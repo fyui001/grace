@@ -1,0 +1,8 @@
+services:
+  app:
+    image: node:22.10-slim
+    volumes:
+      - .:/code
+    tty: true
+    ports:
+      - 8080:3000
