@@ -1,3 +1,5 @@
-export default function Page() {
-  return <p>This is Login page!</p>
+import LoginPage from '../../../components/auth/login/LoginPage'
+
+export default async function Page() {
+  return <LoginPage></LoginPage>
 }
