@@ -1,4 +1,10 @@
-FROM node:22.10-slim
+FROM node:25.2-slim as base
+
+EXPOSE 3000
+EXPOSE 6006
+ENV PORT=3000
+
+FROM base
 
 WORKDIR /app
 
@@ -10,9 +16,6 @@ COPY --chown=nodejs:nodejs ./.next/standalone ./
 COPY --chown=nodejs:nodejs ./.next/static ./.next/static
 
 USER nodejs
-
-EXPOSE 3000
-ENV PORT 3000
 
 CMD ["node", "server.js"]
 
