@@ -1,8 +1,23 @@
 services:
-  app:
-    image: node:22.10-slim
+  grace:
+    build:
+      target: base
+    working_dir: /code
     volumes:
       - .:/code
     tty: true
-    ports:
-      - 8080:3000
+    networks:
+      - docker_default
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.grace.rule=Host(`grace.localhost`)'
+      - 'traefik.http.services.grace.loadbalancer.server.port=3000'
+      - 'traefik.http.routers.grace.service=grace'
+      # storybook
+      - 'traefik.http.routers.grace-storybook.rule=Host(`grace-storybook.localhost`)'
+      - 'traefik.http.routers.grace-storybook.service=grace-storybook'
+      - 'traefik.http.services.grace-storybook.loadbalancer.server.port=6006'
+networks:
+    docker_default:
+      external: true
+      name: docker_default

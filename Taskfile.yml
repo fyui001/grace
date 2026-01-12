@@ -1,25 +1,32 @@
 version: '3'
 
 tasks:
-  docker_build:
-    cmd: docker compose build
+  # Docker
+  rebuild:
+    cmd: docker compose build --no-cache
   up:
     cmd: docker compose up -d
+  restart:
+    cmd: docker compose restart
   down:
     cmd: docker compose down
   stop:
     cmd: docker compose stop
   bash:
-    cmd: docker compose exec app /bin/bash
+    cmd: docker compose exec grace /bin/bash
+
+
   yarn:
-    cmd: docker compose exec app yarn
+    cmd: docker compose exec grace yarn
+  build:
+    cmd: docker compose exec grace yarn build
   dev:
-    cmd: docker compose exec app yarn dev
+    cmd: docker compose exec grace yarn dev
   lint:
-    cmd: docker compose exec app yarn lint
+    cmd: docker compose exec grace yarn lint
   typecheck:
-    cmd: docker compose exec app yarn typecheck
+    cmd: docker compose exec grace yarn typecheck
   prettier-check:
-    cmd: docker compose exec app yarn prettier:check
+    cmd: docker compose exec grace yarn prettier:check
   prettier:
-    cmd: docker compose exec app yarn prettier
+    cmd: docker compose exec grace yarn prettier
