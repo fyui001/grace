@@ -1,4 +1,4 @@
-FROM node:25.2-slim as base
+FROM node:25.2-slim AS base
 
 EXPOSE 3000
 EXPOSE 6006
