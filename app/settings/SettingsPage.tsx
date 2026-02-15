@@ -1,15 +1,61 @@
 'use client'
 
+import { useState } from 'react'
 import {
+  Box,
+  Button,
   Container,
   ContentLayout,
+  FormField,
   Header,
+  KeyValuePairs,
+  SpaceBetween,
+  TimeInput,
+  Toggle,
 } from '@cloudscape-design/components'
 
 export default function SettingsPage() {
+  const [reminderEnabled, setReminderEnabled] = useState(true)
+  const [reminderTime, setReminderTime] = useState('07:30')
+
   return (
     <ContentLayout header={<Header variant="h1">設定</Header>}>
-      <Container>設定項目がここに表示されます。</Container>
+      <SpaceBetween size="l">
+        <Container header={<Header variant="h2">通知設定</Header>}>
+          <SpaceBetween size="m">
+            <Toggle
+              checked={reminderEnabled}
+              onChange={({ detail }) => setReminderEnabled(detail.checked)}
+            >
+              服薬リマインダー
+            </Toggle>
+            <FormField label="通知時刻">
+              <TimeInput
+                value={reminderTime}
+                onChange={({ detail }) => setReminderTime(detail.value)}
+                format="hh:mm"
+                placeholder="hh:mm"
+                disabled={!reminderEnabled}
+              />
+            </FormField>
+          </SpaceBetween>
+        </Container>
+
+        <Container header={<Header variant="h2">アカウント</Header>}>
+          <SpaceBetween size="m">
+            <KeyValuePairs
+              columns={2}
+              items={[
+                { label: 'メールアドレス', value: 'user@example.com' },
+                { label: 'プラン', value: 'フリー' },
+              ]}
+            />
+            <Box>
+              <Button variant="normal">ログアウト</Button>
+            </Box>
+          </SpaceBetween>
+        </Container>
+      </SpaceBetween>
     </ContentLayout>
   )
 }
