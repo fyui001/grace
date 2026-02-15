@@ -7,7 +7,7 @@ import {
   Container,
   Header,
 } from '@cloudscape-design/components'
-import { loginPathWithReturnToURL } from 'utils/urls'
+import { loginPath, loginPathWithReturnToURL } from 'utils/urls'
 
 export default function LoginRequired({
   returnTo,
@@ -21,7 +21,7 @@ export default function LoginRequired({
       </Alert>
       <Box padding="xxxl" textAlign="center">
         <Button
-          href={loginPathWithReturnToURL(returnTo ?? '/dashboard')}
+          href={returnTo ? loginPathWithReturnToURL(returnTo) : loginPath}
           ariaLabel="ログインページへ"
           iconAlign="left"
           iconName="key"
