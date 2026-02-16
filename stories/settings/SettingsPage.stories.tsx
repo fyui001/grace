@@ -1,19 +1,19 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import DashboardPage from '../../components/page-component/DashboardPage'
+import SettingsPage from '../../app/settings/SettingsPage'
 import { withAppShell } from '../decorators'
 
 const meta = {
-  title: 'Pages/Dashboard',
-  component: DashboardPage,
+  title: 'Pages/Settings',
+  component: SettingsPage,
   parameters: {
     layout: 'fullscreen',
     nextjs: {
       navigation: {
-        pathname: '/dashboard',
+        pathname: '/settings',
       },
     },
   },
-} satisfies Meta<typeof DashboardPage>
+} satisfies Meta<typeof SettingsPage>
 
 export default meta
 type Story = StoryObj<typeof meta>

@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import LoginRequired from '../../components/auth/login/LoginRequired'
+import LoginPage from '../../components/auth/login/LoginPage'
 
 const meta = {
-  title: 'Components/LoginRequired',
-  component: LoginRequired,
+  title: 'Pages/Login',
+  component: LoginPage,
   parameters: {
     layout: 'fullscreen',
   },
-} satisfies Meta<typeof LoginRequired>
+} satisfies Meta<typeof LoginPage>
 
 export default meta
 type Story = StoryObj<typeof meta>
