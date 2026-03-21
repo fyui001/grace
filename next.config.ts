@@ -5,6 +5,11 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   compiler: {},
   allowedDevOrigins: ['grace.localhost'],
+  transpilePackages: [
+    '@cloudscape-design/components',
+    '@cloudscape-design/design-tokens',
+    '@cloudscape-design/component-toolkit',
+  ],
 }
 
 export default nextConfig

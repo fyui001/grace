@@ -13,14 +13,22 @@ import {
   TimeInput,
   Toggle,
 } from '@cloudscape-design/components'
+import { useTheme } from 'components/theme/ThemeProvider'
 
 export default function SettingsPage() {
   const [reminderEnabled, setReminderEnabled] = useState(true)
   const [reminderTime, setReminderTime] = useState('07:30')
+  const { mode, toggleMode } = useTheme()
 
   return (
     <ContentLayout header={<Header variant="h1">設定</Header>}>
       <SpaceBetween size="l">
+        <Container header={<Header variant="h2">表示設定</Header>}>
+          <Toggle checked={mode === 'dark'} onChange={toggleMode}>
+            ダークモード
+          </Toggle>
+        </Container>
+
         <Container header={<Header variant="h2">通知設定</Header>}>
           <SpaceBetween size="m">
             <Toggle

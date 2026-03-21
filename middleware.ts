@@ -10,17 +10,23 @@ function redirectToLoginPage(request: NextRequest) {
 }
 
 export async function middleware(request: NextRequest) {
-  const cookie = request.headers.get('cookie') ?? ''
-  const apiClient = createServerApiClient({ cookie })
-  const currentUser = await userRepository.getCurrentUser(apiClient)
+  const themeMode = request.cookies.get('grace-theme-mode')?.value ?? 'light'
+  const requestHeaders = new Headers(request.headers)
+  requestHeaders.set('x-theme-mode', themeMode === 'dark' ? 'dark' : 'light')
 
-  if (!currentUser) {
-    return redirectToLoginPage(request)
+  if (request.nextUrl.pathname.match(/^\/(dashboard|settings)(\/|$)/)) {
+    const cookie = request.headers.get('cookie') ?? ''
+    const apiClient = createServerApiClient({ cookie })
+    const currentUser = await userRepository.getCurrentUser(apiClient)
+
+    if (!currentUser) {
+      return redirectToLoginPage(request)
+    }
   }
 
-  return NextResponse.next()
+  return NextResponse.next({ request: { headers: requestHeaders } })
 }
 
 export const config = {
-  matcher: '/(dashboard|settings)(/?.*)',
+  matcher: ['/(dashboard|settings)(/?.*)', '/e2e-test'],
 }
