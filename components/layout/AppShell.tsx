@@ -2,10 +2,11 @@
 
 import { useState, useCallback } from 'react'
 import { AppLayout, SideNavigation } from '@cloudscape-design/components'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
+  const router = useRouter()
   const [hydrated, setHydrated] = useState(false)
 
   const appLayoutRef = useCallback((node: HTMLElement | null) => {
@@ -19,6 +20,10 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           <SideNavigation
             activeHref={pathname}
             header={{ href: '/dashboard', text: 'Grace' }}
+            onFollow={(event) => {
+              event.preventDefault()
+              router.push(event.detail.href)
+            }}
             items={[
               {
                 type: 'expandable-link-group',
