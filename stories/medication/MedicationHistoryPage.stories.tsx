@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import MedicationHistoryPage from '../../components/medication/MedicationHistoryPage'
+import MedicationHistoryPage from '../../components/page-component/MedicationHistoryPage'
 import { withAppShell } from '../decorators'
 
 const meta = {

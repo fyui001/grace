@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import SettingsPage from '../../app/settings/SettingsPage'
+import SettingsPage from '../../components/page-component/SettingsPage'
 import { withAppShell, withThemeProvider } from '../decorators'
 
 const meta = {

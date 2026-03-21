@@ -1,5 +1,5 @@
 import AppShell from 'components/layout/AppShell'
-import SettingsPage from './SettingsPage'
+import SettingsPage from 'components/page-component/SettingsPage'
 
 export default function PageSettings() {
   return (
