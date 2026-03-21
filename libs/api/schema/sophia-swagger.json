@@ -36,24 +36,89 @@
           }
         }
       }
+    },
+    "/api/user/register": {
+      "post": {
+        "tags": [
+          "RegisterUserAction"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterUserRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseBaseResponder"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseBaseResponder"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseBaseResponder"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "RegisterUserRequest": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 255,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
       "UserResponse": {
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "integer",
+            "format": "int64",
             "nullable": true
           },
           "name": {
             "type": "string",
             "nullable": true
           },
-          "email": {
+          "iconUrl": {
             "type": "string",
             "nullable": true
+          },
+          "isRegistered": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false

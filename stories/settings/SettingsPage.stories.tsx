@@ -1,10 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import SettingsPage from '../../app/settings/SettingsPage'
-import { withAppShell } from '../decorators'
+import { withAppShell, withThemeProvider } from '../decorators'
 
 const meta = {
   title: 'Pages/Settings',
   component: SettingsPage,
+  decorators: [withThemeProvider],
   parameters: {
     layout: 'fullscreen',
     nextjs: {

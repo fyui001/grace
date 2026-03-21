@@ -22,11 +22,29 @@ export async function middleware(request: NextRequest) {
     if (!currentUser) {
       return redirectToLoginPage(request)
     }
+
+    if (!currentUser.isRegistered) {
+      return NextResponse.redirect(new URL('/setup', request.url))
+    }
+  }
+
+  if (request.nextUrl.pathname === '/setup') {
+    const cookie = request.headers.get('cookie') ?? ''
+    const apiClient = createServerApiClient({ cookie })
+    const currentUser = await userRepository.getCurrentUser(apiClient)
+
+    if (!currentUser) {
+      return redirectToLoginPage(request)
+    }
+
+    if (currentUser.isRegistered) {
+      return NextResponse.redirect(new URL('/dashboard', request.url))
+    }
   }
 
   return NextResponse.next({ request: { headers: requestHeaders } })
 }
 
 export const config = {
-  matcher: ['/(dashboard|settings)(/?.*)', '/e2e-test'],
+  matcher: ['/(dashboard|settings)(/?.*)', '/setup'],
 }
