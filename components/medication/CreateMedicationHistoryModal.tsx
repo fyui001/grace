@@ -205,7 +205,6 @@ export default function CreateMedicationHistoryModal({
                 }
                 type="number"
                 placeholder="mg"
-                inputMode="decimal"
               />
             </FormField>
             <RemoveButton>
