@@ -211,8 +211,8 @@ export default function CreateMedicationHistoryModal({
                 onChange={({ detail }) =>
                   updateEntry(index, 'amount', detail.value)
                 }
+                type="number"
                 placeholder="mg"
-                inputMode="decimal"
               />
             </FormField>
             <RemoveButton>
