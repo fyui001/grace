@@ -28,7 +28,9 @@ export default function DrugDetailPage({ drug }: DrugDetailPageProps) {
       <Header
         variant="h1"
         actions={
-          <Button onClick={() => router.push(`/medication/drugs/${drug.id}/edit`)}>
+          <Button
+            onClick={() => router.push(`/medication/drugs/${drug.id}/edit`)}
+          >
             編集
           </Button>
         }

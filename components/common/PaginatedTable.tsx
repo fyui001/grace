@@ -53,10 +53,7 @@ export default function PaginatedTable<T>({
   maxHeight,
 }: PaginatedTableProps<T>) {
   return (
-    <ScrollableTable
-      maxHeight={maxHeight}
-      clickableRows={!!onRowClick}
-    >
+    <ScrollableTable maxHeight={maxHeight} clickableRows={!!onRowClick}>
       <Table
         variant="container"
         stickyHeader
@@ -73,9 +70,7 @@ export default function PaginatedTable<T>({
         stripedRows
         sortingDisabled
         onRowClick={
-          onRowClick
-            ? ({ detail }) => onRowClick(detail.item)
-            : undefined
+          onRowClick ? ({ detail }) => onRowClick(detail.item) : undefined
         }
         empty={empty}
         pagination={

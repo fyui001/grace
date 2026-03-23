@@ -6,7 +6,6 @@ import {
   Button,
   FormField,
   Header,
-  Icon,
   Input,
   Modal,
   Select,

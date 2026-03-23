@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useCallback } from 'react'
+import { useRef, useCallback, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { useCreateBlockNote } from '@blocknote/react'
 import { BlockNoteView } from '@blocknote/mantine'
@@ -32,7 +32,9 @@ interface NoteEditorProps {
 
 export default function NoteEditor({ data, onChange }: NoteEditorProps) {
   const onChangeRef = useRef(onChange)
-  onChangeRef.current = onChange
+  useEffect(() => {
+    onChangeRef.current = onChange
+  }, [onChange])
   const { mode } = useTheme()
 
   const editor = useCreateBlockNote({

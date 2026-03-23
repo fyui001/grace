@@ -148,7 +148,12 @@ export default function AppShell({
     node.querySelectorAll('.awsui-context-top-navigation').forEach((el) => {
       el.classList.remove('awsui-context-top-navigation')
     })
-    observer.observe(node, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] })
+    observer.observe(node, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['class'],
+    })
   }, [])
 
   const clearHoverTimer = useCallback(() => {

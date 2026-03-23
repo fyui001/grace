@@ -1,4 +1,4 @@
-import { headers, cookies } from 'next/headers'
+import { cookies } from 'next/headers'
 
 export async function getAuthCookieNextHeaders(): Promise<Headers> {
   const cookieStore = await cookies()

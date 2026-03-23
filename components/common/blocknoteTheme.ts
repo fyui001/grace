@@ -32,8 +32,7 @@ const lightTheme: Theme = {
     sideMenu: '#9ba7b6',
   },
   borderRadius: 8,
-  fontFamily:
-    '"Open Sans", "Helvetica Neue", Roboto, Arial, sans-serif',
+  fontFamily: '"Open Sans", "Helvetica Neue", Roboto, Arial, sans-serif',
 }
 
 const darkTheme: Theme = {
@@ -67,8 +66,7 @@ const darkTheme: Theme = {
     sideMenu: '#5f6b7a',
   },
   borderRadius: 8,
-  fontFamily:
-    '"Open Sans", "Helvetica Neue", Roboto, Arial, sans-serif',
+  fontFamily: '"Open Sans", "Helvetica Neue", Roboto, Arial, sans-serif',
 }
 
 export const cloudscapeBlockNoteTheme = {

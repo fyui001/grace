@@ -14,13 +14,21 @@ const nextConfig: NextConfig = {
     '@blocknote/mantine',
   ],
   async rewrites() {
+    const target = process.env.SSR_API_BASE_PATH
+    if (!target) return []
     return [
       {
         source: '/api/:path*',
-        destination: `${process.env.SSR_API_BASE_PATH}/api/:path*`,
+        destination: `${target}/api/:path*`,
+      },
+      {
+        source: '/auth0/:path*',
+        destination: `${target}/auth0/:path*`,
       },
     ]
   },
+  // ローカルではTraefikが/api/*,/auth0/*をSophiaに直接転送するため
+  // rewritesは本番デプロイ時のみ使用される
 }
 
 export default nextConfig

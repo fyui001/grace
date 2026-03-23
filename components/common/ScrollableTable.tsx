@@ -35,10 +35,7 @@ export default function ScrollableTable({
   children,
 }: ScrollableTableProps) {
   return (
-    <ScrollContainer
-      $maxHeight={maxHeight}
-      $clickableRows={clickableRows}
-    >
+    <ScrollContainer $maxHeight={maxHeight} $clickableRows={clickableRows}>
       {children}
     </ScrollContainer>
   )

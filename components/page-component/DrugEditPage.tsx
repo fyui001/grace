@@ -53,11 +53,7 @@ export default function DrugEditPage({ drug }: DrugEditPageProps) {
           <Button variant="link" onClick={() => router.back()}>
             キャンセル
           </Button>
-          <Button
-            variant="primary"
-            loading={submitting}
-            onClick={handleSubmit}
-          >
+          <Button variant="primary" loading={submitting} onClick={handleSubmit}>
             保存
           </Button>
         </SpaceBetween>

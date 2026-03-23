@@ -34,7 +34,11 @@ export default function MedicationHistoryDetailPage({
       <Header
         variant="h1"
         actions={
-          <Button onClick={() => router.push(`/medication/history/${history.id}/edit`)}>
+          <Button
+            onClick={() =>
+              router.push(`/medication/history/${history.id}/edit`)
+            }
+          >
             編集
           </Button>
         }
