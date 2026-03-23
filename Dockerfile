@@ -19,7 +19,6 @@ WORKDIR /app
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nodejs
 
-COPY --from=build --chown=nodejs:nodejs /app/public ./public
 COPY --from=build --chown=nodejs:nodejs /app/.next/standalone ./
 COPY --from=build --chown=nodejs:nodejs /app/.next/static ./.next/static
 
