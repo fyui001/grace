@@ -9,6 +9,9 @@ const nextConfig: NextConfig = {
     '@cloudscape-design/components',
     '@cloudscape-design/design-tokens',
     '@cloudscape-design/component-toolkit',
+    '@blocknote/core',
+    '@blocknote/react',
+    '@blocknote/mantine',
   ],
 }
 

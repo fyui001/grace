@@ -9,7 +9,7 @@ import {
   SpaceBetween,
 } from '@cloudscape-design/components'
 import { useRouter } from 'next/navigation'
-import EditorJsRenderer from 'components/common/EditorJsRenderer'
+import NoteRenderer from 'components/common/NoteRenderer'
 
 interface MedicationHistoryDetailPageProps {
   history: {
@@ -82,7 +82,7 @@ export default function MedicationHistoryDetailPage({
 
       <Container header={<Header variant="h2">備考</Header>}>
         {history.note ? (
-          <EditorJsRenderer note={history.note} />
+          <NoteRenderer note={history.note} />
         ) : (
           <p>備考はありません</p>
         )}

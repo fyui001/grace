@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   Button,
@@ -11,19 +11,9 @@ import {
   Input,
   SpaceBetween,
 } from '@cloudscape-design/components'
-import type { OutputData } from '@editorjs/editorjs'
 import { useApiClient } from 'client/apiClient'
 import { medicationRepository } from 'repository/medicationRepository'
-import EditorJsEditor from 'components/common/EditorJsEditor'
-
-function parseNoteData(note: string | null): OutputData | null {
-  if (!note) return null
-  try {
-    return JSON.parse(note) as OutputData
-  } catch {
-    return null
-  }
-}
+import NoteEditor from 'components/common/NoteEditor'
 
 interface MedicationHistoryEditPageProps {
   history: {
@@ -41,24 +31,17 @@ export default function MedicationHistoryEditPage({
   const router = useRouter()
   const apiClient = useApiClient()
   const [amount, setAmount] = useState(String(history.amount))
-  const noteDataRef = useRef<OutputData | null>(parseNoteData(history.note))
-  const initialNoteData = useMemo(
-    () => parseNoteData(history.note),
-    [history.note],
-  )
+  const noteJsonRef = useRef<string | null>(history.note)
   const [submitting, setSubmitting] = useState(false)
 
   const handleSubmit = async () => {
     setSubmitting(true)
-    const noteJson = noteDataRef.current
-      ? JSON.stringify(noteDataRef.current)
-      : null
     const success = await medicationRepository.updateMedicationHistory(
       apiClient,
       history.id,
       {
         amount: Number(amount),
-        note: noteJson,
+        note: noteJsonRef.current,
       },
     )
     setSubmitting(false)
@@ -111,10 +94,10 @@ export default function MedicationHistoryEditPage({
         </Container>
 
         <Container header={<Header variant="h2">備考</Header>}>
-          <EditorJsEditor
-            data={initialNoteData}
-            onChange={(data) => {
-              noteDataRef.current = data
+          <NoteEditor
+            data={history.note}
+            onChange={(json) => {
+              noteJsonRef.current = json
             }}
           />
         </Container>

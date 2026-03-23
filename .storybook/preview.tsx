@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react'
 import type { Preview } from '@storybook/react'
 import '@cloudscape-design/global-styles/index.css'
+import { ThemeProvider } from '../components/theme/ThemeProvider'
 
-const withLinkInterceptor: Preview['decorators'] = [
+const globalDecorators: Preview['decorators'] = [
   (Story) => {
     useEffect(() => {
       const handler = (e: MouseEvent) => {
@@ -10,9 +11,7 @@ const withLinkInterceptor: Preview['decorators'] = [
         if (!anchor) return
         const href = anchor.getAttribute('href')
         if (!href) return
-        // 外部リンク（target="_blank"）はそのまま通す
         if (anchor.getAttribute('target') === '_blank') return
-        // Storybook 内の相対リンク遷移を防止
         if (href.startsWith('/') || href.startsWith('?')) {
           e.preventDefault()
           e.stopPropagation()
@@ -21,12 +20,16 @@ const withLinkInterceptor: Preview['decorators'] = [
       document.addEventListener('click', handler, true)
       return () => document.removeEventListener('click', handler, true)
     }, [])
-    return <Story />
+    return (
+      <ThemeProvider initialMode="light">
+        <Story />
+      </ThemeProvider>
+    )
   },
 ]
 
 const preview: Preview = {
-  decorators: withLinkInterceptor,
+  decorators: globalDecorators,
   parameters: {
     controls: {
       matchers: {

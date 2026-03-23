@@ -22,18 +22,11 @@ const sampleDrug = {
   id: 1,
   name: 'レボチロキシン',
   url: 'https://example.com/drug/levothyroxine',
-  note: JSON.stringify({
-    blocks: [
-      { type: 'paragraph', data: { text: '甲状腺ホルモン補充薬。朝食前に服用。' } },
-      {
-        type: 'list',
-        data: {
-          style: 'unordered',
-          items: ['空腹時に服用', 'カルシウム剤との併用注意'],
-        },
-      },
-    ],
-  }),
+  note: JSON.stringify([
+    { type: 'paragraph', content: [{ type: 'text', text: '甲状腺ホルモン補充薬。朝食前に服用。' }] },
+    { type: 'bulletListItem', content: [{ type: 'text', text: '空腹時に服用' }] },
+    { type: 'bulletListItem', content: [{ type: 'text', text: 'カルシウム剤との併用注意' }] },
+  ]),
 }
 
 export const Default: Story = {

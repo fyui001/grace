@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   Button,
@@ -11,19 +11,9 @@ import {
   Input,
   SpaceBetween,
 } from '@cloudscape-design/components'
-import type { OutputData } from '@editorjs/editorjs'
 import { useApiClient } from 'client/apiClient'
 import { drugRepository } from 'repository/drugRepository'
-import EditorJsEditor from 'components/common/EditorJsEditor'
-
-function parseNoteData(note: string | null): OutputData | null {
-  if (!note) return null
-  try {
-    return JSON.parse(note) as OutputData
-  } catch {
-    return null
-  }
-}
+import NoteEditor from 'components/common/NoteEditor'
 
 interface DrugEditPageProps {
   drug: {
@@ -39,22 +29,15 @@ export default function DrugEditPage({ drug }: DrugEditPageProps) {
   const apiClient = useApiClient()
   const [name, setName] = useState(drug.name)
   const [url, setUrl] = useState(drug.url)
-  const noteDataRef = useRef<OutputData | null>(parseNoteData(drug.note))
-  const initialNoteData = useMemo(
-    () => parseNoteData(drug.note),
-    [drug.note],
-  )
+  const noteJsonRef = useRef<string | null>(drug.note)
   const [submitting, setSubmitting] = useState(false)
 
   const handleSubmit = async () => {
     setSubmitting(true)
-    const noteJson = noteDataRef.current
-      ? JSON.stringify(noteDataRef.current)
-      : null
     const success = await drugRepository.updateDrug(apiClient, drug.id, {
       drugName: name,
       url,
-      note: noteJson,
+      note: noteJsonRef.current,
     })
     setSubmitting(false)
     if (success) {
@@ -103,10 +86,10 @@ export default function DrugEditPage({ drug }: DrugEditPageProps) {
         </Container>
 
         <Container header={<Header variant="h2">備考</Header>}>
-          <EditorJsEditor
-            data={initialNoteData}
-            onChange={(data) => {
-              noteDataRef.current = data
+          <NoteEditor
+            data={drug.note}
+            onChange={(json) => {
+              noteJsonRef.current = json
             }}
           />
         </Container>

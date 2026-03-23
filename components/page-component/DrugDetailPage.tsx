@@ -9,7 +9,7 @@ import {
   SpaceBetween,
 } from '@cloudscape-design/components'
 import { useRouter } from 'next/navigation'
-import EditorJsRenderer from 'components/common/EditorJsRenderer'
+import NoteRenderer from 'components/common/NoteRenderer'
 
 interface DrugDetailPageProps {
   drug: {
@@ -57,7 +57,7 @@ export default function DrugDetailPage({ drug }: DrugDetailPageProps) {
 
       <Container header={<Header variant="h2">備考</Header>}>
         {drug.note ? (
-          <EditorJsRenderer note={drug.note} />
+          <NoteRenderer note={drug.note} />
         ) : (
           <p>備考はありません</p>
         )}
