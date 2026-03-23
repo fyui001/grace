@@ -16,5 +16,9 @@ export default async function PageHome() {
     redirect('/auth/login')
   }
 
+  if (!user.isRegistered) {
+    redirect('/setup')
+  }
+
   redirect('/dashboard')
 }

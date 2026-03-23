@@ -10,17 +10,43 @@ function redirectToLoginPage(request: NextRequest) {
 }
 
 export async function middleware(request: NextRequest) {
-  const cookie = request.headers.get('cookie') ?? ''
-  const apiClient = createServerApiClient({ cookie })
-  const currentUser = await userRepository.getCurrentUser(apiClient)
+  const themeMode = request.cookies.get('grace-theme-mode')?.value ?? 'light'
+  const requestHeaders = new Headers(request.headers)
+  requestHeaders.set('x-theme-mode', themeMode === 'dark' ? 'dark' : 'light')
 
-  if (!currentUser) {
-    return redirectToLoginPage(request)
+  if (
+    request.nextUrl.pathname.match(/^\/(dashboard|settings|medication)(\/|$)/)
+  ) {
+    const cookie = request.headers.get('cookie') ?? ''
+    const apiClient = createServerApiClient({ cookie })
+    const currentUser = await userRepository.getCurrentUser(apiClient)
+
+    if (!currentUser) {
+      return redirectToLoginPage(request)
+    }
+
+    if (!currentUser.isRegistered) {
+      return NextResponse.redirect(new URL('/setup', request.url))
+    }
   }
 
-  return NextResponse.next()
+  if (request.nextUrl.pathname === '/setup') {
+    const cookie = request.headers.get('cookie') ?? ''
+    const apiClient = createServerApiClient({ cookie })
+    const currentUser = await userRepository.getCurrentUser(apiClient)
+
+    if (!currentUser) {
+      return redirectToLoginPage(request)
+    }
+
+    if (currentUser.isRegistered) {
+      return NextResponse.redirect(new URL('/dashboard', request.url))
+    }
+  }
+
+  return NextResponse.next({ request: { headers: requestHeaders } })
 }
 
 export const config = {
-  matcher: '/(dashboard|settings)(/?.*)',
+  matcher: ['/(dashboard|settings|medication)(/?.*)', '/setup'],
 }

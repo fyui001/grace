@@ -14,4 +14,26 @@ export const userRepository = {
       return null
     }
   },
+
+  async registerUser(apiClient: ClientType, name: string) {
+    const result = await apiClient.POST('/api/user/register', {
+      body: { name },
+    })
+
+    if (!result.data) {
+      throw new Error('Registration failed')
+    }
+
+    return result.data.data
+  },
+
+  async unlinkDiscord(apiClient: ClientType) {
+    const result = await apiClient.DELETE('/api/user/discord')
+
+    if (!result.data) {
+      throw new Error('Failed to unlink Discord')
+    }
+
+    return result.data.data
+  },
 }

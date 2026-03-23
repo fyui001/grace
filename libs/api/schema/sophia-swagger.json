@@ -5,6 +5,457 @@
     "version": "1.0"
   },
   "paths": {
+    "/api/drugs": {
+      "post": {
+        "tags": [
+          "CreateDrugAction"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDrugRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDrugRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDrugRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObjectBaseResponder"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObjectBaseResponder"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObjectBaseResponder"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "GetDrugListAction"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetDrugListResponder"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetDrugListResponder"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetDrugListResponder"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/medication-histories": {
+      "post": {
+        "tags": [
+          "CreateMedicationHistoryAction"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateMedicationHistoryRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateMedicationHistoryRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateMedicationHistoryRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateMedicationHistoryResponder"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateMedicationHistoryResponder"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateMedicationHistoryResponder"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "GetMedicationHistoriesAction"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMedicationHistoriesResponder"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMedicationHistoriesResponder"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMedicationHistoriesResponder"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/api/drugs/{id}": {
+      "delete": {
+        "tags": [
+          "DeleteDrugAction"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObjectBaseResponder"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObjectBaseResponder"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObjectBaseResponder"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "GetDrugDetailAction"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetDrugDetailResponder"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetDrugDetailResponder"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetDrugDetailResponder"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "UpdateDrugAction"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDrugRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDrugRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDrugRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObjectBaseResponder"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObjectBaseResponder"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObjectBaseResponder"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/medication-histories/{id}": {
+      "get": {
+        "tags": [
+          "GetMedicationHistoryDetailAction"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMedicationHistoryDetailResponder"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMedicationHistoryDetailResponder"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMedicationHistoryDetailResponder"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "UpdateMedicationHistoryAction"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateMedicationHistoryRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateMedicationHistoryRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateMedicationHistoryRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMedicationHistoryDetailResponder"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMedicationHistoryDetailResponder"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMedicationHistoryDetailResponder"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
     "/api/user": {
       "get": {
         "tags": [
@@ -16,17 +467,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseBaseResponder"
+                  "$ref": "#/components/schemas/GetUserResponder"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseBaseResponder"
+                  "$ref": "#/components/schemas/GetUserResponder"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseBaseResponder"
+                  "$ref": "#/components/schemas/GetUserResponder"
                 }
               }
             }
@@ -36,29 +487,144 @@
           }
         }
       }
+    },
+    "/api/user/register": {
+      "post": {
+        "tags": [
+          "RegisterUserAction"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterUserRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterUserRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterUserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterUserResponder"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterUserResponder"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterUserResponder"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        }
+      }
+    },
+    "/api/user/discord": {
+      "delete": {
+        "tags": [
+          "UnlinkDiscordAction"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnlinkDiscordResponder"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnlinkDiscordResponder"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnlinkDiscordResponder"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
-      "UserResponse": {
+      "CreateDrugRequest": {
+        "required": [
+          "drugName",
+          "url"
+        ],
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "nullable": true
+          "drugName": {
+            "minLength": 1,
+            "type": "string"
           },
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "email": {
-            "type": "string",
-            "nullable": true
+          "url": {
+            "minLength": 1,
+            "type": "string"
           }
         },
         "additionalProperties": false
       },
-      "UserResponseBaseResponder": {
+      "CreateMedicationHistoryRequest": {
+        "required": [
+          "amount",
+          "drugId",
+          "medicationDate"
+        ],
+        "type": "object",
+        "properties": {
+          "drugId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "medicationDate": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateMedicationHistoryResponder": {
         "type": "object",
         "properties": {
           "status": {
@@ -72,7 +638,360 @@
             "nullable": true
           },
           "data": {
-            "$ref": "#/components/schemas/UserResponse"
+            "$ref": "#/components/schemas/MedicationHistoryDetail"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DrugDetail": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "url": {
+            "type": "string",
+            "nullable": true
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DrugListResult": {
+        "type": "object",
+        "properties": {
+          "currentPage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lastPage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "perPage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DrugDetail"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetDrugDetailResponder": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "errors": {
+            "nullable": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/DrugDetail"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetDrugListResponder": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "errors": {
+            "nullable": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/DrugListResult"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetMedicationHistoriesResponder": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "errors": {
+            "nullable": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/MedicationHistoryListResult"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetMedicationHistoryDetailResponder": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "errors": {
+            "nullable": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/MedicationHistoryDetail"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetUserResponder": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "errors": {
+            "nullable": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/UserDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "MedicationHistoryDetail": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "drugId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "drugName": {
+            "type": "string",
+            "nullable": true
+          },
+          "drugUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "nullable": true
+          },
+          "updatedAt": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "MedicationHistoryListResult": {
+        "type": "object",
+        "properties": {
+          "currentPage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lastPage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "perPage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MedicationHistoryDetail"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ObjectBaseResponder": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "errors": {
+            "nullable": true
+          },
+          "data": {
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RegisterUserRequest": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RegisterUserResponder": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "errors": {
+            "nullable": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/UserDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UnlinkDiscordResponder": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "errors": {
+            "nullable": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/UserDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateDrugRequest": {
+        "required": [
+          "drugName",
+          "url"
+        ],
+        "type": "object",
+        "properties": {
+          "drugName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "url": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateMedicationHistoryRequest": {
+        "required": [
+          "amount"
+        ],
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "iconUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "isRegistered": {
+            "type": "boolean"
+          },
+          "discordUserId": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
