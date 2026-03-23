@@ -1,5 +1,5 @@
+import React, { useEffect } from 'react'
 import type { Preview } from '@storybook/react'
-import { useEffect } from 'react'
 import '@cloudscape-design/global-styles/index.css'
 
 const withLinkInterceptor: Preview['decorators'] = [
@@ -15,12 +15,13 @@ const withLinkInterceptor: Preview['decorators'] = [
         // Storybook 内の相対リンク遷移を防止
         if (href.startsWith('/') || href.startsWith('?')) {
           e.preventDefault()
+          e.stopPropagation()
         }
       }
       document.addEventListener('click', handler, true)
       return () => document.removeEventListener('click', handler, true)
     }, [])
-    return Story()
+    return <Story />
   },
 ]
 
@@ -35,6 +36,9 @@ const preview: Preview = {
     },
     nextjs: {
       appDirectory: true,
+      navigation: {
+        pathname: '/',
+      },
     },
   },
 }
