@@ -30,7 +30,12 @@ interface DrugListPageProps {
 }
 
 const MOCK_ITEMS: Drug[] = [
-  { id: '1', name: 'レボチロキシン', url: 'https://example.com', hasNote: true },
+  {
+    id: '1',
+    name: 'レボチロキシン',
+    url: 'https://example.com',
+    hasNote: true,
+  },
   { id: '2', name: 'ロキソプロフェン', url: '', hasNote: false },
   { id: '3', name: 'アムロジピン', url: '', hasNote: true },
 ]

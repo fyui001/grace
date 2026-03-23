@@ -4,675 +4,675 @@
  */
 
 export interface paths {
-    "/api/drugs": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: {
-                    page?: number;
-                    per_page?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["GetDrugListResponder"];
-                        "application/json": components["schemas"]["GetDrugListResponder"];
-                        "text/json": components["schemas"]["GetDrugListResponder"];
-                    };
-                };
-                /** @description Unauthorized */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        put?: never;
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["CreateDrugRequest"];
-                    "text/json": components["schemas"]["CreateDrugRequest"];
-                    "application/*+json": components["schemas"]["CreateDrugRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ObjectBaseResponder"];
-                        "application/json": components["schemas"]["ObjectBaseResponder"];
-                        "text/json": components["schemas"]["ObjectBaseResponder"];
-                    };
-                };
-                /** @description Unauthorized */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/medication-histories": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: {
-                    page?: number;
-                    per_page?: number;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["GetMedicationHistoriesResponder"];
-                        "application/json": components["schemas"]["GetMedicationHistoriesResponder"];
-                        "text/json": components["schemas"]["GetMedicationHistoriesResponder"];
-                    };
-                };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                /** @description Unauthorized */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        put?: never;
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["CreateMedicationHistoryRequest"];
-                    "text/json": components["schemas"]["CreateMedicationHistoryRequest"];
-                    "application/*+json": components["schemas"]["CreateMedicationHistoryRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["CreateMedicationHistoryResponder"];
-                        "application/json": components["schemas"]["CreateMedicationHistoryResponder"];
-                        "text/json": components["schemas"]["CreateMedicationHistoryResponder"];
-                    };
-                };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                /** @description Unauthorized */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/drugs/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["GetDrugDetailResponder"];
-                        "application/json": components["schemas"]["GetDrugDetailResponder"];
-                        "text/json": components["schemas"]["GetDrugDetailResponder"];
-                    };
-                };
-                /** @description Unauthorized */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        put: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["UpdateDrugRequest"];
-                    "text/json": components["schemas"]["UpdateDrugRequest"];
-                    "application/*+json": components["schemas"]["UpdateDrugRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ObjectBaseResponder"];
-                        "application/json": components["schemas"]["ObjectBaseResponder"];
-                        "text/json": components["schemas"]["ObjectBaseResponder"];
-                    };
-                };
-                /** @description Unauthorized */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        post?: never;
-        delete: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["ObjectBaseResponder"];
-                        "application/json": components["schemas"]["ObjectBaseResponder"];
-                        "text/json": components["schemas"]["ObjectBaseResponder"];
-                    };
-                };
-                /** @description Unauthorized */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/medication-histories/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["GetMedicationHistoryDetailResponder"];
-                        "application/json": components["schemas"]["GetMedicationHistoryDetailResponder"];
-                        "text/json": components["schemas"]["GetMedicationHistoryDetailResponder"];
-                    };
-                };
-                /** @description Unauthorized */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        put: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    id: number;
-                };
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["UpdateMedicationHistoryRequest"];
-                    "text/json": components["schemas"]["UpdateMedicationHistoryRequest"];
-                    "application/*+json": components["schemas"]["UpdateMedicationHistoryRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["GetMedicationHistoryDetailResponder"];
-                        "application/json": components["schemas"]["GetMedicationHistoryDetailResponder"];
-                        "text/json": components["schemas"]["GetMedicationHistoryDetailResponder"];
-                    };
-                };
-                /** @description Unauthorized */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/user": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["GetUserResponder"];
-                        "application/json": components["schemas"]["GetUserResponder"];
-                        "text/json": components["schemas"]["GetUserResponder"];
-                    };
-                };
-                /** @description Unauthorized */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/user/register": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: {
-                content: {
-                    "application/json": components["schemas"]["RegisterUserRequest"];
-                    "text/json": components["schemas"]["RegisterUserRequest"];
-                    "application/*+json": components["schemas"]["RegisterUserRequest"];
-                };
-            };
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["RegisterUserResponder"];
-                        "application/json": components["schemas"]["RegisterUserResponder"];
-                        "text/json": components["schemas"]["RegisterUserResponder"];
-                    };
-                };
-                /** @description Bad Request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                /** @description Unauthorized */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                /** @description Conflict */
-                409: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/user/discord": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "text/plain": components["schemas"]["UnlinkDiscordResponder"];
-                        "application/json": components["schemas"]["UnlinkDiscordResponder"];
-                        "text/json": components["schemas"]["UnlinkDiscordResponder"];
-                    };
-                };
-                /** @description Unauthorized */
-                401: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-                /** @description Not Found */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
-            };
-        };
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
+  '/api/drugs': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get: {
+      parameters: {
+        query?: {
+          page?: number
+          per_page?: number
+        }
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'text/plain': components['schemas']['GetDrugListResponder']
+            'application/json': components['schemas']['GetDrugListResponder']
+            'text/json': components['schemas']['GetDrugListResponder']
+          }
+        }
+        /** @description Unauthorized */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+      }
+    }
+    put?: never
+    post: {
+      parameters: {
+        query?: never
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['CreateDrugRequest']
+          'text/json': components['schemas']['CreateDrugRequest']
+          'application/*+json': components['schemas']['CreateDrugRequest']
+        }
+      }
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'text/plain': components['schemas']['ObjectBaseResponder']
+            'application/json': components['schemas']['ObjectBaseResponder']
+            'text/json': components['schemas']['ObjectBaseResponder']
+          }
+        }
+        /** @description Unauthorized */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+      }
+    }
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/medication-histories': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get: {
+      parameters: {
+        query?: {
+          page?: number
+          per_page?: number
+        }
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'text/plain': components['schemas']['GetMedicationHistoriesResponder']
+            'application/json': components['schemas']['GetMedicationHistoriesResponder']
+            'text/json': components['schemas']['GetMedicationHistoriesResponder']
+          }
+        }
+        /** @description Bad Request */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+        /** @description Unauthorized */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+      }
+    }
+    put?: never
+    post: {
+      parameters: {
+        query?: never
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['CreateMedicationHistoryRequest']
+          'text/json': components['schemas']['CreateMedicationHistoryRequest']
+          'application/*+json': components['schemas']['CreateMedicationHistoryRequest']
+        }
+      }
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'text/plain': components['schemas']['CreateMedicationHistoryResponder']
+            'application/json': components['schemas']['CreateMedicationHistoryResponder']
+            'text/json': components['schemas']['CreateMedicationHistoryResponder']
+          }
+        }
+        /** @description Bad Request */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+        /** @description Unauthorized */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+      }
+    }
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/drugs/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'text/plain': components['schemas']['GetDrugDetailResponder']
+            'application/json': components['schemas']['GetDrugDetailResponder']
+            'text/json': components['schemas']['GetDrugDetailResponder']
+          }
+        }
+        /** @description Unauthorized */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+      }
+    }
+    put: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['UpdateDrugRequest']
+          'text/json': components['schemas']['UpdateDrugRequest']
+          'application/*+json': components['schemas']['UpdateDrugRequest']
+        }
+      }
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'text/plain': components['schemas']['ObjectBaseResponder']
+            'application/json': components['schemas']['ObjectBaseResponder']
+            'text/json': components['schemas']['ObjectBaseResponder']
+          }
+        }
+        /** @description Unauthorized */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+      }
+    }
+    post?: never
+    delete: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'text/plain': components['schemas']['ObjectBaseResponder']
+            'application/json': components['schemas']['ObjectBaseResponder']
+            'text/json': components['schemas']['ObjectBaseResponder']
+          }
+        }
+        /** @description Unauthorized */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+      }
+    }
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/medication-histories/{id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'text/plain': components['schemas']['GetMedicationHistoryDetailResponder']
+            'application/json': components['schemas']['GetMedicationHistoryDetailResponder']
+            'text/json': components['schemas']['GetMedicationHistoryDetailResponder']
+          }
+        }
+        /** @description Unauthorized */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+      }
+    }
+    put: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['UpdateMedicationHistoryRequest']
+          'text/json': components['schemas']['UpdateMedicationHistoryRequest']
+          'application/*+json': components['schemas']['UpdateMedicationHistoryRequest']
+        }
+      }
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'text/plain': components['schemas']['GetMedicationHistoryDetailResponder']
+            'application/json': components['schemas']['GetMedicationHistoryDetailResponder']
+            'text/json': components['schemas']['GetMedicationHistoryDetailResponder']
+          }
+        }
+        /** @description Unauthorized */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+      }
+    }
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/user': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get: {
+      parameters: {
+        query?: never
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'text/plain': components['schemas']['GetUserResponder']
+            'application/json': components['schemas']['GetUserResponder']
+            'text/json': components['schemas']['GetUserResponder']
+          }
+        }
+        /** @description Unauthorized */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+      }
+    }
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/user/register': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post: {
+      parameters: {
+        query?: never
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['RegisterUserRequest']
+          'text/json': components['schemas']['RegisterUserRequest']
+          'application/*+json': components['schemas']['RegisterUserRequest']
+        }
+      }
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'text/plain': components['schemas']['RegisterUserResponder']
+            'application/json': components['schemas']['RegisterUserResponder']
+            'text/json': components['schemas']['RegisterUserResponder']
+          }
+        }
+        /** @description Bad Request */
+        400: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+        /** @description Unauthorized */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+        /** @description Conflict */
+        409: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+      }
+    }
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/api/user/discord': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    delete: {
+      parameters: {
+        query?: never
+        header?: never
+        path?: never
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'text/plain': components['schemas']['UnlinkDiscordResponder']
+            'application/json': components['schemas']['UnlinkDiscordResponder']
+            'text/json': components['schemas']['UnlinkDiscordResponder']
+          }
+        }
+        /** @description Unauthorized */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+        /** @description Not Found */
+        404: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+      }
+    }
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
 }
-export type webhooks = Record<string, never>;
+export type webhooks = Record<string, never>
 export interface components {
-    schemas: {
-        CreateDrugRequest: {
-            drugName: string;
-            url: string;
-        };
-        CreateMedicationHistoryRequest: {
-            /** Format: int32 */
-            drugId: number;
-            /** Format: double */
-            amount: number;
-            medicationDate: string;
-        };
-        CreateMedicationHistoryResponder: {
-            status: boolean;
-            message: string | null;
-            errors: unknown;
-            data: components["schemas"]["MedicationHistoryDetail"];
-        };
-        DrugDetail: {
-            /** Format: int32 */
-            id: number;
-            name: string | null;
-            url: string | null;
-            note: string | null;
-        };
-        DrugListResult: {
-            /** Format: int32 */
-            currentPage: number;
-            /** Format: int32 */
-            lastPage: number;
-            /** Format: int32 */
-            perPage: number;
-            /** Format: int32 */
-            total: number;
-            data: components["schemas"]["DrugDetail"][] | null;
-        };
-        GetDrugDetailResponder: {
-            status: boolean;
-            message: string | null;
-            errors: unknown;
-            data: components["schemas"]["DrugDetail"];
-        };
-        GetDrugListResponder: {
-            status: boolean;
-            message: string | null;
-            errors: unknown;
-            data: components["schemas"]["DrugListResult"];
-        };
-        GetMedicationHistoriesResponder: {
-            status: boolean;
-            message: string | null;
-            errors: unknown;
-            data: components["schemas"]["MedicationHistoryListResult"];
-        };
-        GetMedicationHistoryDetailResponder: {
-            status: boolean;
-            message: string | null;
-            errors: unknown;
-            data: components["schemas"]["MedicationHistoryDetail"];
-        };
-        GetUserResponder: {
-            status: boolean;
-            message: string | null;
-            errors: unknown;
-            data: components["schemas"]["UserDto"];
-        };
-        MedicationHistoryDetail: {
-            /** Format: int32 */
-            id: number;
-            /** Format: int64 */
-            userId: number;
-            /** Format: double */
-            amount: number;
-            /** Format: int32 */
-            drugId: number;
-            drugName: string | null;
-            drugUrl: string | null;
-            note: string | null;
-            createdAt: string | null;
-            updatedAt: string | null;
-        };
-        MedicationHistoryListResult: {
-            /** Format: int32 */
-            currentPage: number;
-            /** Format: int32 */
-            lastPage: number;
-            /** Format: int32 */
-            perPage: number;
-            /** Format: int32 */
-            total: number;
-            data: components["schemas"]["MedicationHistoryDetail"][] | null;
-        };
-        ObjectBaseResponder: {
-            status: boolean;
-            message: string | null;
-            errors: unknown;
-            data: unknown;
-        };
-        RegisterUserRequest: {
-            name: string;
-        };
-        RegisterUserResponder: {
-            status: boolean;
-            message: string | null;
-            errors: unknown;
-            data: components["schemas"]["UserDto"];
-        };
-        UnlinkDiscordResponder: {
-            status: boolean;
-            message: string | null;
-            errors: unknown;
-            data: components["schemas"]["UserDto"];
-        };
-        UpdateDrugRequest: {
-            drugName: string;
-            url: string;
-            note?: string | null;
-        };
-        UpdateMedicationHistoryRequest: {
-            /** Format: double */
-            amount: number;
-            note?: string | null;
-        };
-        UserDto: {
-            /** Format: int64 */
-            id: number | null;
-            name: string | null;
-            iconUrl: string | null;
-            isRegistered: boolean;
-            discordUserId: string | null;
-        };
-    };
-    responses: never;
-    parameters: never;
-    requestBodies: never;
-    headers: never;
-    pathItems: never;
+  schemas: {
+    CreateDrugRequest: {
+      drugName: string
+      url: string
+    }
+    CreateMedicationHistoryRequest: {
+      /** Format: int32 */
+      drugId: number
+      /** Format: double */
+      amount: number
+      medicationDate: string
+    }
+    CreateMedicationHistoryResponder: {
+      status: boolean
+      message: string | null
+      errors: unknown
+      data: components['schemas']['MedicationHistoryDetail']
+    }
+    DrugDetail: {
+      /** Format: int32 */
+      id: number
+      name: string | null
+      url: string | null
+      note: string | null
+    }
+    DrugListResult: {
+      /** Format: int32 */
+      currentPage: number
+      /** Format: int32 */
+      lastPage: number
+      /** Format: int32 */
+      perPage: number
+      /** Format: int32 */
+      total: number
+      data: components['schemas']['DrugDetail'][] | null
+    }
+    GetDrugDetailResponder: {
+      status: boolean
+      message: string | null
+      errors: unknown
+      data: components['schemas']['DrugDetail']
+    }
+    GetDrugListResponder: {
+      status: boolean
+      message: string | null
+      errors: unknown
+      data: components['schemas']['DrugListResult']
+    }
+    GetMedicationHistoriesResponder: {
+      status: boolean
+      message: string | null
+      errors: unknown
+      data: components['schemas']['MedicationHistoryListResult']
+    }
+    GetMedicationHistoryDetailResponder: {
+      status: boolean
+      message: string | null
+      errors: unknown
+      data: components['schemas']['MedicationHistoryDetail']
+    }
+    GetUserResponder: {
+      status: boolean
+      message: string | null
+      errors: unknown
+      data: components['schemas']['UserDto']
+    }
+    MedicationHistoryDetail: {
+      /** Format: int32 */
+      id: number
+      /** Format: int64 */
+      userId: number
+      /** Format: double */
+      amount: number
+      /** Format: int32 */
+      drugId: number
+      drugName: string | null
+      drugUrl: string | null
+      note: string | null
+      createdAt: string | null
+      updatedAt: string | null
+    }
+    MedicationHistoryListResult: {
+      /** Format: int32 */
+      currentPage: number
+      /** Format: int32 */
+      lastPage: number
+      /** Format: int32 */
+      perPage: number
+      /** Format: int32 */
+      total: number
+      data: components['schemas']['MedicationHistoryDetail'][] | null
+    }
+    ObjectBaseResponder: {
+      status: boolean
+      message: string | null
+      errors: unknown
+      data: unknown
+    }
+    RegisterUserRequest: {
+      name: string
+    }
+    RegisterUserResponder: {
+      status: boolean
+      message: string | null
+      errors: unknown
+      data: components['schemas']['UserDto']
+    }
+    UnlinkDiscordResponder: {
+      status: boolean
+      message: string | null
+      errors: unknown
+      data: components['schemas']['UserDto']
+    }
+    UpdateDrugRequest: {
+      drugName: string
+      url: string
+      note?: string | null
+    }
+    UpdateMedicationHistoryRequest: {
+      /** Format: double */
+      amount: number
+      note?: string | null
+    }
+    UserDto: {
+      /** Format: int64 */
+      id: number | null
+      name: string | null
+      iconUrl: string | null
+      isRegistered: boolean
+      discordUserId: string | null
+    }
+  }
+  responses: never
+  parameters: never
+  requestBodies: never
+  headers: never
+  pathItems: never
 }
-export type $defs = Record<string, never>;
-export type operations = Record<string, never>;
+export type $defs = Record<string, never>
+export type operations = Record<string, never>

@@ -10,7 +10,7 @@ export default async function PageSetup() {
     .map((c) => `${c.name}=${c.value}`)
     .join('; ')
   const apiClient = createServerApiClient({ cookie })
-  const user = await userRepository.getCurrentUser(apiClient)
+  await userRepository.getCurrentUser(apiClient)
 
   return <SetupForm />
 }

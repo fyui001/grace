@@ -25,7 +25,10 @@ export const Default: Story = {
       drugName: 'レボチロキシン',
       amount: 50,
       note: JSON.stringify([
-        { type: 'paragraph', content: [{ type: 'text', text: '朝食前に水で服用。体調良好。' }] },
+        {
+          type: 'paragraph',
+          content: [{ type: 'text', text: '朝食前に水で服用。体調良好。' }],
+        },
       ]),
       createdAt: '2026-03-23T07:30:00',
     },

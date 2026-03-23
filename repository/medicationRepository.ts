@@ -55,7 +55,10 @@ export const medicationRepository = {
       }
       return true
     } catch (e) {
-      console.error('[medicationRepository] createMedicationHistory exception:', e)
+      console.error(
+        '[medicationRepository] createMedicationHistory exception:',
+        e,
+      )
       return false
     }
   },

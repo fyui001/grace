@@ -25,7 +25,12 @@ export const Default: Story = {
       name: 'レボチロキシン',
       url: 'https://example.com/drug/levothyroxine',
       note: JSON.stringify([
-        { type: 'paragraph', content: [{ type: 'text', text: '甲状腺ホルモン補充薬。朝食前に服用。' }] },
+        {
+          type: 'paragraph',
+          content: [
+            { type: 'text', text: '甲状腺ホルモン補充薬。朝食前に服用。' },
+          ],
+        },
       ]),
     },
   },

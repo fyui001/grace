@@ -19,8 +19,18 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 const sampleItems = [
-  { id: '1', name: 'レボチロキシン', url: 'https://example.com/drug/1', hasNote: true },
-  { id: '2', name: 'ロキソプロフェン', url: 'https://example.com/drug/2', hasNote: false },
+  {
+    id: '1',
+    name: 'レボチロキシン',
+    url: 'https://example.com/drug/1',
+    hasNote: true,
+  },
+  {
+    id: '2',
+    name: 'ロキソプロフェン',
+    url: 'https://example.com/drug/2',
+    hasNote: false,
+  },
   { id: '3', name: 'アムロジピン', url: '', hasNote: true },
 ]
 

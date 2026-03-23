@@ -29,7 +29,12 @@ const OverlayContent = styled.div`
   background: var(--color-background-container-content);
   background: linear-gradient(
     180deg,
-    color-mix(in srgb, var(--color-background-container-content) 80%, transparent) 0%,
+    color-mix(
+        in srgb,
+        var(--color-background-container-content) 80%,
+        transparent
+      )
+      0%,
     var(--color-background-container-content) 100%
   );
   padding: 32px;
@@ -40,7 +45,9 @@ interface DiscordLinkPromptProps {
   children: React.ReactNode
 }
 
-export default function DiscordLinkPrompt({ children }: DiscordLinkPromptProps) {
+export default function DiscordLinkPrompt({
+  children,
+}: DiscordLinkPromptProps) {
   const router = useRouter()
 
   return (
@@ -52,7 +59,8 @@ export default function DiscordLinkPrompt({ children }: DiscordLinkPromptProps) 
           Discordと連携してデータを表示
         </Box>
         <Box variant="p" color="text-body-secondary" textAlign="center">
-          Discord Botと連携すると、服薬記録の登録やリマインダー通知が利用できます。
+          Discord
+          Botと連携すると、服薬記録の登録やリマインダー通知が利用できます。
         </Box>
         <Button variant="primary" onClick={() => router.push('/settings')}>
           設定画面で連携する
