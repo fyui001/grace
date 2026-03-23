@@ -9,21 +9,20 @@ WORKDIR /app
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
 COPY . .
-ARG SSR_API_URL=http://chiron
-ENV SSR_API_URL=${SSR_API_URL}
+ARG SSR_API_BASE_PATH=http://sophia
+ENV SSR_API_BASE_PATH=${SSR_API_BASE_PATH}
 RUN yarn build
 
-FROM base
+FROM base AS production
 WORKDIR /app
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nodejs
 
-COPY --chown=nodejs:nodejs ./public ./public
-COPY --chown=nodejs:nodejs ./.next/standalone ./
-COPY --chown=nodejs:nodejs ./.next/static ./.next/static
+COPY --from=build --chown=nodejs:nodejs /app/public ./public
+COPY --from=build --chown=nodejs:nodejs /app/.next/standalone ./
+COPY --from=build --chown=nodejs:nodejs /app/.next/static ./.next/static
 
 USER nodejs
 
 CMD ["node", "server.js"]
-
