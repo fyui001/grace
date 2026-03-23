@@ -3,6 +3,11 @@ import { Header, SpaceBetween } from '@cloudscape-design/components'
 import AppShell from '../../components/layout/AppShell'
 import { withThemeProvider } from '../decorators'
 
+const sampleUser = {
+  name: 'テストユーザー',
+  iconUrl: null,
+}
+
 const meta = {
   title: 'Layout/AppShell',
   component: AppShell,
@@ -15,6 +20,9 @@ const meta = {
       },
     },
   },
+  args: {
+    user: sampleUser,
+  },
 } satisfies Meta<typeof AppShell>
 
 export default meta
@@ -25,6 +33,45 @@ export const Default: Story = {
     children: (
       <SpaceBetween size="l">
         <Header variant="h1">ダッシュボード</Header>
+      </SpaceBetween>
+    ),
+  },
+}
+
+export const DrugListActive: Story = {
+  parameters: {
+    nextjs: {
+      navigation: {
+        pathname: '/medication/drugs',
+      },
+    },
+  },
+  args: {
+    children: (
+      <SpaceBetween size="l">
+        <Header variant="h1">薬一覧</Header>
+      </SpaceBetween>
+    ),
+  },
+}
+
+export const DrugDetailWithBreadcrumbs: Story = {
+  parameters: {
+    nextjs: {
+      navigation: {
+        pathname: '/medication/drugs/1',
+      },
+    },
+  },
+  args: {
+    breadcrumbs: [
+      { text: 'Grace', href: '/dashboard' },
+      { text: '薬一覧', href: '/medication/drugs' },
+      { text: 'レボチロキシン', href: '/medication/drugs/1' },
+    ],
+    children: (
+      <SpaceBetween size="l">
+        <Header variant="h1">レボチロキシン</Header>
       </SpaceBetween>
     ),
   },
@@ -42,6 +89,28 @@ export const MedicationHistoryActive: Story = {
     children: (
       <SpaceBetween size="l">
         <Header variant="h1">服薬履歴</Header>
+      </SpaceBetween>
+    ),
+  },
+}
+
+export const MedicationHistoryDetailWithBreadcrumbs: Story = {
+  parameters: {
+    nextjs: {
+      navigation: {
+        pathname: '/medication/history/1',
+      },
+    },
+  },
+  args: {
+    breadcrumbs: [
+      { text: 'Grace', href: '/dashboard' },
+      { text: '服薬履歴', href: '/medication/history' },
+      { text: '服薬履歴詳細', href: '/medication/history/1' },
+    ],
+    children: (
+      <SpaceBetween size="l">
+        <Header variant="h1">服薬履歴詳細</Header>
       </SpaceBetween>
     ),
   },

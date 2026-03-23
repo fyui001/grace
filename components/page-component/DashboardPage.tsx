@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import {
   Container,
   Header,
@@ -10,6 +11,7 @@ import {
   Tabs,
 } from '@cloudscape-design/components'
 import ScrollableTable from 'components/common/ScrollableTable'
+import DiscordLinkPrompt from 'components/common/DiscordLinkPrompt'
 import {
   Bar,
   BarChart,
@@ -35,6 +37,7 @@ interface MedicationHistory {
 
 interface DashboardPageProps {
   histories: MedicationHistory[]
+  discordLinked?: boolean
 }
 
 const COLORS = [
@@ -74,21 +77,21 @@ function buildDailyCount(histories: MedicationHistory[]) {
     .map(([date, count]) => ({ date: date.substring(5), count }))
 }
 
-// --- 日別服薬量 (薬別) ---
+// --- 日別服薬回数 (薬別) ---
 
-function buildDailyAmountByDrug(histories: MedicationHistory[]) {
+function buildDailyCountByDrug(histories: MedicationHistory[]) {
   const drugs = [...new Set(histories.map((h) => h.drugName))]
   const map = new Map<string, Record<string, number>>()
   for (const h of histories) {
     const date = h.createdAt.substring(0, 10)
     if (!map.has(date)) map.set(date, {})
     const day = map.get(date)!
-    day[h.drugName] = (day[h.drugName] ?? 0) + h.amount
+    day[h.drugName] = (day[h.drugName] ?? 0) + 1
   }
   return {
     data: [...map.entries()]
       .sort(([a], [b]) => a.localeCompare(b))
-      .map(([date, amounts]) => ({ date: date.substring(5), ...amounts })),
+      .map(([date, counts]) => ({ date: date.substring(5), ...counts })),
     drugs,
   }
 }
@@ -120,7 +123,7 @@ function buildHourlyDistribution(histories: MedicationHistory[]) {
   }))
 }
 
-// --- 週別服薬量 (薬別) ---
+// --- 週別服薬回数 (薬別) ---
 
 function getMonday(date: Date) {
   const d = new Date(date)
@@ -134,15 +137,14 @@ function fmtShort(d: Date) {
   return `${d.getMonth() + 1}/${d.getDate()}`
 }
 
-function buildWeeklyAmountByDrug(histories: MedicationHistory[]) {
-  const filtered = histories.filter((h) => h.amount > 0)
-  const drugs = [...new Set(filtered.map((h) => h.drugName))]
+function buildWeeklyCountByDrug(histories: MedicationHistory[]) {
+  const drugs = [...new Set(histories.map((h) => h.drugName))]
   const map = new Map<
     number,
-    { label: string; amounts: Record<string, number> }
+    { label: string; counts: Record<string, number> }
   >()
 
-  for (const h of filtered) {
+  for (const h of histories) {
     const monday = getMonday(new Date(h.createdAt))
     const key = monday.getTime()
     if (!map.has(key)) {
@@ -150,20 +152,20 @@ function buildWeeklyAmountByDrug(histories: MedicationHistory[]) {
       sunday.setDate(sunday.getDate() + 6)
       map.set(key, {
         label: `${fmtShort(monday)}~${fmtShort(sunday)}`,
-        amounts: {},
+        counts: {},
       })
     }
     const week = map.get(key)!
-    week.amounts[h.drugName] = (week.amounts[h.drugName] ?? 0) + h.amount
+    week.counts[h.drugName] = (week.counts[h.drugName] ?? 0) + 1
   }
 
   return {
     data: [...map.entries()]
       .sort(([a], [b]) => a - b)
-      .map(([, { label, amounts }]) => {
+      .map(([, { label, counts }]) => {
         const row: Record<string, string | number> = { week: label }
         for (const drug of drugs) {
-          row[drug] = amounts[drug] ?? 0
+          row[drug] = counts[drug] ?? 0
         }
         return row
       }),
@@ -191,11 +193,7 @@ function PeriodSelect({
   )
 }
 
-function DailyCountChart({
-  histories,
-}: {
-  histories: MedicationHistory[]
-}) {
+function DailyCountChart({ histories }: { histories: MedicationHistory[] }) {
   const data = useMemo(() => buildDailyCount(histories), [histories])
   return (
     <ResponsiveContainer width="100%" height={300}>
@@ -210,13 +208,13 @@ function DailyCountChart({
   )
 }
 
-function DailyAmountChart({
+function DailyCountByDrugChart({
   histories,
 }: {
   histories: MedicationHistory[]
 }) {
   const { data, drugs } = useMemo(
-    () => buildDailyAmountByDrug(histories),
+    () => buildDailyCountByDrug(histories),
     [histories],
   )
   return (
@@ -224,16 +222,16 @@ function DailyAmountChart({
       <BarChart data={data}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="date" fontSize={12} />
-        <YAxis />
+        <YAxis allowDecimals={false} />
         <Tooltip />
         <Legend />
         {drugs.map((drug, i) => (
           <Bar
             key={drug}
             dataKey={drug}
-            name={`${drug} (mg)`}
+            name={drug}
             fill={COLORS[i % COLORS.length]}
-            stackId="amount"
+            stackId="count"
           />
         ))}
       </BarChart>
@@ -241,11 +239,7 @@ function DailyAmountChart({
   )
 }
 
-function DrugBreakdownChart({
-  histories,
-}: {
-  histories: MedicationHistory[]
-}) {
+function DrugBreakdownChart({ histories }: { histories: MedicationHistory[] }) {
   const data = useMemo(() => buildDrugBreakdown(histories), [histories])
   return (
     <ResponsiveContainer width="100%" height={300}>
@@ -272,10 +266,7 @@ function DrugBreakdownChart({
 }
 
 function HourlyChart({ histories }: { histories: MedicationHistory[] }) {
-  const data = useMemo(
-    () => buildHourlyDistribution(histories),
-    [histories],
-  )
+  const data = useMemo(() => buildHourlyDistribution(histories), [histories])
   return (
     <ResponsiveContainer width="100%" height={300}>
       <BarChart data={data}>
@@ -289,13 +280,9 @@ function HourlyChart({ histories }: { histories: MedicationHistory[] }) {
   )
 }
 
-function WeeklyAmountChart({
-  histories,
-}: {
-  histories: MedicationHistory[]
-}) {
+function WeeklyCountChart({ histories }: { histories: MedicationHistory[] }) {
   const { data, drugs } = useMemo(
-    () => buildWeeklyAmountByDrug(histories),
+    () => buildWeeklyCountByDrug(histories),
     [histories],
   )
   return (
@@ -303,15 +290,15 @@ function WeeklyAmountChart({
       <LineChart data={data}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="week" fontSize={12} />
-        <YAxis />
-        <Tooltip formatter={(value) => `${value}mg`} />
+        <YAxis allowDecimals={false} />
+        <Tooltip formatter={(value) => `${value}回`} />
         <Legend />
         {drugs.map((drug, i) => (
           <Line
             key={drug}
             type="monotone"
             dataKey={drug}
-            name={`${drug} (mg)`}
+            name={drug}
             stroke={COLORS[i % COLORS.length]}
             strokeWidth={2}
             connectNulls
@@ -322,22 +309,20 @@ function WeeklyAmountChart({
   )
 }
 
-function RecentHistoryTable({
-  histories,
-}: {
-  histories: MedicationHistory[]
-}) {
+function RecentHistoryTable({ histories }: { histories: MedicationHistory[] }) {
+  const router = useRouter()
   const recentItems = histories.map((h) => ({
-      id: String(h.id),
-      name: h.drugName,
-      amount: h.amount,
-      takenAt: h.createdAt.replace('T', ' ').substring(0, 16),
-    }))
+    id: String(h.id),
+    name: h.drugName,
+    amount: h.amount,
+    takenAt: h.createdAt.replace('T', ' ').substring(0, 16),
+  }))
 
   return (
-    <ScrollableTable>
+    <ScrollableTable clickableRows>
       <Table
         variant="container"
+        stickyHeader
         header={
           <Header variant="h2" counter={`(${recentItems.length})`}>
             直近の服薬履歴
@@ -361,12 +346,45 @@ function RecentHistoryTable({
         stripedRows
         sortingDisabled
         empty="服薬履歴はありません"
+        onRowClick={({ detail }) =>
+          router.push(`/medication/history/${detail.item.id}`)
+        }
       />
     </ScrollableTable>
   )
 }
 
-export default function DashboardPage({ histories }: DashboardPageProps) {
+const MOCK_HISTORIES: MedicationHistory[] = Array.from(
+  { length: 30 },
+  (_, i) => {
+    const date = new Date(2026, 2, 23)
+    date.setDate(date.getDate() - Math.floor(i / 2))
+    date.setHours(7 + (i % 3), (i * 13) % 60)
+    return {
+      id: i + 1,
+      drugName: ['レボチロキシン', 'ロキソプロフェン', 'アムロジピン'][i % 3],
+      amount: [50, 60, 5][i % 3],
+      createdAt: date.toISOString(),
+    }
+  },
+)
+
+function MockDashboardContent() {
+  return (
+    <SpaceBetween size="l">
+      <Header variant="h1">ダッシュボード</Header>
+      <Container header={<Header variant="h2">服薬分析</Header>}>
+        <DailyCountChart histories={MOCK_HISTORIES} />
+      </Container>
+      <RecentHistoryTable histories={MOCK_HISTORIES.slice(0, 10)} />
+    </SpaceBetween>
+  )
+}
+
+export default function DashboardPage({
+  histories,
+  discordLinked,
+}: DashboardPageProps) {
   const [period, setPeriod] = useState('30')
   const [activeTab, setActiveTab] = useState('daily-count')
 
@@ -375,15 +393,27 @@ export default function DashboardPage({ histories }: DashboardPageProps) {
     [histories, period],
   )
 
+  if (discordLinked === false) {
+    return (
+      <SpaceBetween size="l">
+        <Header variant="h1">ダッシュボード</Header>
+        <DiscordLinkPrompt>
+          <MockDashboardContent />
+        </DiscordLinkPrompt>
+      </SpaceBetween>
+    )
+  }
+
   return (
     <SpaceBetween size="l">
-      <Header variant="h1" actions={<PeriodSelect value={period} onChange={setPeriod} />}>
+      <Header
+        variant="h1"
+        actions={<PeriodSelect value={period} onChange={setPeriod} />}
+      >
         ダッシュボード
       </Header>
 
-      <Container
-        header={<Header variant="h2">服薬分析</Header>}
-      >
+      <Container header={<Header variant="h2">服薬分析</Header>}>
         <Tabs
           activeTabId={activeTab}
           onChange={({ detail }) => setActiveTab(detail.activeTabId)}
@@ -394,14 +424,14 @@ export default function DashboardPage({ histories }: DashboardPageProps) {
               content: <DailyCountChart histories={filtered} />,
             },
             {
-              id: 'daily-amount',
-              label: '日別服薬量',
-              content: <DailyAmountChart histories={filtered} />,
+              id: 'daily-by-drug',
+              label: '日別回数(薬別)',
+              content: <DailyCountByDrugChart histories={filtered} />,
             },
             {
-              id: 'weekly-amount',
-              label: '週別服薬量',
-              content: <WeeklyAmountChart histories={filtered} />,
+              id: 'weekly-by-drug',
+              label: '週別回数(薬別)',
+              content: <WeeklyCountChart histories={filtered} />,
             },
             {
               id: 'hourly',

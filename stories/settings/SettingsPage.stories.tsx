@@ -19,8 +19,15 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Default: Story = {}
+export const Default: Story = {
+  args: {
+    userName: 'テストユーザー',
+  },
+}
 
 export const WithAppShell: Story = {
+  args: {
+    userName: 'テストユーザー',
+  },
   decorators: [withAppShell],
 }

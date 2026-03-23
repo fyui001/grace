@@ -16,8 +16,8 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   args: {
-    email: 'user@example.com',
-    plan: 'フリー',
+    userName: 'テストユーザー',
+    authProvider: 'Auth0',
     onLogout: () => {},
   },
 }

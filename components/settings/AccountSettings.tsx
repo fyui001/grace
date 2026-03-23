@@ -8,14 +8,14 @@ import {
 } from '@cloudscape-design/components'
 
 interface AccountSettingsProps {
-  email: string
-  plan: string
+  userName: string
+  authProvider: string
   onLogout: () => void
 }
 
 export default function AccountSettings({
-  email,
-  plan,
+  userName,
+  authProvider,
   onLogout,
 }: AccountSettingsProps) {
   return (
@@ -24,8 +24,8 @@ export default function AccountSettings({
         <KeyValuePairs
           columns={2}
           items={[
-            { label: 'メールアドレス', value: email },
-            { label: 'プラン', value: plan },
+            { label: '表示名', value: userName || '-' },
+            { label: '認証方法', value: authProvider },
           ]}
         />
         <Box>

@@ -6,6 +6,11 @@ const meta = {
   component: MedicationHistoryTable,
   parameters: {
     layout: 'padded',
+    nextjs: {
+      navigation: {
+        pathname: '/medication/history',
+      },
+    },
   },
 } satisfies Meta<typeof MedicationHistoryTable>
 
@@ -24,6 +29,7 @@ const generateItems = (count: number) =>
       name: i % 3 === 0 ? 'レボチロキシン' : 'ロキソプロフェン',
       amount: i % 3 === 0 ? 1 : 2,
       takenAt: `${yyyy}-${mm}-${dd} 07:${String(30 - (i % 15)).padStart(2, '0')}`,
+      hasNote: i % 4 === 0,
     }
   })
 

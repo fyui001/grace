@@ -1,20 +1,18 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Icon } from '@cloudscape-design/components'
+import { Icon, Link } from '@cloudscape-design/components'
 import PaginatedTable from 'components/common/PaginatedTable'
 
-interface MedicationRecord {
+interface Drug {
   id: string
   name: string
-  amount: number
-  takenAt: string
+  url: string
   hasNote?: boolean
 }
 
-interface MedicationHistoryTableProps {
-  items: MedicationRecord[]
-  loading?: boolean
+interface DrugListTableProps {
+  items: Drug[]
   currentPage: number
   lastPage: number
   perPage: number
@@ -23,21 +21,20 @@ interface MedicationHistoryTableProps {
   onPageSizeChange: (pageSize: number) => void
 }
 
-export default function MedicationHistoryTable({
+export default function DrugListTable({
   items,
-  loading,
   currentPage,
   lastPage,
   perPage,
   total,
   onPageChange,
   onPageSizeChange,
-}: MedicationHistoryTableProps) {
+}: DrugListTableProps) {
   const router = useRouter()
 
   return (
     <PaginatedTable
-      title="履歴一覧"
+      title="薬一覧"
       maxHeight="calc(100vh - 250px)"
       columnDefinitions={[
         {
@@ -56,28 +53,28 @@ export default function MedicationHistoryTable({
           ),
         },
         {
-          id: 'amount',
-          header: '服薬量(mg)',
-          cell: (item) => `${item.amount}mg`,
-        },
-        {
-          id: 'takenAt',
-          header: '服薬日時',
-          cell: (item) => item.takenAt,
-          sortingField: 'takenAt',
+          id: 'url',
+          header: 'リンク',
+          cell: (item) =>
+            item.url ? (
+              <Link href={item.url} external>
+                詳細
+              </Link>
+            ) : (
+              '-'
+            ),
         },
       ]}
       items={items}
       trackBy="id"
-      loading={loading}
-      empty="服薬履歴がありません"
+      empty="薬が登録されていません"
       currentPage={currentPage}
       lastPage={lastPage}
       perPage={perPage}
       total={total}
       onPageChange={onPageChange}
       onPageSizeChange={onPageSizeChange}
-      onRowClick={(item) => router.push(`/medication/history/${item.id}`)}
+      onRowClick={(item) => router.push(`/medication/drugs/${item.id}`)}
     />
   )
 }

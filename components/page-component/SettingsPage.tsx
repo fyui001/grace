@@ -7,13 +7,14 @@ import { useApiClient } from 'client/apiClient'
 import { userRepository } from 'repository/userRepository'
 import { discordLinkPath } from 'utils/urls'
 import DisplaySettings from 'components/settings/DisplaySettings'
-import NotificationSettings from 'components/settings/NotificationSettings'
 import ExternalServiceSettings from 'components/settings/ExternalServiceSettings'
 import AccountSettings from 'components/settings/AccountSettings'
 
-export default function SettingsPage() {
-  const [reminderEnabled, setReminderEnabled] = useState(true)
-  const [reminderTime, setReminderTime] = useState('07:30')
+interface SettingsPageProps {
+  userName: string
+}
+
+export default function SettingsPage({ userName }: SettingsPageProps) {
   const { mode, toggleMode } = useTheme()
 
   const apiClient = useApiClient()
@@ -44,18 +45,15 @@ export default function SettingsPage() {
     }
   }, [apiClient])
 
+  const handleLogout = useCallback(() => {
+    window.location.href = '/logout'
+  }, [])
+
   return (
     <SpaceBetween size="l">
       <Header variant="h1">設定</Header>
 
       <DisplaySettings mode={mode} onToggle={toggleMode} />
-
-      <NotificationSettings
-        reminderEnabled={reminderEnabled}
-        onReminderEnabledChange={setReminderEnabled}
-        reminderTime={reminderTime}
-        onReminderTimeChange={setReminderTime}
-      />
 
       <ExternalServiceSettings
         discordUserId={discordUserId}
@@ -65,9 +63,9 @@ export default function SettingsPage() {
       />
 
       <AccountSettings
-        email="user@example.com"
-        plan="フリー"
-        onLogout={() => {}}
+        userName={userName}
+        authProvider="Auth0"
+        onLogout={handleLogout}
       />
     </SpaceBetween>
   )

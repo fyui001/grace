@@ -1,13 +1,13 @@
 import { cookies } from 'next/headers'
 import { createServerApiClient } from 'client/serverApiClient'
-import { medicationRepository } from 'repository/medicationRepository'
+import { drugRepository } from 'repository/drugRepository'
 import AppShell from 'components/layout/AppShell'
-import MedicationHistoryPage from 'components/page-component/MedicationHistoryPage'
+import DrugListPage from 'components/page-component/DrugListPage'
 import { getServerUser } from 'libs/server/getServerUser'
 
 const DEFAULT_PAGE_SIZE = 25
 
-export default async function PageMedicationHistory({
+export default async function PageDrugs({
   searchParams,
 }: {
   searchParams: Promise<{ page?: string; per_page?: string }>
@@ -20,28 +20,23 @@ export default async function PageMedicationHistory({
     .map((c) => `${c.name}=${c.value}`)
     .join('; ')
 
-  const pageSizeCookie = cookieStore.get('grace-medication-history-page-size')
+  const pageSizeCookie = cookieStore.get('grace-drug-list-page-size')
   const perPage = Number(pageSizeCookie?.value) || DEFAULT_PAGE_SIZE
 
   const user = await getServerUser()
   const apiClient = createServerApiClient({ cookie })
-  const data = await medicationRepository.getMedicationHistories(
-    apiClient,
-    page,
-    perPage,
-  )
+  const data = await drugRepository.getDrugs(apiClient, page, perPage)
 
   const items = (data?.data ?? []).map((h) => ({
     id: String(h.id),
-    name: h.drugName ?? '',
-    amount: h.amount,
-    takenAt: (h.createdAt ?? '').replace('T', ' ').substring(0, 16),
+    name: h.name ?? '',
+    url: h.url ?? '',
     hasNote: !!h.note,
   }))
 
   return (
     <AppShell user={user ?? undefined}>
-      <MedicationHistoryPage
+      <DrugListPage
         items={items}
         currentPage={data?.currentPage ?? 1}
         lastPage={data?.lastPage ?? 1}

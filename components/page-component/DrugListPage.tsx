@@ -3,25 +3,24 @@
 import { useCallback } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Header, SpaceBetween } from '@cloudscape-design/components'
-import MedicationHistoryTable from 'components/medication/MedicationHistoryTable'
+import DrugListTable from 'components/medication/DrugListTable'
 import DiscordLinkPrompt from 'components/common/DiscordLinkPrompt'
 
-const PAGE_SIZE_COOKIE = 'grace-medication-history-page-size'
+const PAGE_SIZE_COOKIE = 'grace-drug-list-page-size'
 
 function setPageSizeCookie(size: number) {
   document.cookie = `${PAGE_SIZE_COOKIE}=${size}; path=/; max-age=${60 * 60 * 24 * 365}; SameSite=Lax`
 }
 
-interface MedicationRecord {
+interface Drug {
   id: string
   name: string
-  amount: number
-  takenAt: string
+  url: string
   hasNote?: boolean
 }
 
-interface MedicationHistoryPageProps {
-  items: MedicationRecord[]
+interface DrugListPageProps {
+  items: Drug[]
   currentPage: number
   lastPage: number
   perPage: number
@@ -29,22 +28,20 @@ interface MedicationHistoryPageProps {
   discordLinked?: boolean
 }
 
-const MOCK_ITEMS: MedicationRecord[] = [
-  { id: '1', name: 'レボチロキシン', amount: 50, takenAt: '2026-03-23 07:30' },
-  { id: '2', name: 'ロキソプロフェン', amount: 60, takenAt: '2026-03-23 08:00' },
-  { id: '3', name: 'レボチロキシン', amount: 50, takenAt: '2026-03-22 07:25' },
-  { id: '4', name: 'アムロジピン', amount: 5, takenAt: '2026-03-22 08:00' },
-  { id: '5', name: 'ロキソプロフェン', amount: 60, takenAt: '2026-03-21 12:00' },
+const MOCK_ITEMS: Drug[] = [
+  { id: '1', name: 'レボチロキシン', url: 'https://example.com', hasNote: true },
+  { id: '2', name: 'ロキソプロフェン', url: '', hasNote: false },
+  { id: '3', name: 'アムロジピン', url: '', hasNote: true },
 ]
 
-export default function MedicationHistoryPage({
+export default function DrugListPage({
   items,
   currentPage,
   lastPage,
   perPage,
   total,
   discordLinked,
-}: MedicationHistoryPageProps) {
+}: DrugListPageProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -78,14 +75,14 @@ export default function MedicationHistoryPage({
   if (discordLinked === false) {
     return (
       <SpaceBetween size="l">
-        <Header variant="h1">服薬履歴</Header>
+        <Header variant="h1">薬一覧</Header>
         <DiscordLinkPrompt>
-          <MedicationHistoryTable
+          <DrugListTable
             items={MOCK_ITEMS}
             currentPage={1}
-            lastPage={3}
+            lastPage={1}
             perPage={25}
-            total={62}
+            total={3}
             onPageChange={() => {}}
             onPageSizeChange={() => {}}
           />
@@ -96,8 +93,8 @@ export default function MedicationHistoryPage({
 
   return (
     <SpaceBetween size="l">
-      <Header variant="h1">服薬履歴</Header>
-      <MedicationHistoryTable
+      <Header variant="h1">薬一覧</Header>
+      <DrugListTable
         items={items}
         currentPage={currentPage}
         lastPage={lastPage}

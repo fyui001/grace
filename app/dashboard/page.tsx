@@ -3,8 +3,10 @@ import { createServerApiClient } from 'client/serverApiClient'
 import { medicationRepository } from 'repository/medicationRepository'
 import AppShell from 'components/layout/AppShell'
 import DashboardPage from 'components/page-component/DashboardPage'
+import { getServerUser } from 'libs/server/getServerUser'
 
 export default async function PageDashboard() {
+  const user = await getServerUser()
   const cookieStore = await cookies()
   const cookie = cookieStore
     .getAll()
@@ -19,14 +21,17 @@ export default async function PageDashboard() {
 
   const histories = (data?.data ?? []).map((h) => ({
     id: h.id,
-    drugName: h.drugName,
+    drugName: h.drugName ?? '',
     amount: h.amount,
-    createdAt: h.createdAt,
+    createdAt: h.createdAt ?? '',
   }))
 
   return (
-    <AppShell>
-      <DashboardPage histories={histories} />
+    <AppShell user={user ?? undefined}>
+      <DashboardPage
+        histories={histories}
+        discordLinked={!!user?.discordUserId}
+      />
     </AppShell>
   )
 }

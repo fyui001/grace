@@ -31,6 +31,7 @@ interface PaginatedTableProps<T> {
   total: number
   onPageChange: (page: number) => void
   onPageSizeChange: (pageSize: number) => void
+  onRowClick?: (item: T) => void
   maxHeight?: string
 }
 
@@ -48,45 +49,55 @@ export default function PaginatedTable<T>({
   total,
   onPageChange,
   onPageSizeChange,
+  onRowClick,
   maxHeight,
 }: PaginatedTableProps<T>) {
   return (
-    <ScrollableTable maxHeight={maxHeight}>
-    <Table
-      variant="container"
-      header={
-        <Header variant="h2" counter={`(${total})`}>
-          {title}
-        </Header>
-      }
-      loading={loading}
-      loadingText={loadingText}
-      columnDefinitions={columnDefinitions}
-      items={items}
-      trackBy={trackBy}
-      stripedRows
-      sortingDisabled
-      empty={empty}
-      pagination={
-        <SpaceBetween direction="horizontal" size="xs" alignItems="center">
-          <Select
-            selectedOption={
-              PAGE_SIZE_OPTIONS.find((o) => o.value === String(perPage)) ??
-              PAGE_SIZE_OPTIONS[0]
-            }
-            options={PAGE_SIZE_OPTIONS}
-            onChange={({ detail }) =>
-              onPageSizeChange(Number(detail.selectedOption.value))
-            }
-          />
-          <Pagination
-            currentPageIndex={currentPage}
-            pagesCount={lastPage}
-            onChange={({ detail }) => onPageChange(detail.currentPageIndex)}
-          />
-        </SpaceBetween>
-      }
-    />
+    <ScrollableTable
+      maxHeight={maxHeight}
+      clickableRows={!!onRowClick}
+    >
+      <Table
+        variant="container"
+        stickyHeader
+        header={
+          <Header variant="h2" counter={`(${total})`}>
+            {title}
+          </Header>
+        }
+        loading={loading}
+        loadingText={loadingText}
+        columnDefinitions={columnDefinitions}
+        items={items}
+        trackBy={trackBy}
+        stripedRows
+        sortingDisabled
+        onRowClick={
+          onRowClick
+            ? ({ detail }) => onRowClick(detail.item)
+            : undefined
+        }
+        empty={empty}
+        pagination={
+          <SpaceBetween direction="horizontal" size="xs" alignItems="center">
+            <Select
+              selectedOption={
+                PAGE_SIZE_OPTIONS.find((o) => o.value === String(perPage)) ??
+                PAGE_SIZE_OPTIONS[0]
+              }
+              options={PAGE_SIZE_OPTIONS}
+              onChange={({ detail }) =>
+                onPageSizeChange(Number(detail.selectedOption.value))
+              }
+            />
+            <Pagination
+              currentPageIndex={currentPage}
+              pagesCount={lastPage}
+              onChange={({ detail }) => onPageChange(detail.currentPageIndex)}
+            />
+          </SpaceBetween>
+        }
+      />
     </ScrollableTable>
   )
 }
