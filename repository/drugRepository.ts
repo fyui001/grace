@@ -31,6 +31,23 @@ export const drugRepository = {
     return true
   },
 
+  async createDrug(
+    apiClient: ClientType,
+    body: { drugName: string; url: string },
+  ) {
+    try {
+      const result = await apiClient.POST('/api/drugs', { body })
+      if (result.error) {
+        console.error('[drugRepository] createDrug error:', result.error)
+        return false
+      }
+      return true
+    } catch (e) {
+      console.error('[drugRepository] createDrug exception:', e)
+      return false
+    }
+  },
+
   async getDrug(apiClient: ClientType, id: number) {
     try {
       const result = await apiClient.GET('/api/drugs/{id}', {
