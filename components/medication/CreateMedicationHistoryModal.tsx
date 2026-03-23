@@ -103,7 +103,11 @@ export default function CreateMedicationHistoryModal({
   }, [reset, onDismiss])
 
   const validEntries = entries.filter(
-    (e) => e.drugId !== '' && e.amount !== '' && Number(e.amount) > 0,
+    (e) =>
+      e.drugId !== '' &&
+      e.amount !== '' &&
+      !isNaN(Number(e.amount)) &&
+      Number(e.amount) > 0,
   )
 
   const handleSubmit = useCallback(async () => {
@@ -203,7 +207,6 @@ export default function CreateMedicationHistoryModal({
                 onChange={({ detail }) =>
                   updateEntry(index, 'amount', detail.value)
                 }
-                type="number"
                 placeholder="mg"
                 inputMode="decimal"
               />
