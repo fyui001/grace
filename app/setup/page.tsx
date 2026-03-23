@@ -12,5 +12,5 @@ export default async function PageSetup() {
   const apiClient = createServerApiClient({ cookie })
   const user = await userRepository.getCurrentUser(apiClient)
 
-  return <SetupForm email={user?.email} />
+  return <SetupForm />
 }

@@ -1,56 +1,63 @@
 'use client'
 
-import { Header, StatusIndicator, Table } from '@cloudscape-design/components'
+import PaginatedTable from 'components/common/PaginatedTable'
 
 interface MedicationRecord {
   id: string
-  date: string
   name: string
-  time: string
-  status: string
+  amount: number
+  takenAt: string
+}
+
+interface MedicationHistoryTableProps {
+  items: MedicationRecord[]
+  loading?: boolean
+  currentPage: number
+  lastPage: number
+  perPage: number
+  total: number
+  onPageChange: (page: number) => void
+  onPageSizeChange: (pageSize: number) => void
 }
 
 export default function MedicationHistoryTable({
   items,
   loading,
-}: {
-  items: MedicationRecord[]
-  loading?: boolean
-}) {
+  currentPage,
+  lastPage,
+  perPage,
+  total,
+  onPageChange,
+  onPageSizeChange,
+}: MedicationHistoryTableProps) {
   return (
-    <Table
-      variant="container"
-      header={
-        <Header variant="h2" counter={`(${items.length})`}>
-          履歴一覧
-        </Header>
-      }
-      loading={loading}
-      loadingText="読み込み中"
+    <PaginatedTable
+      title="履歴一覧"
+      maxHeight="calc(100vh - 250px)"
       columnDefinitions={[
-        {
-          id: 'date',
-          header: '日付',
-          cell: (item) => item.date,
-          sortingField: 'date',
-        },
         { id: 'name', header: '薬名', cell: (item) => item.name },
-        { id: 'time', header: '服薬時刻', cell: (item) => item.time },
         {
-          id: 'status',
-          header: 'ステータス',
-          cell: (item) =>
-            item.status === 'completed' ? (
-              <StatusIndicator type="success">服薬済み</StatusIndicator>
-            ) : (
-              <StatusIndicator type="error">未服薬</StatusIndicator>
-            ),
+          id: 'amount',
+          header: '服薬量(mg)',
+          cell: (item) => `${item.amount}mg`,
+        },
+        {
+          id: 'takenAt',
+          header: '服薬日時',
+          cell: (item) => item.takenAt,
+          sortingField: 'takenAt',
         },
       ]}
       items={items}
       trackBy="id"
-      sortingDisabled
+      loading={loading}
       empty="服薬履歴がありません"
+      currentPage={currentPage}
+      lastPage={lastPage}
+      perPage={perPage}
+      total={total}
+      onPageChange={onPageChange}
+      onPageSizeChange={onPageSizeChange}
     />
   )
 }

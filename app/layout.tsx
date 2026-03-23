@@ -15,7 +15,8 @@ export default async function RootLayout({
   children: React.ReactNode
 }>) {
   const headerStore = await headers()
-  const initialMode = headerStore.get('x-theme-mode') === 'dark' ? 'dark' : 'light'
+  const initialMode =
+    headerStore.get('x-theme-mode') === 'dark' ? 'dark' : 'light'
 
   return (
     <html lang="ja">

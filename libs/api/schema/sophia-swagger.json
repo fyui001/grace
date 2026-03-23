@@ -7,9 +7,7 @@
   "paths": {
     "/api/user": {
       "get": {
-        "tags": [
-          "GetUserAction"
-        ],
+        "tags": ["GetUserAction"],
         "responses": {
           "200": {
             "description": "OK",
@@ -37,11 +35,77 @@
         }
       }
     },
+    "/api/user/discord": {
+      "delete": {
+        "tags": ["UnlinkDiscordAction"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseBaseResponder"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseBaseResponder"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseBaseResponder"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/medication-histories": {
+      "get": {
+        "tags": ["GetMedicationHistoriesAction"],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": { "type": "integer", "nullable": true }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "schema": { "type": "integer", "nullable": true }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MedicationHistoryListResultBaseResponder"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
     "/api/user/register": {
       "post": {
-        "tags": [
-          "RegisterUserAction"
-        ],
+        "tags": ["RegisterUserAction"],
         "requestBody": {
           "content": {
             "application/json": {
@@ -88,10 +152,46 @@
   },
   "components": {
     "schemas": {
+      "MedicationHistoryDetail": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "userId": { "type": "integer", "format": "int64" },
+          "amount": { "type": "number" },
+          "drugId": { "type": "integer" },
+          "drugName": { "type": "string" },
+          "drugUrl": { "type": "string" },
+          "createdAt": { "type": "string" },
+          "updatedAt": { "type": "string" }
+        },
+        "additionalProperties": false
+      },
+      "MedicationHistoryPaginator": {
+        "type": "object",
+        "properties": {
+          "currentPage": { "type": "integer" },
+          "lastPage": { "type": "integer" },
+          "perPage": { "type": "integer" },
+          "total": { "type": "integer" },
+          "data": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/MedicationHistoryDetail" }
+          }
+        },
+        "additionalProperties": false
+      },
+      "MedicationHistoryListResultBaseResponder": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "boolean" },
+          "message": { "type": "string", "nullable": true },
+          "errors": { "nullable": true },
+          "data": { "$ref": "#/components/schemas/MedicationHistoryPaginator" }
+        },
+        "additionalProperties": false
+      },
       "RegisterUserRequest": {
-        "required": [
-          "name"
-        ],
+        "required": ["name"],
         "type": "object",
         "properties": {
           "name": {
@@ -119,6 +219,10 @@
           },
           "isRegistered": {
             "type": "boolean"
+          },
+          "discordUserId": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

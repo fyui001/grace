@@ -18,8 +18,30 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Default: Story = {}
+const sampleItems = [
+  { id: '1', name: 'レボチロキシン', amount: 50, takenAt: '2026-03-23 07:30' },
+  { id: '2', name: 'ロキソプロフェン', amount: 60, takenAt: '2026-03-23 08:00' },
+  { id: '3', name: 'レボチロキシン', amount: 50, takenAt: '2026-03-22 07:25' },
+]
+
+const paginationArgs = {
+  currentPage: 1,
+  lastPage: 4,
+  perPage: 25,
+  total: 80,
+}
+
+export const Default: Story = {
+  args: {
+    items: sampleItems,
+    ...paginationArgs,
+  },
+}
 
 export const WithAppShell: Story = {
+  args: {
+    items: sampleItems,
+    ...paginationArgs,
+  },
   decorators: [withAppShell],
 }

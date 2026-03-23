@@ -17,11 +17,7 @@ const Wrapper = styled.div`
   padding: 0 16px;
 `
 
-export default function LoginRequired({
-  returnTo,
-}: {
-  returnTo?: string
-}) {
+export default function LoginRequired({ returnTo }: { returnTo?: string }) {
   return (
     <Box padding={{ top: 'xxxl' }}>
       <Wrapper>
@@ -37,9 +33,7 @@ export default function LoginRequired({
             </Alert>
             <Box padding="xxxl" textAlign="center">
               <Button
-                href={
-                  returnTo ? loginPathWithReturnToURL(returnTo) : loginPath
-                }
+                href={returnTo ? loginPathWithReturnToURL(returnTo) : loginPath}
                 ariaLabel="ログインページへ"
                 iconAlign="left"
                 iconName="key"

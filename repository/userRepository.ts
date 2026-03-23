@@ -26,4 +26,14 @@ export const userRepository = {
 
     return result.data.data
   },
+
+  async unlinkDiscord(apiClient: ClientType) {
+    const result = await apiClient.DELETE('/api/user/discord')
+
+    if (!result.data) {
+      throw new Error('Failed to unlink Discord')
+    }
+
+    return result.data.data
+  },
 }

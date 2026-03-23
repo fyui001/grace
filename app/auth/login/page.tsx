@@ -19,9 +19,7 @@ export default async function Page(props: {
 
   if (user) {
     const returnTo = searchParams.return_to
-    redirect(
-      returnTo && checkRedirectPath(returnTo) ? returnTo : '/dashboard',
-    )
+    redirect(returnTo && checkRedirectPath(returnTo) ? returnTo : '/dashboard')
   }
 
   return <LoginPage returnTo={searchParams.return_to} />

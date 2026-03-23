@@ -14,7 +14,9 @@ export async function middleware(request: NextRequest) {
   const requestHeaders = new Headers(request.headers)
   requestHeaders.set('x-theme-mode', themeMode === 'dark' ? 'dark' : 'light')
 
-  if (request.nextUrl.pathname.match(/^\/(dashboard|settings|medication)(\/|$)/)) {
+  if (
+    request.nextUrl.pathname.match(/^\/(dashboard|settings|medication)(\/|$)/)
+  ) {
     const cookie = request.headers.get('cookie') ?? ''
     const apiClient = createServerApiClient({ cookie })
     const currentUser = await userRepository.getCurrentUser(apiClient)
