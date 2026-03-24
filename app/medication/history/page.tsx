@@ -22,7 +22,10 @@ export default async function PageMedicationHistory({
     .join('; ')
 
   const pageSizeCookie = cookieStore.get('grace-medication-history-page-size')
-  const perPage = Number(pageSizeCookie?.value) || DEFAULT_PAGE_SIZE
+  const perPage =
+    Number(params.per_page) ||
+    Number(pageSizeCookie?.value) ||
+    DEFAULT_PAGE_SIZE
 
   const user = await getServerUser()
   const apiClient = createServerApiClient({ cookie })
