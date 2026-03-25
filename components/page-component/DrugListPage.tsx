@@ -2,16 +2,13 @@
 
 import { useCallback, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Button, Header, SpaceBetween } from '@cloudscape-design/components'
+import { Button } from '@cloudscape-design/components'
 import DrugListTable from 'components/medication/DrugListTable'
 import CreateDrugModal from 'components/medication/CreateDrugModal'
 import DiscordLinkPrompt from 'components/common/DiscordLinkPrompt'
+import { setPageSizeCookie } from 'utils/cookies'
 
 const PAGE_SIZE_COOKIE = 'grace-drug-list-page-size'
-
-function setPageSizeCookie(size: number) {
-  document.cookie = `${PAGE_SIZE_COOKIE}=${size}; path=/; max-age=${60 * 60 * 24 * 365}; SameSite=Lax`
-}
 
 interface Drug {
   id: string
@@ -73,7 +70,7 @@ export default function DrugListPage({
 
   const handlePageSizeChange = useCallback(
     (pageSize: number) => {
-      setPageSizeCookie(pageSize)
+      setPageSizeCookie(PAGE_SIZE_COOKIE, pageSize)
       navigateWithParams(1, pageSize)
     },
     [navigateWithParams],
@@ -86,37 +83,29 @@ export default function DrugListPage({
 
   if (discordLinked === false) {
     return (
-      <SpaceBetween size="l">
-        <Header variant="h1">薬一覧</Header>
-        <DiscordLinkPrompt>
-          <DrugListTable
-            items={MOCK_ITEMS}
-            currentPage={1}
-            lastPage={1}
-            perPage={25}
-            total={3}
-            onPageChange={() => {}}
-            onPageSizeChange={() => {}}
-          />
-        </DiscordLinkPrompt>
-      </SpaceBetween>
+      <DiscordLinkPrompt>
+        <DrugListTable
+          items={MOCK_ITEMS}
+          currentPage={1}
+          lastPage={1}
+          perPage={25}
+          total={3}
+          onPageChange={() => {}}
+          onPageSizeChange={() => {}}
+        />
+      </DiscordLinkPrompt>
     )
   }
 
   return (
-    <SpaceBetween size="l">
-      <Header
-        variant="h1"
-        actions={
+    <>
+      <DrugListTable
+        items={items}
+        headerActions={
           <Button variant="primary" onClick={() => setModalVisible(true)}>
             薬を登録
           </Button>
         }
-      >
-        薬一覧
-      </Header>
-      <DrugListTable
-        items={items}
         currentPage={currentPage}
         lastPage={lastPage}
         perPage={perPage}
@@ -129,6 +118,6 @@ export default function DrugListPage({
         onDismiss={() => setModalVisible(false)}
         onCreated={handleCreated}
       />
-    </SpaceBetween>
+    </>
   )
 }

@@ -1,13 +1,9 @@
-import { cookies } from 'next/headers'
+import { getCookieString } from 'libs/next/headers'
 import { createServerApiClient } from 'client/serverApiClient'
 import { userRepository } from 'repository/userRepository'
 
 export async function getServerUser() {
-  const cookieStore = await cookies()
-  const cookie = cookieStore
-    .getAll()
-    .map((c) => `${c.name}=${c.value}`)
-    .join('; ')
+  const cookie = await getCookieString()
   const apiClient = createServerApiClient({ cookie })
   const user = await userRepository.getCurrentUser(apiClient)
 

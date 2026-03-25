@@ -309,9 +309,11 @@ function WeeklyCountChart({ histories }: { histories: MedicationHistory[] }) {
   )
 }
 
+const RECENT_LIMIT = 25
+
 function RecentHistoryTable({ histories }: { histories: MedicationHistory[] }) {
   const router = useRouter()
-  const recentItems = histories.map((h) => ({
+  const recentItems = histories.slice(0, RECENT_LIMIT).map((h) => ({
     id: String(h.id),
     name: h.drugName,
     amount: h.amount,
@@ -324,7 +326,10 @@ function RecentHistoryTable({ histories }: { histories: MedicationHistory[] }) {
         variant="container"
         stickyHeader
         header={
-          <Header variant="h2" counter={`(${recentItems.length})`}>
+          <Header
+            variant="h2"
+            counter={`(${recentItems.length}${histories.length > RECENT_LIMIT ? `/${histories.length}` : ''})`}
+          >
             直近の服薬履歴
           </Header>
         }
@@ -372,7 +377,6 @@ const MOCK_HISTORIES: MedicationHistory[] = Array.from(
 function MockDashboardContent() {
   return (
     <SpaceBetween size="l">
-      <Header variant="h1">ダッシュボード</Header>
       <Container header={<Header variant="h2">服薬分析</Header>}>
         <DailyCountChart histories={MOCK_HISTORIES} />
       </Container>
@@ -395,25 +399,24 @@ export default function DashboardPage({
 
   if (discordLinked === false) {
     return (
-      <SpaceBetween size="l">
-        <Header variant="h1">ダッシュボード</Header>
-        <DiscordLinkPrompt>
-          <MockDashboardContent />
-        </DiscordLinkPrompt>
-      </SpaceBetween>
+      <DiscordLinkPrompt>
+        <MockDashboardContent />
+      </DiscordLinkPrompt>
     )
   }
 
   return (
     <SpaceBetween size="l">
-      <Header
-        variant="h1"
-        actions={<PeriodSelect value={period} onChange={setPeriod} />}
+      <Container
+        header={
+          <Header
+            variant="h2"
+            actions={<PeriodSelect value={period} onChange={setPeriod} />}
+          >
+            服薬分析
+          </Header>
+        }
       >
-        ダッシュボード
-      </Header>
-
-      <Container header={<Header variant="h2">服薬分析</Header>}>
         <Tabs
           activeTabId={activeTab}
           onChange={({ detail }) => setActiveTab(detail.activeTabId)}

@@ -2,16 +2,13 @@
 
 import { useCallback, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Button, Header, SpaceBetween } from '@cloudscape-design/components'
+import { Button } from '@cloudscape-design/components'
 import MedicationHistoryTable from 'components/medication/MedicationHistoryTable'
 import CreateMedicationHistoryModal from 'components/medication/CreateMedicationHistoryModal'
 import DiscordLinkPrompt from 'components/common/DiscordLinkPrompt'
+import { setPageSizeCookie } from 'utils/cookies'
 
 const PAGE_SIZE_COOKIE = 'grace-medication-history-page-size'
-
-function setPageSizeCookie(size: number) {
-  document.cookie = `${PAGE_SIZE_COOKIE}=${size}; path=/; max-age=${60 * 60 * 24 * 365}; SameSite=Lax`
-}
 
 interface MedicationRecord {
   id: string
@@ -88,7 +85,7 @@ export default function MedicationHistoryPage({
 
   const handlePageSizeChange = useCallback(
     (pageSize: number) => {
-      setPageSizeCookie(pageSize)
+      setPageSizeCookie(PAGE_SIZE_COOKIE, pageSize)
       navigateWithParams(1, pageSize)
     },
     [navigateWithParams],
@@ -107,30 +104,25 @@ export default function MedicationHistoryPage({
 
   if (discordLinked === false) {
     return (
-      <SpaceBetween size="l">
-        <Header variant="h1">服薬履歴</Header>
-        <DiscordLinkPrompt>
-          <MedicationHistoryTable
-            items={MOCK_ITEMS}
-            currentPage={1}
-            lastPage={3}
-            perPage={25}
-            total={62}
-            onPageChange={() => {}}
-            onPageSizeChange={() => {}}
-          />
-        </DiscordLinkPrompt>
-      </SpaceBetween>
+      <DiscordLinkPrompt>
+        <MedicationHistoryTable
+          items={MOCK_ITEMS}
+          currentPage={1}
+          lastPage={3}
+          perPage={25}
+          total={62}
+          onPageChange={() => {}}
+          onPageSizeChange={() => {}}
+        />
+      </DiscordLinkPrompt>
     )
   }
 
   return (
-    <SpaceBetween size="l">
-      <Header variant="h1" actions={createButton}>
-        服薬履歴
-      </Header>
+    <>
       <MedicationHistoryTable
         items={items}
+        headerActions={createButton || undefined}
         currentPage={currentPage}
         lastPage={lastPage}
         perPage={perPage}
@@ -144,6 +136,6 @@ export default function MedicationHistoryPage({
         onCreated={handleCreated}
         drugs={drugs}
       />
-    </SpaceBetween>
+    </>
   )
 }

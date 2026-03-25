@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { Header, SpaceBetween } from '@cloudscape-design/components'
+import { Container, Header, SpaceBetween } from '@cloudscape-design/components'
 import AppShell from '../../components/layout/AppShell'
 import { withThemeProvider } from '../decorators'
 
@@ -30,9 +30,13 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   args: {
+    breadcrumbs: [{ text: 'ダッシュボード', href: '/dashboard' }],
+    contentType: 'default',
     children: (
       <SpaceBetween size="l">
-        <Header variant="h1">ダッシュボード</Header>
+        <Container header={<Header variant="h2">サンプルコンテンツ</Header>}>
+          ダッシュボードのコンテンツがここに表示されます。
+        </Container>
       </SpaceBetween>
     ),
   },
@@ -47,10 +51,12 @@ export const DrugListActive: Story = {
     },
   },
   args: {
+    breadcrumbs: [{ text: '薬一覧', href: '/medication/drugs' }],
+    contentType: 'table',
     children: (
-      <SpaceBetween size="l">
-        <Header variant="h1">薬一覧</Header>
-      </SpaceBetween>
+      <Container header={<Header variant="h2">薬一覧テーブル</Header>}>
+        テーブルコンテンツ
+      </Container>
     ),
   },
 }
@@ -65,52 +71,15 @@ export const DrugDetailWithBreadcrumbs: Story = {
   },
   args: {
     breadcrumbs: [
-      { text: 'Grace', href: '/dashboard' },
       { text: '薬一覧', href: '/medication/drugs' },
       { text: 'レボチロキシン', href: '/medication/drugs/1' },
     ],
     children: (
       <SpaceBetween size="l">
         <Header variant="h1">レボチロキシン</Header>
-      </SpaceBetween>
-    ),
-  },
-}
-
-export const MedicationHistoryActive: Story = {
-  parameters: {
-    nextjs: {
-      navigation: {
-        pathname: '/medication/history',
-      },
-    },
-  },
-  args: {
-    children: (
-      <SpaceBetween size="l">
-        <Header variant="h1">服薬履歴</Header>
-      </SpaceBetween>
-    ),
-  },
-}
-
-export const MedicationHistoryDetailWithBreadcrumbs: Story = {
-  parameters: {
-    nextjs: {
-      navigation: {
-        pathname: '/medication/history/1',
-      },
-    },
-  },
-  args: {
-    breadcrumbs: [
-      { text: 'Grace', href: '/dashboard' },
-      { text: '服薬履歴', href: '/medication/history' },
-      { text: '服薬履歴詳細', href: '/medication/history/1' },
-    ],
-    children: (
-      <SpaceBetween size="l">
-        <Header variant="h1">服薬履歴詳細</Header>
+        <Container header={<Header variant="h2">基本情報</Header>}>
+          薬の詳細情報
+        </Container>
       </SpaceBetween>
     ),
   },
@@ -125,10 +94,12 @@ export const SettingsActive: Story = {
     },
   },
   args: {
+    breadcrumbs: [{ text: '設定', href: '/settings' }],
+    contentType: 'form',
     children: (
-      <SpaceBetween size="l">
-        <Header variant="h1">設定</Header>
-      </SpaceBetween>
+      <Container header={<Header variant="h2">表示設定</Header>}>
+        設定コンテンツ
+      </Container>
     ),
   },
 }

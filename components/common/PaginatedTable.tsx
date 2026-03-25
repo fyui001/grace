@@ -19,6 +19,7 @@ const PAGE_SIZE_OPTIONS = [
 
 interface PaginatedTableProps<T> {
   title: string
+  headerActions?: React.ReactNode
   columnDefinitions: TableProps<T>['columnDefinitions']
   items: T[]
   trackBy: TableProps<T>['trackBy']
@@ -37,6 +38,7 @@ interface PaginatedTableProps<T> {
 
 export default function PaginatedTable<T>({
   title,
+  headerActions,
   columnDefinitions,
   items,
   trackBy,
@@ -53,12 +55,15 @@ export default function PaginatedTable<T>({
   maxHeight,
 }: PaginatedTableProps<T>) {
   return (
-    <ScrollableTable maxHeight={maxHeight} clickableRows={!!onRowClick}>
+    <ScrollableTable
+      maxHeight={maxHeight ?? 'calc(100vh - 250px)'}
+      clickableRows={!!onRowClick}
+    >
       <Table
         variant="container"
         stickyHeader
         header={
-          <Header variant="h2" counter={`(${total})`}>
+          <Header variant="h2" counter={`(${total})`} actions={headerActions}>
             {title}
           </Header>
         }

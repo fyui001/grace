@@ -1,4 +1,4 @@
-import { cookies } from 'next/headers'
+import { getCookieString } from 'libs/next/headers'
 import { createServerApiClient } from 'client/serverApiClient'
 import { medicationRepository } from 'repository/medicationRepository'
 import AppShell from 'components/layout/AppShell'
@@ -7,11 +7,7 @@ import { getServerUser } from 'libs/server/getServerUser'
 
 export default async function PageDashboard() {
   const user = await getServerUser()
-  const cookieStore = await cookies()
-  const cookie = cookieStore
-    .getAll()
-    .map((c) => `${c.name}=${c.value}`)
-    .join('; ')
+  const cookie = await getCookieString()
   const apiClient = createServerApiClient({ cookie })
   const data = await medicationRepository.getMedicationHistories(
     apiClient,
@@ -27,7 +23,11 @@ export default async function PageDashboard() {
   }))
 
   return (
-    <AppShell user={user ?? undefined}>
+    <AppShell
+      user={user ?? undefined}
+      pageTitle="ダッシュボード"
+      contentType="default"
+    >
       <DashboardPage
         histories={histories}
         discordLinked={!!user?.discordUserId}

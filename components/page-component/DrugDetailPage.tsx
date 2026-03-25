@@ -25,20 +25,22 @@ export default function DrugDetailPage({ drug }: DrugDetailPageProps) {
 
   return (
     <SpaceBetween size="l">
-      <Header
-        variant="h1"
-        actions={
-          <Button
-            onClick={() => router.push(`/medication/drugs/${drug.id}/edit`)}
+      <Container
+        header={
+          <Header
+            variant="h2"
+            actions={
+              <Button
+                onClick={() => router.push(`/medication/drugs/${drug.id}/edit`)}
+              >
+                編集
+              </Button>
+            }
           >
-            編集
-          </Button>
+            基本情報
+          </Header>
         }
       >
-        {drug.name || '薬詳細'}
-      </Header>
-
-      <Container header={<Header variant="h2">基本情報</Header>}>
         <KeyValuePairs
           columns={2}
           items={[
