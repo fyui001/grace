@@ -4,7 +4,7 @@ import {
   useState,
   useCallback,
   useRef,
-  useEffect,
+  useMemo,
   useSyncExternalStore,
 } from 'react'
 import styled from '@emotion/styled'
@@ -16,6 +16,7 @@ import {
   TopNavigation,
 } from '@cloudscape-design/components'
 import { usePathname, useRouter } from 'next/navigation'
+import { useTheme } from 'components/theme/ThemeProvider'
 
 const SIDEBAR_WIDTH = 280
 const MOBILE_BREAKPOINT = 768
@@ -23,6 +24,7 @@ const MOBILE_BREAKPOINT = 768
 const ShellContainer = styled.div`
   display: flex;
   height: 100vh;
+  overflow: hidden;
   opacity: 0;
   &[data-hydrated='true'] {
     opacity: 1;
@@ -62,7 +64,7 @@ const HoverEdge = styled.div`
   left: 0;
   width: 24px;
   height: 100vh;
-  z-index: 300;
+  z-index: 1000;
 
   @media (max-width: ${MOBILE_BREAKPOINT}px) {
     display: none;
@@ -78,7 +80,7 @@ const Overlay = styled.div`
   background: var(--color-background-cell-shaded-v7o6so, #f6f6f9);
   border-right: 1px solid var(--color-border-divider-default);
   box-shadow: 0 0 16px rgba(0, 0, 0, 0.15);
-  z-index: 301;
+  z-index: 1001;
   display: flex;
   flex-direction: column;
   animation: sidebarSlideIn 150ms ease;
@@ -101,7 +103,7 @@ const Overlay = styled.div`
 const OverlayBackdrop = styled.div`
   position: fixed;
   inset: 0;
-  z-index: 300;
+  z-index: 1000;
   background: rgba(0, 0, 0, 0.3);
 
   @media (min-width: ${MOBILE_BREAKPOINT + 1}px) {
@@ -114,11 +116,13 @@ const MainArea = styled.div`
   min-width: 0;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 `
 
 const TopBar = styled.div`
   display: flex;
   align-items: stretch;
+  flex-shrink: 0;
 `
 
 const MenuButton = styled.div`
@@ -132,6 +136,11 @@ const MenuButton = styled.div`
 const TopNavWrapper = styled.div`
   flex: 1;
   min-width: 0;
+`
+
+const ContentArea = styled.div`
+  flex: 1;
+  overflow-y: auto;
 `
 
 const mobileQuery = `(max-width: ${MOBILE_BREAKPOINT}px)`
@@ -165,16 +174,21 @@ interface AppShellProps {
     iconUrl: string | null
   }
   breadcrumbs?: { text: string; href: string }[]
+  pageTitle?: string
+  contentType?: 'default' | 'table' | 'form' | 'cards' | 'wizard'
 }
 
 export default function AppShell({
   children,
   user,
   breadcrumbs,
+  pageTitle,
+  contentType = 'default',
 }: AppShellProps) {
   const pathname = usePathname()
   const router = useRouter()
   const isMobile = useIsMobile()
+  const { mode, toggleMode } = useTheme()
   const [hydrated, setHydrated] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [overlayVisible, setOverlayVisible] = useState(false)
@@ -227,7 +241,6 @@ export default function AppShell({
     clearHoverTimer()
   }, [clearHoverTimer])
 
-  // モバイルではサイドバーは常にオーバーレイモード
   const showSidebarInline = sidebarOpen && !isMobile
   const showMenuButton = !showSidebarInline
 
@@ -237,20 +250,24 @@ export default function AppShell({
       ? '/medication/history'
       : pathname
 
-  const navItems: React.ComponentProps<typeof SideNavigation>['items'] = [
-    {
-      type: 'expandable-link-group',
-      text: '服薬指導室',
-      href: '/dashboard',
-      items: [
-        { type: 'link', text: 'ダッシュボード', href: '/dashboard' },
-        { type: 'link', text: '薬一覧', href: '/medication/drugs' },
-        { type: 'link', text: '服薬履歴', href: '/medication/history' },
+  const navItems: React.ComponentProps<typeof SideNavigation>['items'] =
+    useMemo(
+      () => [
+        {
+          type: 'expandable-link-group',
+          text: '服薬指導室',
+          href: '/dashboard',
+          items: [
+            { type: 'link', text: 'ダッシュボード', href: '/dashboard' },
+            { type: 'link', text: '薬一覧', href: '/medication/drugs' },
+            { type: 'link', text: '服薬履歴', href: '/medication/history' },
+          ],
+        },
+        { type: 'divider' },
+        { type: 'link', text: '設定', href: '/settings' },
       ],
-    },
-    { type: 'divider' },
-    { type: 'link', text: '設定', href: '/settings' },
-  ]
+      [],
+    )
 
   const handleFollow = useCallback(
     (event: CustomEvent<{ href: string }>) => {
@@ -270,17 +287,13 @@ export default function AppShell({
     />
   )
 
-  const openMobileMenu = useCallback(() => {
-    setOverlayVisible(true)
-  }, [])
-
   const handleMenuButtonClick = useCallback(() => {
     if (isMobile) {
-      openMobileMenu()
+      setOverlayVisible(true)
     } else {
       setSidebarOpen(true)
     }
-  }, [isMobile, openMobileMenu])
+  }, [isMobile])
 
   return (
     <ShellContainer ref={shellRef} data-hydrated={hydrated}>
@@ -349,7 +362,7 @@ export default function AppShell({
             <TopNavigation
               identity={{
                 href: '/dashboard',
-                title: 'Grace',
+                title: pageTitle ?? 'Grace',
                 onFollow: (e) => {
                   e.preventDefault()
                   router.push('/dashboard')
@@ -358,10 +371,32 @@ export default function AppShell({
               utilities={[
                 {
                   type: 'button',
+                  iconName: mode === 'dark' ? 'star-filled' : 'star',
+                  text: mode === 'dark' ? 'Dark' : 'Light',
+                  title:
+                    mode === 'dark'
+                      ? 'ライトモードに切替'
+                      : 'ダークモードに切替',
+                  onClick: toggleMode,
+                },
+                {
+                  type: 'menu-dropdown',
                   iconUrl: user?.iconUrl ?? undefined,
                   iconName: user?.iconUrl ? undefined : 'user-profile',
                   text: user?.name ?? '',
                   title: user?.name ?? '',
+                  items: [
+                    {
+                      id: 'logout',
+                      text: 'ログアウト',
+                      iconName: 'external',
+                    },
+                  ],
+                  onItemClick: ({ detail }) => {
+                    if (detail.id === 'logout') {
+                      window.location.href = '/logout'
+                    }
+                  },
                 },
               ]}
               i18nStrings={{
@@ -371,22 +406,25 @@ export default function AppShell({
             />
           </TopNavWrapper>
         </TopBar>
-        <AppLayout
-          navigationHide
-          breadcrumbs={
-            breadcrumbs ? (
-              <BreadcrumbGroup
-                items={breadcrumbs}
-                onFollow={(event) => {
-                  event.preventDefault()
-                  router.push(event.detail.href)
-                }}
-              />
-            ) : undefined
-          }
-          content={children}
-          toolsHide
-        />
+        <ContentArea>
+          <AppLayout
+            navigationHide
+            breadcrumbs={
+              breadcrumbs ? (
+                <BreadcrumbGroup
+                  items={breadcrumbs}
+                  onFollow={(event) => {
+                    event.preventDefault()
+                    router.push(event.detail.href)
+                  }}
+                />
+              ) : undefined
+            }
+            content={children}
+            contentType={contentType}
+            toolsHide
+          />
+        </ContentArea>
       </MainArea>
     </ShellContainer>
   )

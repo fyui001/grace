@@ -63,3 +63,26 @@ export const WithAppShell: Story = {
   },
   decorators: [withAppShell],
 }
+
+export const WithDrugs: Story = {
+  args: {
+    items: sampleItems,
+    ...paginationArgs,
+    drugs: [
+      { id: '1', name: 'レボチロキシン' },
+      { id: '2', name: 'ロキソプロフェン' },
+      { id: '3', name: 'アムロジピン' },
+    ],
+  },
+  decorators: [withAppShell],
+}
+
+export const DiscordNotLinked: Story = {
+  args: {
+    items: [],
+    ...paginationArgs,
+    total: 0,
+    discordLinked: false,
+  },
+  decorators: [withAppShell],
+}

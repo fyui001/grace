@@ -55,3 +55,13 @@ export const WithAppShell: Story = {
   },
   decorators: [withAppShell],
 }
+
+export const DiscordNotLinked: Story = {
+  args: {
+    items: [],
+    ...paginationArgs,
+    total: 0,
+    discordLinked: false,
+  },
+  decorators: [withAppShell],
+}

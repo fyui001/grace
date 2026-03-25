@@ -60,8 +60,6 @@ export default function DrugEditPage({ drug }: DrugEditPageProps) {
       }
     >
       <SpaceBetween size="l">
-        <Header variant="h1">薬を編集</Header>
-
         <Container header={<Header variant="h2">基本情報</Header>}>
           <SpaceBetween size="l">
             <FormField label="薬名">

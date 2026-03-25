@@ -31,22 +31,24 @@ export default function MedicationHistoryDetailPage({
 
   return (
     <SpaceBetween size="l">
-      <Header
-        variant="h1"
-        actions={
-          <Button
-            onClick={() =>
-              router.push(`/medication/history/${history.id}/edit`)
+      <Container
+        header={
+          <Header
+            variant="h2"
+            actions={
+              <Button
+                onClick={() =>
+                  router.push(`/medication/history/${history.id}/edit`)
+                }
+              >
+                編集
+              </Button>
             }
           >
-            編集
-          </Button>
+            基本情報
+          </Header>
         }
       >
-        服薬履歴詳細
-      </Header>
-
-      <Container header={<Header variant="h2">基本情報</Header>}>
         <KeyValuePairs
           columns={3}
           items={[

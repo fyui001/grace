@@ -14,6 +14,7 @@ interface MedicationRecord {
 
 interface MedicationHistoryTableProps {
   items: MedicationRecord[]
+  headerActions?: React.ReactNode
   loading?: boolean
   currentPage: number
   lastPage: number
@@ -25,6 +26,7 @@ interface MedicationHistoryTableProps {
 
 export default function MedicationHistoryTable({
   items,
+  headerActions,
   loading,
   currentPage,
   lastPage,
@@ -38,7 +40,7 @@ export default function MedicationHistoryTable({
   return (
     <PaginatedTable
       title="履歴一覧"
-      maxHeight="calc(100vh - 250px)"
+      headerActions={headerActions}
       columnDefinitions={[
         {
           id: 'name',

@@ -1,4 +1,5 @@
 import { cookies } from 'next/headers'
+import { getCookieString } from 'libs/next/headers'
 import { createServerApiClient } from 'client/serverApiClient'
 import { drugRepository } from 'repository/drugRepository'
 import AppShell from 'components/layout/AppShell'
@@ -15,11 +16,6 @@ export default async function PageDrugs({
   const params = await searchParams
   const page = Number(params.page) || 1
   const cookieStore = await cookies()
-  const cookie = cookieStore
-    .getAll()
-    .map((c) => `${c.name}=${c.value}`)
-    .join('; ')
-
   const pageSizeCookie = cookieStore.get('grace-drug-list-page-size')
   const perPage =
     Number(params.per_page) ||
@@ -27,6 +23,7 @@ export default async function PageDrugs({
     DEFAULT_PAGE_SIZE
 
   const user = await getServerUser()
+  const cookie = await getCookieString()
   const apiClient = createServerApiClient({ cookie })
   const data = await drugRepository.getDrugs(apiClient, page, perPage)
 
@@ -38,7 +35,7 @@ export default async function PageDrugs({
   }))
 
   return (
-    <AppShell user={user ?? undefined}>
+    <AppShell user={user ?? undefined} pageTitle="薬一覧" contentType="table">
       <DrugListPage
         items={items}
         currentPage={data?.currentPage ?? 1}

@@ -13,6 +13,7 @@ interface Drug {
 
 interface DrugListTableProps {
   items: Drug[]
+  headerActions?: React.ReactNode
   currentPage: number
   lastPage: number
   perPage: number
@@ -23,6 +24,7 @@ interface DrugListTableProps {
 
 export default function DrugListTable({
   items,
+  headerActions,
   currentPage,
   lastPage,
   perPage,
@@ -35,7 +37,7 @@ export default function DrugListTable({
   return (
     <PaginatedTable
       title="薬一覧"
-      maxHeight="calc(100vh - 250px)"
+      headerActions={headerActions}
       columnDefinitions={[
         {
           id: 'name',

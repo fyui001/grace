@@ -1,4 +1,5 @@
 import { cookies } from 'next/headers'
+import { getCookieString } from 'libs/next/headers'
 import { createServerApiClient } from 'client/serverApiClient'
 import { medicationRepository } from 'repository/medicationRepository'
 import { drugRepository } from 'repository/drugRepository'
@@ -16,11 +17,6 @@ export default async function PageMedicationHistory({
   const params = await searchParams
   const page = Number(params.page) || 1
   const cookieStore = await cookies()
-  const cookie = cookieStore
-    .getAll()
-    .map((c) => `${c.name}=${c.value}`)
-    .join('; ')
-
   const pageSizeCookie = cookieStore.get('grace-medication-history-page-size')
   const perPage =
     Number(params.per_page) ||
@@ -28,6 +24,7 @@ export default async function PageMedicationHistory({
     DEFAULT_PAGE_SIZE
 
   const user = await getServerUser()
+  const cookie = await getCookieString()
   const apiClient = createServerApiClient({ cookie })
   const [data, drugData] = await Promise.all([
     medicationRepository.getMedicationHistories(apiClient, page, perPage),
@@ -48,7 +45,7 @@ export default async function PageMedicationHistory({
   }))
 
   return (
-    <AppShell user={user ?? undefined}>
+    <AppShell user={user ?? undefined} pageTitle="服薬履歴" contentType="table">
       <MedicationHistoryPage
         items={items}
         currentPage={data?.currentPage ?? 1}

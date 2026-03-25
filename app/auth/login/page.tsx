@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { cookies } from 'next/headers'
+import { getCookieString } from 'libs/next/headers'
 import LoginPage from 'components/auth/login/LoginPage'
 import { createServerApiClient } from 'client/serverApiClient'
 import { userRepository } from 'repository/userRepository'
@@ -9,11 +9,7 @@ export default async function Page(props: {
   searchParams: Promise<{ return_to?: string }>
 }) {
   const searchParams = await props.searchParams
-  const cookieStore = await cookies()
-  const cookie = cookieStore
-    .getAll()
-    .map((c) => `${c.name}=${c.value}`)
-    .join('; ')
+  const cookie = await getCookieString()
   const apiClient = createServerApiClient({ cookie })
   const user = await userRepository.getCurrentUser(apiClient)
 
