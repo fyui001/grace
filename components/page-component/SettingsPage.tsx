@@ -1,7 +1,6 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
-import { Header, SpaceBetween } from '@cloudscape-design/components'
 import { useTheme } from 'components/theme/ThemeProvider'
 import { useApiClient } from 'client/apiClient'
 import { userRepository } from 'repository/userRepository'
@@ -50,8 +49,8 @@ export default function SettingsPage({ userName }: SettingsPageProps) {
   }, [])
 
   return (
-    <SpaceBetween size="l">
-      <Header variant="h1">設定</Header>
+    <div className="flex flex-col gap-5">
+      <h1 className="text-2xl font-bold">設定</h1>
 
       <DisplaySettings mode={mode} onToggle={toggleMode} />
 
@@ -67,6 +66,6 @@ export default function SettingsPage({ userName }: SettingsPageProps) {
         authProvider="Auth0"
         onLogout={handleLogout}
       />
-    </SpaceBetween>
+    </div>
   )
 }
