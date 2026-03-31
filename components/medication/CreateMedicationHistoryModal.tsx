@@ -92,6 +92,18 @@ export default function CreateMedicationHistoryModal({
     (e) => e.drugId !== '' && e.amount !== '' && Number(e.amount) > 0,
   )
 
+  const hasIncompleteEntry = entries.some((e) => {
+    const hasDrug = e.drugId !== ''
+    const hasAmount = e.amount !== '' && Number(e.amount) > 0
+    const isEmpty = !hasDrug && !hasAmount
+    const isComplete = hasDrug && hasAmount
+    return !isEmpty && !isComplete
+  })
+
+  const hasEmptyEntry = entries.length > 1 && entries.some(
+    (e) => e.drugId === '' && (e.amount === '' || Number(e.amount) <= 0),
+  )
+
   const handleSubmit = useCallback(async () => {
     if (validEntries.length === 0) {
       setError('薬と服薬量を入力してください')
@@ -186,7 +198,12 @@ export default function CreateMedicationHistoryModal({
             キャンセル
           </Button>
           <Button
-            disabled={submitting || validEntries.length === 0}
+            disabled={
+              submitting ||
+              validEntries.length === 0 ||
+              hasIncompleteEntry ||
+              hasEmptyEntry
+            }
             onClick={handleSubmit}
           >
             {submitting
@@ -229,7 +246,7 @@ function DrugCombobox({
       <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
         <Command>
           <CommandInput placeholder="薬名で検索" />
-          <CommandList>
+          <CommandList className="max-h-60">
             <CommandEmpty>見つかりませんでした</CommandEmpty>
             <CommandGroup>
               {drugs.map((drug) => (
