@@ -76,7 +76,19 @@ export default function DataTable<T>({
             <TableRow
               key={getKey(item, index)}
               className={`${onRowClick ? 'cursor-pointer hover:bg-muted/50' : ''} ${striped && index % 2 === 1 ? 'bg-muted/30' : ''}`}
+              tabIndex={onRowClick ? 0 : undefined}
+              role={onRowClick ? 'link' : undefined}
               onClick={onRowClick ? () => onRowClick(item) : undefined}
+              onKeyDown={
+                onRowClick
+                  ? (e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault()
+                        onRowClick(item)
+                      }
+                    }
+                  : undefined
+              }
             >
               {columnDefinitions.map((col) => (
                 <TableCell key={col.id}>{col.cell(item)}</TableCell>

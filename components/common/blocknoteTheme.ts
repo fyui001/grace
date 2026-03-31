@@ -1,6 +1,6 @@
 import type { Theme } from '@blocknote/mantine'
 
-// Cloudscape Design System トークンに準拠したカラー定義
+// Grace アプリのカラー定義（ライト/ダークモード対応）
 const lightTheme: Theme = {
   colors: {
     editor: {
@@ -69,7 +69,7 @@ const darkTheme: Theme = {
   fontFamily: '"Open Sans", "Helvetica Neue", Roboto, Arial, sans-serif',
 }
 
-export const cloudscapeBlockNoteTheme = {
+export const blockNoteTheme = {
   light: lightTheme,
   dark: darkTheme,
 }

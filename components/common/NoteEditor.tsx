@@ -7,7 +7,7 @@ import type { Block } from '@blocknote/core'
 import '@blocknote/core/fonts/inter.css'
 import '@blocknote/mantine/style.css'
 import { useTheme } from 'components/theme/ThemeProvider'
-import { cloudscapeBlockNoteTheme } from './blocknoteTheme'
+import { blockNoteTheme } from './blocknoteTheme'
 
 function parseInitialContent(data: string | null): Block[] | undefined {
   if (!data) return undefined
@@ -45,7 +45,7 @@ export default function NoteEditor({ data, onChange }: NoteEditorProps) {
       <BlockNoteView
         editor={editor}
         onChange={handleChange}
-        theme={cloudscapeBlockNoteTheme[mode]}
+        theme={blockNoteTheme[mode]}
       />
     </div>
   )

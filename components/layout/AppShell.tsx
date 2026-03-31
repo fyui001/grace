@@ -1,6 +1,12 @@
 'use client'
 
-import { useState, useCallback, useRef, useSyncExternalStore } from 'react'
+import {
+  Fragment,
+  useState,
+  useCallback,
+  useRef,
+  useSyncExternalStore,
+} from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
@@ -155,6 +161,7 @@ export default function AppShell({
       {NAV_GROUPS.map((group) => (
         <div key={group.href}>
           <button
+            type="button"
             className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold hover:bg-accent"
             onClick={() => setGroupOpen((prev) => !prev)}
           >
@@ -169,6 +176,7 @@ export default function AppShell({
             <div className="ml-4 flex flex-col gap-0.5">
               {group.items.map((item) => (
                 <button
+                  type="button"
                   key={item.href}
                   className={cn(
                     'rounded-md px-3 py-1.5 text-left text-sm transition-colors hover:bg-accent',
@@ -187,6 +195,7 @@ export default function AppShell({
       <Separator className="my-1" />
       {NAV_EXTRA.map((item) => (
         <button
+          type="button"
           key={item.href}
           className={cn(
             'rounded-md px-3 py-1.5 text-left text-sm transition-colors hover:bg-accent',
@@ -335,12 +344,14 @@ export default function AppShell({
             <Breadcrumb>
               <BreadcrumbList>
                 {breadcrumbs.map((crumb, i) => (
-                  <BreadcrumbItem key={crumb.href}>
+                  <Fragment key={crumb.href}>
                     {i > 0 && <BreadcrumbSeparator />}
-                    <BreadcrumbLink asChild>
-                      <Link href={crumb.href}>{crumb.text}</Link>
-                    </BreadcrumbLink>
-                  </BreadcrumbItem>
+                    <BreadcrumbItem>
+                      <BreadcrumbLink asChild>
+                        <Link href={crumb.href}>{crumb.text}</Link>
+                      </BreadcrumbLink>
+                    </BreadcrumbItem>
+                  </Fragment>
                 ))}
               </BreadcrumbList>
             </Breadcrumb>
