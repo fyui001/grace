@@ -6,9 +6,6 @@ const nextConfig: NextConfig = {
   compiler: {},
   allowedDevOrigins: ['grace.localhost'],
   transpilePackages: [
-    '@cloudscape-design/components',
-    '@cloudscape-design/design-tokens',
-    '@cloudscape-design/component-toolkit',
     '@blocknote/core',
     '@blocknote/react',
     '@blocknote/mantine',

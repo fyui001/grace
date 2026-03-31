@@ -7,7 +7,6 @@ import {
   useCallback,
   type ReactNode,
 } from 'react'
-import { applyMode, Mode } from '@cloudscape-design/global-styles'
 
 type ThemeMode = 'light' | 'dark'
 
@@ -23,15 +22,11 @@ const COOKIE_KEY = 'grace-theme-mode'
 function applyTheme(mode: ThemeMode) {
   document.cookie = `${COOKIE_KEY}=${mode};path=/;max-age=31536000`
 
-  // Tailwind dark mode
   if (mode === 'dark') {
     document.documentElement.classList.add('dark')
   } else {
     document.documentElement.classList.remove('dark')
   }
-
-  // Cloudscape dark mode (kept during migration, remove in Phase 7)
-  applyMode(mode === 'dark' ? Mode.Dark : Mode.Light)
 }
 
 export function ThemeProvider({

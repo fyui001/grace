@@ -1,45 +1,8 @@
 'use client'
 
-import styled from '@emotion/styled'
-import { Box, Button, Icon } from '@cloudscape-design/components'
 import { useRouter } from 'next/navigation'
-
-const PromptBanner = styled.div`
-  position: relative;
-  border: 1px solid var(--color-border-divider-default);
-  border-radius: 16px;
-  overflow: hidden;
-`
-
-const MockPreview = styled.div`
-  opacity: 0.15;
-  pointer-events: none;
-  user-select: none;
-  filter: blur(1px);
-`
-
-const OverlayContent = styled.div`
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  background: var(--color-background-container-content);
-  background: linear-gradient(
-    180deg,
-    color-mix(
-        in srgb,
-        var(--color-background-container-content) 80%,
-        transparent
-      )
-      0%,
-    var(--color-background-container-content) 100%
-  );
-  padding: 32px;
-  text-align: center;
-`
+import { Button } from 'components/ui/button'
+import { Info } from 'lucide-react'
 
 interface DiscordLinkPromptProps {
   children: React.ReactNode
@@ -51,21 +14,21 @@ export default function DiscordLinkPrompt({
   const router = useRouter()
 
   return (
-    <PromptBanner>
-      <MockPreview>{children}</MockPreview>
-      <OverlayContent>
-        <Icon name="status-info" size="big" variant="link" />
-        <Box variant="h3" textAlign="center">
-          Discordと連携してデータを表示
-        </Box>
-        <Box variant="p" color="text-body-secondary" textAlign="center">
+    <div className="relative rounded-2xl border overflow-hidden">
+      <div className="opacity-15 pointer-events-none select-none blur-[1px]">
+        {children}
+      </div>
+      <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-gradient-to-b from-background/80 to-background p-8 text-center">
+        <Info className="size-8 text-primary" />
+        <h3 className="text-lg font-semibold">Discordと連携してデータを表示</h3>
+        <p className="text-sm text-muted-foreground">
           Discord
           Botと連携すると、服薬記録の登録やリマインダー通知が利用できます。
-        </Box>
-        <Button variant="primary" onClick={() => router.push('/settings')}>
+        </p>
+        <Button onClick={() => router.push('/settings')}>
           設定画面で連携する
         </Button>
-      </OverlayContent>
-    </PromptBanner>
+      </div>
+    </div>
   )
 }

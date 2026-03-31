@@ -1,14 +1,9 @@
 'use client'
 
-import {
-  Button,
-  Container,
-  Header,
-  KeyValuePairs,
-  Link,
-  SpaceBetween,
-} from '@cloudscape-design/components'
 import { useRouter } from 'next/navigation'
+import { Card, CardContent, CardHeader, CardTitle } from 'components/ui/card'
+import { Button } from 'components/ui/button'
+import { ExternalLink } from 'lucide-react'
 import NoteRenderer from 'components/common/NoteRenderer'
 
 interface DrugDetailPageProps {
@@ -24,46 +19,61 @@ export default function DrugDetailPage({ drug }: DrugDetailPageProps) {
   const router = useRouter()
 
   return (
-    <SpaceBetween size="l">
-      <Header
-        variant="h1"
-        actions={
-          <Button
-            onClick={() => router.push(`/medication/drugs/${drug.id}/edit`)}
-          >
-            編集
-          </Button>
-        }
-      >
-        {drug.name || '薬詳細'}
-      </Header>
+    <div className="flex flex-col gap-5">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold">{drug.name || '薬詳細'}</h1>
+        <Button
+          variant="outline"
+          onClick={() => router.push(`/medication/drugs/${drug.id}/edit`)}
+        >
+          編集
+        </Button>
+      </div>
 
-      <Container header={<Header variant="h2">基本情報</Header>}>
-        <KeyValuePairs
-          columns={2}
-          items={[
-            { label: '薬名', value: drug.name || '-' },
-            {
-              label: 'リンク',
-              value: drug.url ? (
-                <Link href={drug.url} external>
-                  {drug.url}
-                </Link>
-              ) : (
-                '-'
-              ),
-            },
-          ]}
-        />
-      </Container>
+      <Card>
+        <CardHeader>
+          <CardTitle>基本情報</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <dt className="text-sm text-muted-foreground">薬名</dt>
+              <dd className="text-sm mt-1">{drug.name || '-'}</dd>
+            </div>
+            <div>
+              <dt className="text-sm text-muted-foreground">リンク</dt>
+              <dd className="text-sm mt-1">
+                {drug.url ? (
+                  <a
+                    href={drug.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-primary hover:underline"
+                  >
+                    {drug.url}
+                    <ExternalLink className="size-3" />
+                  </a>
+                ) : (
+                  '-'
+                )}
+              </dd>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
-      <Container header={<Header variant="h2">備考</Header>}>
-        {drug.note ? (
-          <NoteRenderer note={drug.note} />
-        ) : (
-          <p>備考はありません</p>
-        )}
-      </Container>
-    </SpaceBetween>
+      <Card>
+        <CardHeader>
+          <CardTitle>備考</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {drug.note ? (
+            <NoteRenderer note={drug.note} />
+          ) : (
+            <p className="text-muted-foreground">備考はありません</p>
+          )}
+        </CardContent>
+      </Card>
+    </div>
   )
 }

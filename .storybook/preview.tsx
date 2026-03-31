@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import type { Preview } from '@storybook/react'
-import '@cloudscape-design/global-styles/index.css'
 import '../app/globals.css'
 import { ThemeProvider } from '../components/theme/ThemeProvider'
 

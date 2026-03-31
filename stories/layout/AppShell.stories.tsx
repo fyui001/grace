@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { Header, SpaceBetween } from '@cloudscape-design/components'
 import AppShell from '../../components/layout/AppShell'
 import { withThemeProvider } from '../decorators'
 
@@ -31,9 +30,9 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   args: {
     children: (
-      <SpaceBetween size="l">
-        <Header variant="h1">ダッシュボード</Header>
-      </SpaceBetween>
+      <div className="flex flex-col gap-5">
+        <h1 className="text-2xl font-bold">ダッシュボード</h1>
+      </div>
     ),
   },
 }
@@ -48,9 +47,9 @@ export const DrugListActive: Story = {
   },
   args: {
     children: (
-      <SpaceBetween size="l">
-        <Header variant="h1">薬一覧</Header>
-      </SpaceBetween>
+      <div className="flex flex-col gap-5">
+        <h1 className="text-2xl font-bold">薬一覧</h1>
+      </div>
     ),
   },
 }
@@ -70,9 +69,9 @@ export const DrugDetailWithBreadcrumbs: Story = {
       { text: 'レボチロキシン', href: '/medication/drugs/1' },
     ],
     children: (
-      <SpaceBetween size="l">
-        <Header variant="h1">レボチロキシン</Header>
-      </SpaceBetween>
+      <div className="flex flex-col gap-5">
+        <h1 className="text-2xl font-bold">レボチロキシン</h1>
+      </div>
     ),
   },
 }
@@ -87,9 +86,9 @@ export const MedicationHistoryActive: Story = {
   },
   args: {
     children: (
-      <SpaceBetween size="l">
-        <Header variant="h1">服薬履歴</Header>
-      </SpaceBetween>
+      <div className="flex flex-col gap-5">
+        <h1 className="text-2xl font-bold">服薬履歴</h1>
+      </div>
     ),
   },
 }
@@ -109,9 +108,9 @@ export const MedicationHistoryDetailWithBreadcrumbs: Story = {
       { text: '服薬履歴詳細', href: '/medication/history/1' },
     ],
     children: (
-      <SpaceBetween size="l">
-        <Header variant="h1">服薬履歴詳細</Header>
-      </SpaceBetween>
+      <div className="flex flex-col gap-5">
+        <h1 className="text-2xl font-bold">服薬履歴詳細</h1>
+      </div>
     ),
   },
 }
@@ -126,9 +125,9 @@ export const SettingsActive: Story = {
   },
   args: {
     children: (
-      <SpaceBetween size="l">
-        <Header variant="h1">設定</Header>
-      </SpaceBetween>
+      <div className="flex flex-col gap-5">
+        <h1 className="text-2xl font-bold">設定</h1>
+      </div>
     ),
   },
 }
