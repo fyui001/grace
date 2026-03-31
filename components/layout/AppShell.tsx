@@ -118,14 +118,7 @@ export default function AppShell({
   const isMobile = useIsMobile()
   const { mode, toggleMode } = useTheme()
   const [hydrated, setHydrated] = useState(false)
-  const [sidebarOpen, setSidebarOpenState] = useState(() => {
-    if (typeof document === 'undefined') return true
-    const cookie = document.cookie
-      .split('; ')
-      .find((c) => c.startsWith('grace-sidebar-open='))
-    if (!cookie) return true
-    return cookie.split('=')[1] !== 'false'
-  })
+  const [sidebarOpen, setSidebarOpenState] = useState(true)
   const [overlayVisible, setOverlayVisible] = useState(false)
   const [groupOpen, setGroupOpen] = useState(true)
   const hoverTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -136,7 +129,14 @@ export default function AppShell({
   }, [])
 
   const shellRef = useCallback((node: HTMLElement | null) => {
-    if (node) setHydrated(true)
+    if (!node) return
+    const cookie = document.cookie
+      .split('; ')
+      .find((c) => c.startsWith('grace-sidebar-open='))
+    if (cookie && cookie.split('=')[1] === 'false') {
+      setSidebarOpenState(false)
+    }
+    setHydrated(true)
   }, [])
 
   const clearHoverTimer = useCallback(() => {
@@ -279,7 +279,7 @@ export default function AppShell({
       {!isMobile && overlayVisible && (
         <>
           <div
-            className="fixed inset-0 z-[9998] bg-black/20"
+            className="fixed inset-0 z-[9998] bg-black/50"
             onClick={() => setOverlayVisible(false)}
           />
           <div
