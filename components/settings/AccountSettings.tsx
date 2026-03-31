@@ -1,11 +1,5 @@
-import {
-  Box,
-  Button,
-  Container,
-  Header,
-  KeyValuePairs,
-  SpaceBetween,
-} from '@cloudscape-design/components'
+import { Card, CardContent, CardHeader, CardTitle } from 'components/ui/card'
+import { Button } from 'components/ui/button'
 
 interface AccountSettingsProps {
   userName: string
@@ -19,21 +13,29 @@ export default function AccountSettings({
   onLogout,
 }: AccountSettingsProps) {
   return (
-    <Container header={<Header variant="h2">アカウント</Header>}>
-      <SpaceBetween size="l">
-        <KeyValuePairs
-          columns={2}
-          items={[
-            { label: '表示名', value: userName || '-' },
-            { label: '認証方法', value: authProvider },
-          ]}
-        />
-        <Box>
-          <Button variant="normal" onClick={onLogout}>
-            ログアウト
-          </Button>
-        </Box>
-      </SpaceBetween>
-    </Container>
+    <Card>
+      <CardHeader>
+        <CardTitle>アカウント</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="flex flex-col gap-5">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <dt className="text-sm text-muted-foreground">表示名</dt>
+              <dd className="text-sm mt-1">{userName || '-'}</dd>
+            </div>
+            <div>
+              <dt className="text-sm text-muted-foreground">認証方法</dt>
+              <dd className="text-sm mt-1">{authProvider}</dd>
+            </div>
+          </div>
+          <div>
+            <Button variant="outline" onClick={onLogout}>
+              ログアウト
+            </Button>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   )
 }

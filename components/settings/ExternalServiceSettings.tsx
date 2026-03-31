@@ -1,12 +1,7 @@
-import {
-  Box,
-  Button,
-  Container,
-  Header,
-  KeyValuePairs,
-  SpaceBetween,
-  StatusIndicator,
-} from '@cloudscape-design/components'
+import { Card, CardContent, CardHeader, CardTitle } from 'components/ui/card'
+import { Button } from 'components/ui/button'
+import { Badge } from 'components/ui/badge'
+import { CheckCircle2, MinusCircle } from 'lucide-react'
 
 interface ExternalServiceSettingsProps {
   discordUserId: string | null
@@ -22,39 +17,51 @@ export default function ExternalServiceSettings({
   onDiscordUnlink,
 }: ExternalServiceSettingsProps) {
   return (
-    <Container header={<Header variant="h2">外部サービス連携</Header>}>
-      <SpaceBetween size="l">
-        <KeyValuePairs
-          columns={2}
-          items={[
-            {
-              label: 'Discord',
-              value: discordUserId ? (
-                <StatusIndicator type="success">
-                  連携済み (ID: {discordUserId})
-                </StatusIndicator>
-              ) : (
-                <StatusIndicator type="stopped">未連携</StatusIndicator>
-              ),
-            },
-          ]}
-        />
-        <Box>
-          {discordUserId ? (
-            <Button
-              variant="normal"
-              loading={unlinking}
-              onClick={onDiscordUnlink}
-            >
-              Discord連携を解除
-            </Button>
-          ) : (
-            <Button variant="primary" onClick={onDiscordLink}>
-              Discordと連携する
-            </Button>
-          )}
-        </Box>
-      </SpaceBetween>
-    </Container>
+    <Card>
+      <CardHeader>
+        <CardTitle>外部サービス連携</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="flex flex-col gap-5">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <dt className="text-sm text-muted-foreground">Discord</dt>
+              <dd className="text-sm mt-1">
+                {discordUserId ? (
+                  <Badge
+                    variant="outline"
+                    className="gap-1 text-green-600 dark:text-green-400"
+                  >
+                    <CheckCircle2 className="size-3" />
+                    連携済み (ID: {discordUserId})
+                  </Badge>
+                ) : (
+                  <Badge
+                    variant="outline"
+                    className="gap-1 text-muted-foreground"
+                  >
+                    <MinusCircle className="size-3" />
+                    未連携
+                  </Badge>
+                )}
+              </dd>
+            </div>
+          </div>
+          <div>
+            {discordUserId ? (
+              <Button
+                variant="outline"
+                disabled={unlinking}
+                onClick={onDiscordUnlink}
+              >
+                {unlinking ? 'Discord連携を解除中...' : 'Discord連携を解除'}
+              </Button>
+            ) : (
+              <Button onClick={onDiscordLink}>Discordと連携する</Button>
+            )}
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   )
 }
