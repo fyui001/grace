@@ -2,15 +2,10 @@
 
 import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import {
-  Button,
-  Container,
-  Form,
-  FormField,
-  Header,
-  Input,
-  SpaceBetween,
-} from '@cloudscape-design/components'
+import { Card, CardContent, CardHeader, CardTitle } from 'components/ui/card'
+import { Button } from 'components/ui/button'
+import { Input } from 'components/ui/input'
+import { Label } from 'components/ui/label'
 import { useApiClient } from 'client/apiClient'
 import { medicationRepository } from 'repository/medicationRepository'
 import NoteEditor from 'components/common/NoteEditor'
@@ -52,52 +47,62 @@ export default function MedicationHistoryEditPage({
   }
 
   return (
-    <Form
-      actions={
-        <SpaceBetween direction="horizontal" size="xs">
-          <Button variant="link" onClick={() => router.back()}>
-            キャンセル
-          </Button>
-          <Button variant="primary" loading={submitting} onClick={handleSubmit}>
-            保存
-          </Button>
-        </SpaceBetween>
-      }
-    >
-      <SpaceBetween size="l">
-        <Header variant="h1">服薬履歴を編集</Header>
+    <div className="flex flex-col gap-5">
+      <h1 className="text-2xl font-bold">服薬履歴を編集</h1>
 
-        <Container header={<Header variant="h2">基本情報</Header>}>
-          <SpaceBetween size="l">
-            <FormField label="薬名">
+      <Card>
+        <CardHeader>
+          <CardTitle>基本情報</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-2">
+              <Label>薬名</Label>
               <Input value={history.drugName} disabled />
-            </FormField>
-            <FormField label="服薬日時">
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label>服薬日時</Label>
               <Input
                 value={history.createdAt.replace('T', ' ').substring(0, 16)}
                 disabled
               />
-            </FormField>
-            <FormField label="服薬量(mg)">
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="amount">服薬量(mg)</Label>
               <Input
+                id="amount"
                 value={amount}
-                onChange={({ detail }) => setAmount(detail.value)}
+                onChange={(e) => setAmount(e.target.value)}
                 type="number"
                 autoFocus
               />
-            </FormField>
-          </SpaceBetween>
-        </Container>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
-        <Container header={<Header variant="h2">備考</Header>}>
+      <Card>
+        <CardHeader>
+          <CardTitle>備考</CardTitle>
+        </CardHeader>
+        <CardContent>
           <NoteEditor
             data={history.note}
             onChange={(json) => {
               noteJsonRef.current = json
             }}
           />
-        </Container>
-      </SpaceBetween>
-    </Form>
+        </CardContent>
+      </Card>
+
+      <div className="flex justify-end gap-2">
+        <Button variant="ghost" onClick={() => router.back()}>
+          キャンセル
+        </Button>
+        <Button disabled={submitting} onClick={handleSubmit}>
+          {submitting ? '保存中...' : '保存'}
+        </Button>
+      </div>
+    </div>
   )
 }

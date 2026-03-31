@@ -2,27 +2,12 @@
 
 import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import {
-  Box,
-  Button,
-  Container,
-  Form,
-  FormField,
-  Header,
-  Input,
-  KeyValuePairs,
-  SpaceBetween,
-} from '@cloudscape-design/components'
-import type { InputProps } from '@cloudscape-design/components'
-import styled from '@emotion/styled'
+import { Card, CardContent, CardHeader, CardTitle } from 'components/ui/card'
+import { Button } from 'components/ui/button'
+import { Input } from 'components/ui/input'
+import { Label } from 'components/ui/label'
 import { useApiClient } from 'client/apiClient'
 import { userRepository } from 'repository/userRepository'
-
-const Wrapper = styled.div`
-  max-width: 480px;
-  margin: 0 auto;
-  padding: 0 16px;
-`
 
 export default function SetupForm({ email }: { email?: string }) {
   const router = useRouter()
@@ -30,7 +15,7 @@ export default function SetupForm({ email }: { email?: string }) {
   const [name, setName] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const nameInputRef = useRef<InputProps.Ref>(null)
+  const nameInputRef = useRef<HTMLInputElement>(null)
 
   const handleSubmit = async () => {
     if (!name.trim()) {
@@ -53,65 +38,62 @@ export default function SetupForm({ email }: { email?: string }) {
   }
 
   return (
-    <Box padding={{ top: 'xxxl' }}>
-      <Wrapper>
-        <SpaceBetween size="l">
-          <Box textAlign="center">
-            <SpaceBetween size="xxs">
-              <Box variant="h1" fontSize="heading-xl">
-                Grace
-              </Box>
-              <Box variant="p" color="text-body-secondary">
-                はじめに、あなたのプロフィールを設定しましょう
-              </Box>
-            </SpaceBetween>
-          </Box>
-          <Container header={<Header variant="h2">プロフィール設定</Header>}>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault()
-                handleSubmit()
-              }}
-            >
-              <Form
-                actions={
-                  <Box float="right">
-                    <Button
-                      variant="primary"
-                      loading={loading}
-                      formAction="submit"
-                    >
-                      はじめる
-                    </Button>
-                  </Box>
-                }
-                errorText={error}
+    <div className="pt-16">
+      <div className="mx-auto max-w-md px-4">
+        <div className="flex flex-col gap-5">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold">Grace</h1>
+            <p className="text-sm text-muted-foreground mt-1">
+              はじめに、あなたのプロフィールを設定しましょう
+            </p>
+          </div>
+          <Card>
+            <CardHeader>
+              <CardTitle>プロフィール設定</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault()
+                  handleSubmit()
+                }}
               >
-                <SpaceBetween size="l">
+                <div className="flex flex-col gap-5">
                   {email && (
-                    <KeyValuePairs
-                      items={[{ label: 'メールアドレス', value: email }]}
-                    />
+                    <div>
+                      <dt className="text-sm text-muted-foreground">
+                        メールアドレス
+                      </dt>
+                      <dd className="text-sm mt-1">{email}</dd>
+                    </div>
                   )}
-                  <FormField
-                    label="表示名"
-                    description="アプリ内で使用される名前です"
-                  >
+                  <div className="flex flex-col gap-2">
+                    <Label htmlFor="name">表示名</Label>
+                    <p className="text-sm text-muted-foreground">
+                      アプリ内で使用される名前です
+                    </p>
                     <Input
                       ref={nameInputRef}
+                      id="name"
                       value={name}
-                      onChange={({ detail }) => setName(detail.value)}
+                      onChange={(e) => setName(e.target.value)}
                       placeholder="例：太郎"
                       disabled={loading}
                       autoFocus
                     />
-                  </FormField>
-                </SpaceBetween>
-              </Form>
-            </form>
-          </Container>
-        </SpaceBetween>
-      </Wrapper>
-    </Box>
+                  </div>
+                  {error && <p className="text-sm text-destructive">{error}</p>}
+                  <div className="flex justify-end">
+                    <Button type="submit" disabled={loading}>
+                      {loading ? 'はじめる...' : 'はじめる'}
+                    </Button>
+                  </div>
+                </div>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
   )
 }
