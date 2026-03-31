@@ -222,6 +222,7 @@ export default function AppShell({
             <Button
               variant="ghost"
               size="icon-sm"
+              aria-label="サイドバーを閉じる"
               onClick={() => setSidebarOpen(false)}
             >
               <PanelLeftClose className="size-4" />
@@ -258,6 +259,7 @@ export default function AppShell({
               <Button
                 variant="ghost"
                 size="icon-sm"
+                aria-label="サイドバーを固定"
                 onClick={() => {
                   setSidebarOpen(true)
                   setOverlayVisible(false)
@@ -292,6 +294,7 @@ export default function AppShell({
             <Button
               variant="ghost"
               size="icon-sm"
+              aria-label="メニューを開く"
               className="mr-2"
               onClick={() => {
                 if (isMobile) {

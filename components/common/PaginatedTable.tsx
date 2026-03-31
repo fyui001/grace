@@ -80,6 +80,7 @@ export default function PaginatedTable<T>({
             <Button
               variant="outline"
               size="icon"
+              aria-label="前のページ"
               disabled={currentPage <= 1}
               onClick={() => onPageChange(currentPage - 1)}
             >
@@ -91,6 +92,7 @@ export default function PaginatedTable<T>({
             <Button
               variant="outline"
               size="icon"
+              aria-label="次のページ"
               disabled={currentPage >= lastPage}
               onClick={() => onPageChange(currentPage + 1)}
             >

@@ -47,7 +47,13 @@ export default function MedicationHistoryEditPage({
   }
 
   return (
-    <div className="flex flex-col gap-5">
+    <form
+      className="flex flex-col gap-5"
+      onSubmit={(e) => {
+        e.preventDefault()
+        handleSubmit()
+      }}
+    >
       <h1 className="text-2xl font-bold">服薬履歴を編集</h1>
 
       <Card>
@@ -57,12 +63,13 @@ export default function MedicationHistoryEditPage({
         <CardContent>
           <div className="flex flex-col gap-5">
             <div className="flex flex-col gap-2">
-              <Label>薬名</Label>
-              <Input value={history.drugName} disabled />
+              <Label htmlFor="drug-name">薬名</Label>
+              <Input id="drug-name" value={history.drugName} disabled />
             </div>
             <div className="flex flex-col gap-2">
-              <Label>服薬日時</Label>
+              <Label htmlFor="taken-at">服薬日時</Label>
               <Input
+                id="taken-at"
                 value={history.createdAt.replace('T', ' ').substring(0, 16)}
                 disabled
               />
@@ -96,13 +103,13 @@ export default function MedicationHistoryEditPage({
       </Card>
 
       <div className="flex justify-end gap-2">
-        <Button variant="ghost" onClick={() => router.back()}>
+        <Button type="button" variant="ghost" onClick={() => router.back()}>
           キャンセル
         </Button>
-        <Button disabled={submitting} onClick={handleSubmit}>
+        <Button type="submit" disabled={submitting}>
           {submitting ? '保存中...' : '保存'}
         </Button>
       </div>
-    </div>
+    </form>
   )
 }

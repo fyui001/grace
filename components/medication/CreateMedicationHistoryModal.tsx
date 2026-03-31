@@ -164,6 +164,7 @@ export default function CreateMedicationHistoryModal({
                 <Button
                   variant="ghost"
                   size="icon"
+                  aria-label="この行を削除"
                   disabled={entries.length <= 1}
                   onClick={() => removeEntry(index)}
                 >

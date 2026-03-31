@@ -23,7 +23,7 @@ export default function ExternalServiceSettings({
       </CardHeader>
       <CardContent>
         <div className="flex flex-col gap-5">
-          <div className="grid grid-cols-2 gap-4">
+          <dl className="grid grid-cols-2 gap-4">
             <div>
               <dt className="text-sm text-muted-foreground">Discord</dt>
               <dd className="text-sm mt-1">
@@ -46,7 +46,7 @@ export default function ExternalServiceSettings({
                 )}
               </dd>
             </div>
-          </div>
+          </dl>
           <div>
             {discordUserId ? (
               <Button
