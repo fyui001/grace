@@ -2,14 +2,15 @@
 
 import { useState, useCallback } from 'react'
 import {
-  Box,
-  Button,
-  FormField,
-  Header,
-  Input,
-  Modal,
-  SpaceBetween,
-} from '@cloudscape-design/components'
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from 'components/ui/dialog'
+import { Button } from 'components/ui/button'
+import { Input } from 'components/ui/input'
+import { Label } from 'components/ui/label'
 import { useApiClient } from 'client/apiClient'
 import { drugRepository } from 'repository/drugRepository'
 
@@ -67,50 +68,45 @@ export default function CreateDrugModal({
   }, [apiClient, drugName, url, reset, onCreated])
 
   return (
-    <Modal
-      visible={visible}
-      onDismiss={handleDismiss}
-      header={<Header variant="h2">薬を登録</Header>}
-      footer={
-        <Box float="right">
-          <SpaceBetween direction="horizontal" size="xs">
-            <Button variant="link" onClick={handleDismiss}>
-              キャンセル
-            </Button>
-            <Button
-              variant="primary"
-              loading={submitting}
-              onClick={handleSubmit}
-            >
-              登録する
-            </Button>
-          </SpaceBetween>
-        </Box>
-      }
-    >
-      <SpaceBetween size="l">
-        {error && (
-          <Box color="text-status-error" fontSize="body-s">
-            {error}
-          </Box>
-        )}
-        <FormField label="薬名">
-          <Input
-            value={drugName}
-            onChange={({ detail }) => setDrugName(detail.value)}
-            placeholder="薬名を入力"
-            autoFocus
-          />
-        </FormField>
-        <FormField label="URL" description="- optional">
-          <Input
-            value={url}
-            onChange={({ detail }) => setUrl(detail.value)}
-            placeholder="https://..."
-            type="url"
-          />
-        </FormField>
-      </SpaceBetween>
-    </Modal>
+    <Dialog open={visible} onOpenChange={(open) => !open && handleDismiss()}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>薬を登録</DialogTitle>
+        </DialogHeader>
+        <div className="flex flex-col gap-5">
+          {error && <p className="text-sm text-destructive">{error}</p>}
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="drug-name">薬名</Label>
+            <Input
+              id="drug-name"
+              value={drugName}
+              onChange={(e) => setDrugName(e.target.value)}
+              placeholder="薬名を入力"
+              autoFocus
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="drug-url">
+              URL <span className="text-muted-foreground">- optional</span>
+            </Label>
+            <Input
+              id="drug-url"
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              placeholder="https://..."
+              type="url"
+            />
+          </div>
+        </div>
+        <DialogFooter>
+          <Button variant="ghost" onClick={handleDismiss}>
+            キャンセル
+          </Button>
+          <Button disabled={submitting} onClick={handleSubmit}>
+            {submitting ? '登録中...' : '登録する'}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }
