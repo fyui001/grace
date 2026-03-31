@@ -2,15 +2,16 @@
 
 import { useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { Card, CardContent, CardHeader, CardTitle } from 'components/ui/card'
 import {
-  Container,
-  Header,
   Select,
-  SpaceBetween,
-  Table,
-  Tabs,
-} from '@cloudscape-design/components'
-import ScrollableTable from 'components/common/ScrollableTable'
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from 'components/ui/select'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from 'components/ui/tabs'
+import DataTable from 'components/common/DataTable'
 import DiscordLinkPrompt from 'components/common/DiscordLinkPrompt'
 import {
   Bar,
@@ -183,13 +184,18 @@ function PeriodSelect({
   onChange: (v: string) => void
 }) {
   return (
-    <Select
-      selectedOption={
-        PERIOD_OPTIONS.find((o) => o.value === value) ?? PERIOD_OPTIONS[2]
-      }
-      options={PERIOD_OPTIONS}
-      onChange={({ detail }) => onChange(detail.selectedOption.value ?? '30')}
-    />
+    <Select value={value} onValueChange={onChange}>
+      <SelectTrigger className="w-28">
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        {PERIOD_OPTIONS.map((o) => (
+          <SelectItem key={o.value} value={o.value}>
+            {o.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   )
 }
 
@@ -319,38 +325,35 @@ function RecentHistoryTable({ histories }: { histories: MedicationHistory[] }) {
   }))
 
   return (
-    <ScrollableTable clickableRows>
-      <Table
-        variant="container"
-        stickyHeader
-        header={
-          <Header variant="h2" counter={`(${recentItems.length})`}>
-            直近の服薬履歴
-          </Header>
-        }
-        columnDefinitions={[
-          { id: 'name', header: '薬名', cell: (item) => item.name },
-          {
-            id: 'amount',
-            header: '服薬量(mg)',
-            cell: (item) => `${item.amount}mg`,
-          },
-          {
-            id: 'takenAt',
-            header: '服薬日時',
-            cell: (item) => item.takenAt,
-          },
-        ]}
-        items={recentItems}
-        trackBy="id"
-        stripedRows
-        sortingDisabled
-        empty="服薬履歴はありません"
-        onRowClick={({ detail }) =>
-          router.push(`/medication/history/${detail.item.id}`)
-        }
-      />
-    </ScrollableTable>
+    <Card>
+      <CardHeader>
+        <CardTitle>直近の服薬履歴 ({recentItems.length})</CardTitle>
+      </CardHeader>
+      <CardContent className="p-0">
+        <div className="max-h-[500px] overflow-y-auto">
+          <DataTable
+            columnDefinitions={[
+              { id: 'name', header: '薬名', cell: (item) => item.name },
+              {
+                id: 'amount',
+                header: '服薬量(mg)',
+                cell: (item) => `${item.amount}mg`,
+              },
+              {
+                id: 'takenAt',
+                header: '服薬日時',
+                cell: (item) => item.takenAt,
+              },
+            ]}
+            items={recentItems}
+            trackBy="id"
+            striped
+            empty="服薬履歴はありません"
+            onRowClick={(item) => router.push(`/medication/history/${item.id}`)}
+          />
+        </div>
+      </CardContent>
+    </Card>
   )
 }
 
@@ -371,13 +374,18 @@ const MOCK_HISTORIES: MedicationHistory[] = Array.from(
 
 function MockDashboardContent() {
   return (
-    <SpaceBetween size="l">
-      <Header variant="h1">ダッシュボード</Header>
-      <Container header={<Header variant="h2">服薬分析</Header>}>
-        <DailyCountChart histories={MOCK_HISTORIES} />
-      </Container>
+    <div className="flex flex-col gap-5">
+      <h1 className="text-2xl font-bold">ダッシュボード</h1>
+      <Card>
+        <CardHeader>
+          <CardTitle>服薬分析</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <DailyCountChart histories={MOCK_HISTORIES} />
+        </CardContent>
+      </Card>
       <RecentHistoryTable histories={MOCK_HISTORIES.slice(0, 10)} />
-    </SpaceBetween>
+    </div>
   )
 }
 
@@ -395,59 +403,55 @@ export default function DashboardPage({
 
   if (discordLinked === false) {
     return (
-      <SpaceBetween size="l">
-        <Header variant="h1">ダッシュボード</Header>
+      <div className="flex flex-col gap-5">
+        <h1 className="text-2xl font-bold">ダッシュボード</h1>
         <DiscordLinkPrompt>
           <MockDashboardContent />
         </DiscordLinkPrompt>
-      </SpaceBetween>
+      </div>
     )
   }
 
   return (
-    <SpaceBetween size="l">
-      <Header
-        variant="h1"
-        actions={<PeriodSelect value={period} onChange={setPeriod} />}
-      >
-        ダッシュボード
-      </Header>
+    <div className="flex flex-col gap-5">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold">ダッシュボード</h1>
+        <PeriodSelect value={period} onChange={setPeriod} />
+      </div>
 
-      <Container header={<Header variant="h2">服薬分析</Header>}>
-        <Tabs
-          activeTabId={activeTab}
-          onChange={({ detail }) => setActiveTab(detail.activeTabId)}
-          tabs={[
-            {
-              id: 'daily-count',
-              label: '日別回数',
-              content: <DailyCountChart histories={filtered} />,
-            },
-            {
-              id: 'daily-by-drug',
-              label: '日別回数(薬別)',
-              content: <DailyCountByDrugChart histories={filtered} />,
-            },
-            {
-              id: 'weekly-by-drug',
-              label: '週別回数(薬別)',
-              content: <WeeklyCountChart histories={filtered} />,
-            },
-            {
-              id: 'hourly',
-              label: '時間帯別',
-              content: <HourlyChart histories={filtered} />,
-            },
-            {
-              id: 'drug-breakdown',
-              label: '薬別割合',
-              content: <DrugBreakdownChart histories={filtered} />,
-            },
-          ]}
-        />
-      </Container>
+      <Card>
+        <CardHeader>
+          <CardTitle>服薬分析</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Tabs value={activeTab} onValueChange={setActiveTab}>
+            <TabsList>
+              <TabsTrigger value="daily-count">日別回数</TabsTrigger>
+              <TabsTrigger value="daily-by-drug">日別回数(薬別)</TabsTrigger>
+              <TabsTrigger value="weekly-by-drug">週別回数(薬別)</TabsTrigger>
+              <TabsTrigger value="hourly">時間帯別</TabsTrigger>
+              <TabsTrigger value="drug-breakdown">薬別割合</TabsTrigger>
+            </TabsList>
+            <TabsContent value="daily-count">
+              <DailyCountChart histories={filtered} />
+            </TabsContent>
+            <TabsContent value="daily-by-drug">
+              <DailyCountByDrugChart histories={filtered} />
+            </TabsContent>
+            <TabsContent value="weekly-by-drug">
+              <WeeklyCountChart histories={filtered} />
+            </TabsContent>
+            <TabsContent value="hourly">
+              <HourlyChart histories={filtered} />
+            </TabsContent>
+            <TabsContent value="drug-breakdown">
+              <DrugBreakdownChart histories={filtered} />
+            </TabsContent>
+          </Tabs>
+        </CardContent>
+      </Card>
 
       <RecentHistoryTable histories={filtered} />
-    </SpaceBetween>
+    </div>
   )
 }
