@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Icon } from '@cloudscape-design/components'
+import { FileText } from 'lucide-react'
 import PaginatedTable from 'components/common/PaginatedTable'
 
 interface MedicationRecord {
@@ -14,7 +14,6 @@ interface MedicationRecord {
 
 interface MedicationHistoryTableProps {
   items: MedicationRecord[]
-  headerActions?: React.ReactNode
   loading?: boolean
   currentPage: number
   lastPage: number
@@ -26,7 +25,6 @@ interface MedicationHistoryTableProps {
 
 export default function MedicationHistoryTable({
   items,
-  headerActions,
   loading,
   currentPage,
   lastPage,
@@ -40,19 +38,15 @@ export default function MedicationHistoryTable({
   return (
     <PaginatedTable
       title="履歴一覧"
-      headerActions={headerActions}
       columnDefinitions={[
         {
           id: 'name',
           header: '薬名',
           cell: (item) => (
-            <span>
+            <span className="inline-flex items-center gap-1">
               {item.name || '-'}
               {item.hasNote && (
-                <>
-                  {' '}
-                  <Icon name="file" size="small" variant="subtle" />
-                </>
+                <FileText className="size-3.5 text-muted-foreground" />
               )}
             </span>
           ),
@@ -66,7 +60,6 @@ export default function MedicationHistoryTable({
           id: 'takenAt',
           header: '服薬日時',
           cell: (item) => item.takenAt,
-          sortingField: 'takenAt',
         },
       ]}
       items={items}

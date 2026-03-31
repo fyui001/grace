@@ -2,15 +2,10 @@
 
 import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import {
-  Button,
-  Container,
-  Form,
-  FormField,
-  Header,
-  Input,
-  SpaceBetween,
-} from '@cloudscape-design/components'
+import { Card, CardContent, CardHeader, CardTitle } from 'components/ui/card'
+import { Button } from 'components/ui/button'
+import { Input } from 'components/ui/input'
+import { Label } from 'components/ui/label'
 import { useApiClient } from 'client/apiClient'
 import { drugRepository } from 'repository/drugRepository'
 import NoteEditor from 'components/common/NoteEditor'
@@ -47,47 +42,65 @@ export default function DrugEditPage({ drug }: DrugEditPageProps) {
   }
 
   return (
-    <Form
-      actions={
-        <SpaceBetween direction="horizontal" size="xs">
-          <Button variant="link" onClick={() => router.back()}>
-            キャンセル
-          </Button>
-          <Button variant="primary" loading={submitting} onClick={handleSubmit}>
-            保存
-          </Button>
-        </SpaceBetween>
-      }
+    <form
+      className="flex flex-col gap-5"
+      onSubmit={(e) => {
+        e.preventDefault()
+        handleSubmit()
+      }}
     >
-      <SpaceBetween size="l">
-        <Container header={<Header variant="h2">基本情報</Header>}>
-          <SpaceBetween size="l">
-            <FormField label="薬名">
+      <h1 className="text-2xl font-bold">薬を編集</h1>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>基本情報</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="drug-name">薬名</Label>
               <Input
+                id="drug-name"
                 value={name}
-                onChange={({ detail }) => setName(detail.value)}
+                onChange={(e) => setName(e.target.value)}
                 autoFocus
               />
-            </FormField>
-            <FormField label="URL">
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="drug-url">URL</Label>
               <Input
+                id="drug-url"
                 value={url}
-                onChange={({ detail }) => setUrl(detail.value)}
+                onChange={(e) => setUrl(e.target.value)}
                 type="url"
               />
-            </FormField>
-          </SpaceBetween>
-        </Container>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
-        <Container header={<Header variant="h2">備考</Header>}>
+      <Card>
+        <CardHeader>
+          <CardTitle>備考</CardTitle>
+        </CardHeader>
+        <CardContent>
           <NoteEditor
             data={drug.note}
             onChange={(json) => {
               noteJsonRef.current = json
             }}
           />
-        </Container>
-      </SpaceBetween>
-    </Form>
+        </CardContent>
+      </Card>
+
+      <div className="flex justify-end gap-2">
+        <Button type="button" variant="ghost" onClick={() => router.back()}>
+          キャンセル
+        </Button>
+        <Button type="submit" disabled={submitting}>
+          {submitting ? '保存中...' : '保存'}
+        </Button>
+      </div>
+    </form>
   )
 }

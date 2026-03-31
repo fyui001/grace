@@ -2,13 +2,16 @@
 
 import { useCallback, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Button } from '@cloudscape-design/components'
+import { Button } from 'components/ui/button'
 import DrugListTable from 'components/medication/DrugListTable'
 import CreateDrugModal from 'components/medication/CreateDrugModal'
 import DiscordLinkPrompt from 'components/common/DiscordLinkPrompt'
-import { setPageSizeCookie } from 'utils/cookies'
 
 const PAGE_SIZE_COOKIE = 'grace-drug-list-page-size'
+
+function setPageSizeCookie(size: number) {
+  document.cookie = `${PAGE_SIZE_COOKIE}=${size}; path=/; max-age=${60 * 60 * 24 * 365}; SameSite=Lax`
+}
 
 interface Drug {
   id: string
@@ -62,15 +65,13 @@ export default function DrugListPage({
   )
 
   const handlePageChange = useCallback(
-    (page: number) => {
-      navigateWithParams(page)
-    },
+    (page: number) => navigateWithParams(page),
     [navigateWithParams],
   )
 
   const handlePageSizeChange = useCallback(
     (pageSize: number) => {
-      setPageSizeCookie(PAGE_SIZE_COOKIE, pageSize)
+      setPageSizeCookie(pageSize)
       navigateWithParams(1, pageSize)
     },
     [navigateWithParams],
@@ -83,29 +84,31 @@ export default function DrugListPage({
 
   if (discordLinked === false) {
     return (
-      <DiscordLinkPrompt>
-        <DrugListTable
-          items={MOCK_ITEMS}
-          currentPage={1}
-          lastPage={1}
-          perPage={25}
-          total={3}
-          onPageChange={() => {}}
-          onPageSizeChange={() => {}}
-        />
-      </DiscordLinkPrompt>
+      <div className="flex flex-col gap-5">
+        <h1 className="text-2xl font-bold">薬一覧</h1>
+        <DiscordLinkPrompt>
+          <DrugListTable
+            items={MOCK_ITEMS}
+            currentPage={1}
+            lastPage={1}
+            perPage={25}
+            total={3}
+            onPageChange={() => {}}
+            onPageSizeChange={() => {}}
+          />
+        </DiscordLinkPrompt>
+      </div>
     )
   }
 
   return (
-    <>
+    <div className="flex flex-col gap-5">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold">薬一覧</h1>
+        <Button onClick={() => setModalVisible(true)}>薬を登録</Button>
+      </div>
       <DrugListTable
         items={items}
-        headerActions={
-          <Button variant="primary" onClick={() => setModalVisible(true)}>
-            薬を登録
-          </Button>
-        }
         currentPage={currentPage}
         lastPage={lastPage}
         perPage={perPage}
@@ -118,6 +121,6 @@ export default function DrugListPage({
         onDismiss={() => setModalVisible(false)}
         onCreated={handleCreated}
       />
-    </>
+    </div>
   )
 }

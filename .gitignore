@@ -34,6 +34,9 @@ yarn-error.log*
 # docker compose
 compose.yml
 
+# MCP config
+.mcp.json
+
 # vercel
 .vercel
 

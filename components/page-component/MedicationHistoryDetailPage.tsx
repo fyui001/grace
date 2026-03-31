@@ -1,14 +1,10 @@
 'use client'
 
-import {
-  Button,
-  Container,
-  Header,
-  KeyValuePairs,
-  Link,
-  SpaceBetween,
-} from '@cloudscape-design/components'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import { Card, CardContent, CardHeader, CardTitle } from 'components/ui/card'
+import { Button } from 'components/ui/button'
+import { ExternalLink } from 'lucide-react'
 import NoteRenderer from 'components/common/NoteRenderer'
 
 interface MedicationHistoryDetailPageProps {
@@ -30,69 +26,84 @@ export default function MedicationHistoryDetailPage({
   const router = useRouter()
 
   return (
-    <SpaceBetween size="l">
-      <Container
-        header={
-          <Header
-            variant="h2"
-            actions={
-              <Button
-                onClick={() =>
-                  router.push(`/medication/history/${history.id}/edit`)
-                }
-              >
-                編集
-              </Button>
-            }
-          >
-            基本情報
-          </Header>
-        }
-      >
-        <KeyValuePairs
-          columns={3}
-          items={[
-            {
-              label: '薬名',
-              value: (
-                <Link href={`/medication/drugs/${history.drugId}`}>
+    <div className="flex flex-col gap-5">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold">服薬履歴詳細</h1>
+        <Button
+          variant="outline"
+          onClick={() => router.push(`/medication/history/${history.id}/edit`)}
+        >
+          編集
+        </Button>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>基本情報</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <dl className="grid grid-cols-3 gap-4">
+            <div>
+              <dt className="text-sm text-muted-foreground">薬名</dt>
+              <dd className="text-sm mt-1">
+                <Link
+                  href={`/medication/drugs/${history.drugId}`}
+                  className="text-primary hover:underline"
+                >
                   {history.drugName || '-'}
                 </Link>
-              ),
-            },
-            {
-              label: '服薬量',
-              value: `${history.amount}mg`,
-            },
-            {
-              label: '服薬日時',
-              value: history.createdAt.replace('T', ' ').substring(0, 16),
-            },
-            {
-              label: 'リンク',
-              value: history.drugUrl ? (
-                <Link href={history.drugUrl} external>
-                  {history.drugUrl}
-                </Link>
-              ) : (
-                '-'
-              ),
-            },
-            {
-              label: '更新日時',
-              value: history.updatedAt.replace('T', ' ').substring(0, 16),
-            },
-          ]}
-        />
-      </Container>
+              </dd>
+            </div>
+            <div>
+              <dt className="text-sm text-muted-foreground">服薬量</dt>
+              <dd className="text-sm mt-1">{history.amount}mg</dd>
+            </div>
+            <div>
+              <dt className="text-sm text-muted-foreground">服薬日時</dt>
+              <dd className="text-sm mt-1">
+                {history.createdAt.replace('T', ' ').substring(0, 16)}
+              </dd>
+            </div>
+            <div>
+              <dt className="text-sm text-muted-foreground">リンク</dt>
+              <dd className="text-sm mt-1">
+                {history.drugUrl ? (
+                  <a
+                    href={history.drugUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-primary hover:underline"
+                  >
+                    {history.drugUrl}
+                    <ExternalLink className="size-3" />
+                  </a>
+                ) : (
+                  '-'
+                )}
+              </dd>
+            </div>
+            <div>
+              <dt className="text-sm text-muted-foreground">更新日時</dt>
+              <dd className="text-sm mt-1">
+                {history.updatedAt.replace('T', ' ').substring(0, 16)}
+              </dd>
+            </div>
+          </dl>
+        </CardContent>
+      </Card>
 
-      <Container header={<Header variant="h2">備考</Header>}>
-        {history.note ? (
-          <NoteRenderer note={history.note} />
-        ) : (
-          <p>備考はありません</p>
-        )}
-      </Container>
-    </SpaceBetween>
+      <Card>
+        <CardHeader>
+          <CardTitle>備考</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {history.note ? (
+            <NoteRenderer note={history.note} />
+          ) : (
+            <p className="text-muted-foreground">備考はありません</p>
+          )}
+        </CardContent>
+      </Card>
+    </div>
   )
 }

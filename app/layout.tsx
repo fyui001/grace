@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import { headers } from 'next/headers'
-import '@cloudscape-design/global-styles/index.css'
 import './globals.css'
 import { ThemeProvider } from 'components/theme/ThemeProvider'
 
@@ -19,8 +18,8 @@ export default async function RootLayout({
     headerStore.get('x-theme-mode') === 'dark' ? 'dark' : 'light'
 
   return (
-    <html lang="ja">
-      <body className={initialMode === 'dark' ? 'awsui-dark-mode' : ''}>
+    <html lang="ja" className={initialMode === 'dark' ? 'dark' : ''}>
+      <body>
         <ThemeProvider initialMode={initialMode}>{children}</ThemeProvider>
       </body>
     </html>

@@ -7,7 +7,6 @@ import {
   useCallback,
   type ReactNode,
 } from 'react'
-import { applyMode, Mode } from '@cloudscape-design/global-styles'
 
 type ThemeMode = 'light' | 'dark'
 
@@ -19,6 +18,16 @@ interface ThemeContextValue {
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined)
 
 const COOKIE_KEY = 'grace-theme-mode'
+
+function applyTheme(mode: ThemeMode) {
+  document.cookie = `${COOKIE_KEY}=${mode};path=/;max-age=31536000`
+
+  if (mode === 'dark') {
+    document.documentElement.classList.add('dark')
+  } else {
+    document.documentElement.classList.remove('dark')
+  }
+}
 
 export function ThemeProvider({
   children,
@@ -32,8 +41,7 @@ export function ThemeProvider({
   const toggleMode = useCallback(() => {
     setMode((prev) => {
       const next = prev === 'light' ? 'dark' : 'light'
-      document.cookie = `${COOKIE_KEY}=${next};path=/;max-age=31536000`
-      applyMode(next === 'dark' ? Mode.Dark : Mode.Light)
+      applyTheme(next)
       return next
     })
   }, [])

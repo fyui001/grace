@@ -27,7 +27,6 @@ export default async function PageMedicationHistoryDetail({
   return (
     <AppShell
       user={user ?? undefined}
-      pageTitle={history.drugName ?? '履歴詳細'}
       breadcrumbs={[
         { text: '服薬履歴', href: '/medication/history' },
         {
@@ -35,7 +34,6 @@ export default async function PageMedicationHistoryDetail({
           href: `/medication/history/${id}`,
         },
       ]}
-      contentType="default"
     >
       <MedicationHistoryDetailPage
         history={{

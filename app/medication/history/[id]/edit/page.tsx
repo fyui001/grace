@@ -27,7 +27,6 @@ export default async function PageMedicationHistoryEdit({
   return (
     <AppShell
       user={user ?? undefined}
-      pageTitle={`${history.drugName ?? '履歴'} - 編集`}
       breadcrumbs={[
         { text: '服薬履歴', href: '/medication/history' },
         {
@@ -36,7 +35,6 @@ export default async function PageMedicationHistoryEdit({
         },
         { text: '編集', href: `/medication/history/${id}/edit` },
       ]}
-      contentType="form"
     >
       <MedicationHistoryEditPage
         history={{

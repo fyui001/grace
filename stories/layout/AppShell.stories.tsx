@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { Container, Header, SpaceBetween } from '@cloudscape-design/components'
 import AppShell from '../../components/layout/AppShell'
 import { withThemeProvider } from '../decorators'
 
@@ -30,14 +29,10 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   args: {
-    breadcrumbs: [{ text: 'ダッシュボード', href: '/dashboard' }],
-    contentType: 'default',
     children: (
-      <SpaceBetween size="l">
-        <Container header={<Header variant="h2">サンプルコンテンツ</Header>}>
-          ダッシュボードのコンテンツがここに表示されます。
-        </Container>
-      </SpaceBetween>
+      <div className="flex flex-col gap-5">
+        <h1 className="text-2xl font-bold">ダッシュボード</h1>
+      </div>
     ),
   },
 }
@@ -51,12 +46,10 @@ export const DrugListActive: Story = {
     },
   },
   args: {
-    breadcrumbs: [{ text: '薬一覧', href: '/medication/drugs' }],
-    contentType: 'table',
     children: (
-      <Container header={<Header variant="h2">薬一覧テーブル</Header>}>
-        テーブルコンテンツ
-      </Container>
+      <div className="flex flex-col gap-5">
+        <h1 className="text-2xl font-bold">薬一覧</h1>
+      </div>
     ),
   },
 }
@@ -71,16 +64,53 @@ export const DrugDetailWithBreadcrumbs: Story = {
   },
   args: {
     breadcrumbs: [
+      { text: 'Grace', href: '/dashboard' },
       { text: '薬一覧', href: '/medication/drugs' },
       { text: 'レボチロキシン', href: '/medication/drugs/1' },
     ],
     children: (
-      <SpaceBetween size="l">
-        <Header variant="h1">レボチロキシン</Header>
-        <Container header={<Header variant="h2">基本情報</Header>}>
-          薬の詳細情報
-        </Container>
-      </SpaceBetween>
+      <div className="flex flex-col gap-5">
+        <h1 className="text-2xl font-bold">レボチロキシン</h1>
+      </div>
+    ),
+  },
+}
+
+export const MedicationHistoryActive: Story = {
+  parameters: {
+    nextjs: {
+      navigation: {
+        pathname: '/medication/history',
+      },
+    },
+  },
+  args: {
+    children: (
+      <div className="flex flex-col gap-5">
+        <h1 className="text-2xl font-bold">服薬履歴</h1>
+      </div>
+    ),
+  },
+}
+
+export const MedicationHistoryDetailWithBreadcrumbs: Story = {
+  parameters: {
+    nextjs: {
+      navigation: {
+        pathname: '/medication/history/1',
+      },
+    },
+  },
+  args: {
+    breadcrumbs: [
+      { text: 'Grace', href: '/dashboard' },
+      { text: '服薬履歴', href: '/medication/history' },
+      { text: '服薬履歴詳細', href: '/medication/history/1' },
+    ],
+    children: (
+      <div className="flex flex-col gap-5">
+        <h1 className="text-2xl font-bold">服薬履歴詳細</h1>
+      </div>
     ),
   },
 }
@@ -94,12 +124,10 @@ export const SettingsActive: Story = {
     },
   },
   args: {
-    breadcrumbs: [{ text: '設定', href: '/settings' }],
-    contentType: 'form',
     children: (
-      <Container header={<Header variant="h2">表示設定</Header>}>
-        設定コンテンツ
-      </Container>
+      <div className="flex flex-col gap-5">
+        <h1 className="text-2xl font-bold">設定</h1>
+      </div>
     ),
   },
 }

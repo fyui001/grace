@@ -23,11 +23,7 @@ export default async function PageDashboard() {
   }))
 
   return (
-    <AppShell
-      user={user ?? undefined}
-      pageTitle="ダッシュボード"
-      contentType="default"
-    >
+    <AppShell user={user ?? undefined}>
       <DashboardPage
         histories={histories}
         discordLinked={!!user?.discordUserId}

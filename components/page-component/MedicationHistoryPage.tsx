@@ -2,13 +2,16 @@
 
 import { useCallback, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Button } from '@cloudscape-design/components'
+import { Button } from 'components/ui/button'
 import MedicationHistoryTable from 'components/medication/MedicationHistoryTable'
 import CreateMedicationHistoryModal from 'components/medication/CreateMedicationHistoryModal'
 import DiscordLinkPrompt from 'components/common/DiscordLinkPrompt'
-import { setPageSizeCookie } from 'utils/cookies'
 
 const PAGE_SIZE_COOKIE = 'grace-medication-history-page-size'
+
+function setPageSizeCookie(size: number) {
+  document.cookie = `${PAGE_SIZE_COOKIE}=${size}; path=/; max-age=${60 * 60 * 24 * 365}; SameSite=Lax`
+}
 
 interface MedicationRecord {
   id: string
@@ -77,15 +80,13 @@ export default function MedicationHistoryPage({
   )
 
   const handlePageChange = useCallback(
-    (page: number) => {
-      navigateWithParams(page)
-    },
+    (page: number) => navigateWithParams(page),
     [navigateWithParams],
   )
 
   const handlePageSizeChange = useCallback(
     (pageSize: number) => {
-      setPageSizeCookie(PAGE_SIZE_COOKIE, pageSize)
+      setPageSizeCookie(pageSize)
       navigateWithParams(1, pageSize)
     },
     [navigateWithParams],
@@ -96,33 +97,35 @@ export default function MedicationHistoryPage({
     router.refresh()
   }, [router])
 
-  const createButton = drugs.length > 0 && (
-    <Button variant="primary" onClick={() => setModalVisible(true)}>
-      服薬を記録
-    </Button>
-  )
-
   if (discordLinked === false) {
     return (
-      <DiscordLinkPrompt>
-        <MedicationHistoryTable
-          items={MOCK_ITEMS}
-          currentPage={1}
-          lastPage={3}
-          perPage={25}
-          total={62}
-          onPageChange={() => {}}
-          onPageSizeChange={() => {}}
-        />
-      </DiscordLinkPrompt>
+      <div className="flex flex-col gap-5">
+        <h1 className="text-2xl font-bold">服薬履歴</h1>
+        <DiscordLinkPrompt>
+          <MedicationHistoryTable
+            items={MOCK_ITEMS}
+            currentPage={1}
+            lastPage={3}
+            perPage={25}
+            total={62}
+            onPageChange={() => {}}
+            onPageSizeChange={() => {}}
+          />
+        </DiscordLinkPrompt>
+      </div>
     )
   }
 
   return (
-    <>
+    <div className="flex flex-col gap-5">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold">服薬履歴</h1>
+        {drugs.length > 0 && (
+          <Button onClick={() => setModalVisible(true)}>服薬を記録</Button>
+        )}
+      </div>
       <MedicationHistoryTable
         items={items}
-        headerActions={createButton || undefined}
         currentPage={currentPage}
         lastPage={lastPage}
         perPage={perPage}
@@ -136,6 +139,6 @@ export default function MedicationHistoryPage({
         onCreated={handleCreated}
         drugs={drugs}
       />
-    </>
+    </div>
   )
 }

@@ -35,7 +35,7 @@ export default async function PageDrugs({
   }))
 
   return (
-    <AppShell user={user ?? undefined} pageTitle="薬一覧" contentType="table">
+    <AppShell user={user ?? undefined}>
       <DrugListPage
         items={items}
         currentPage={data?.currentPage ?? 1}

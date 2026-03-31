@@ -1,52 +1,61 @@
-指定されたコンポーネントを Cloudscape Design System ガイドラインに照らし合わせてレビューし、違反箇所を修正する。
+指定されたコンポーネントを shadcn/ui + Tailwind CSS のガイドラインに照らし合わせてレビューし、違反箇所を修正する。
 
 ## レビューチェックリスト
 
 ### レイアウト
-- [ ] ContentLayout を CRUD/生産的ワークフロー（作成・編集・削除）に使用していないか
-- [ ] Container が他の Container 内にネストされていないか
-- [ ] 複数 Container の間に `SpaceBetween size="l"` を使用しているか
-- [ ] AppLayout の `contentType` が適切に設定されているか（"form", "table", "dashboard" 等）
-- [ ] ページごとに ContentLayout は1つのみか
+- [ ] ページレイアウトが `<div className="flex flex-col gap-5">` パターンを使用しているか
+- [ ] ヘッダー + アクションが `<div className="flex items-center justify-between">` か
+- [ ] セクションに shadcn `Card` + `CardHeader` + `CardContent` を使用しているか
+- [ ] Card がネストされていないか
+- [ ] 中央揃えレイアウト（ログイン・セットアップ等）が `mx-auto max-w-md` で正しくセンタリングされているか
+- [ ] AppShell 内のコンテンツにパディングが適用されているか
 
 ### フォーム
-- [ ] Form コンポーネントが `<form>` タグまたは `role="form"` で囲まれているか
-- [ ] フォームのアクションボタンが非活性になっていないか（バリデーションで制御すべき）
-- [ ] 最初のフィールドに自動フォーカスしているか
+- [ ] `<form>` タグで囲まれているか
+- [ ] shadcn `Input` + `Label` を使用しているか
+- [ ] エラー表示に `<p className="text-sm text-destructive">` を使用しているか
+- [ ] 最初のフィールドに `autoFocus` が設定されているか
 - [ ] バリデーション失敗時に最初のエラーフィールドにフォーカスしているか
-- [ ] FormField のラベルが1-3語で、句読点・冠詞がないか
-- [ ] 任意フィールドに「- optional」が付き、必須フィールドにマークがないか
-- [ ] 縦並びフォームフィールドに `SpaceBetween size="l"`、横並びに `size="s"` を使用しているか
+- [ ] 任意フィールドに `<span className="text-muted-foreground">- optional</span>` が付いているか
+- [ ] フォームフィールド間に適切な `gap-5`（縦）/ `gap-3`（横）があるか
 
 ### ボタン
-- [ ] Primary ボタンがページごとに1つのみか
-- [ ] ボタンが非表示でなく、非活性は `disabledReason` ツールチップ付きか
-- [ ] ボタンラベルが動詞+名詞の1-2語で、句読点がないか
-- [ ] 横並びボタン間に `SpaceBetween size="xs"` を使用しているか
+- [ ] Primary ボタン（default variant）がページごとに1つのみか
+- [ ] Secondary ボタンに `variant="outline"` を使用しているか
+- [ ] テキストリンク的ボタンに `variant="ghost"` を使用しているか
+- [ ] ボタン間に `gap-2` があるか
+- [ ] ボタンラベルが簡潔か（動詞+名詞の1-2語）
 
 ### ヘッダー
-- [ ] ページごとに h1 は1つのみか
-- [ ] Container ヘッダーに Header variant="h2" を使用しているか
-- [ ] ヘッダータイトルが最大3語で、末尾句読点がないか
+- [ ] ページごとに `<h1>` は1つのみか
+- [ ] `<h1>` に `className="text-2xl font-bold"` を使用しているか
+- [ ] Card 内の見出しに `CardTitle` を使用しているか
 
 ### テーブル
-- [ ] 第1列に一意識別子とナビゲーションリンクがあるか
-- [ ] テキストは左揃え、数量は右揃えか
-- [ ] 空値にハイフン (-) を表示しているか
+- [ ] `DataTable` / `PaginatedTable` を使用しているか
+- [ ] `columnDefinitions` の `cell` で空値にハイフン (-) を表示しているか
 - [ ] `trackBy` を使用しているか（配列インデックスは禁止）
+- [ ] クリック可能な行に `onRowClick` を設定しているか
 
 ### スタイリング
-- [ ] 色にデザイントークンを使用し、生の Hex 値を使っていないか
-- [ ] カスタムスタイルは `@emotion/styled` で、インラインスタイルでないか
-- [ ] 色だけで情報を伝えていないか（アイコン・テキスト併用）
+- [ ] shadcn CSS カスタムプロパティを使用しているか（`text-foreground`, `bg-background` 等）
+- [ ] 生の Hex 値を使っていないか（recharts のチャートカラーを除く）
+- [ ] Tailwind ユーティリティクラスを使用しているか（インラインスタイルは動的な値のみ）
+- [ ] `@emotion/styled` や Cloudscape の import が残っていないか
+- [ ] 色だけで情報を伝えていないか（lucide アイコン・テキスト併用）
 
-### トグル
-- [ ] ラベルがトグル状態によって変わっていないか
-- [ ] 即時効果のあるオプションにのみ使用しているか
+### テーマ・ダークモード
+- [ ] ダークモード用の色が `dark:` variant で対応しているか
+- [ ] ハードコードされた色がダークモードで見えなくならないか
 
-### ナビゲーション
-- [ ] SideNavigation の items 配列参照がレンダー間で安定しているか
-- [ ] リンク名が名詞であるか（動詞でないか）
+### アクセシビリティ
+- [ ] フォーム入力に `id` と `htmlFor` でラベルが紐づいているか
+- [ ] アイコンのみのボタンにアクセシブルな名前があるか
+- [ ] モーダルにフォーカストラップがあるか（shadcn Dialog は標準対応）
+
+### Storybook
+- [ ] 対象コンポーネントに Story が存在するか
+- [ ] Story の props がコンポーネントの変更に追従しているか
 
 ## 手順
 
@@ -54,6 +63,6 @@
 2. 上記チェックリストの各項目を検証する
 3. 違反箇所をファイルパス・行番号・該当ガイドラインとともに報告する
 4. すべての違反を自動修正する
-5. 該当する場合、Storybook のスクリーンショット（`npx playwright screenshot`）で修正結果を確認する
+5. Storybook および実アプリのスクリーンショット（`npx playwright screenshot`）で修正結果を目視確認する
 
 対象: $ARGUMENTS

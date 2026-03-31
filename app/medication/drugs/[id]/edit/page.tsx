@@ -24,13 +24,11 @@ export default async function PageDrugEdit({
   return (
     <AppShell
       user={user ?? undefined}
-      pageTitle={`${drug.name ?? '薬'} - 編集`}
       breadcrumbs={[
         { text: '薬一覧', href: '/medication/drugs' },
         { text: drug.name ?? '薬詳細', href: `/medication/drugs/${id}` },
         { text: '編集', href: `/medication/drugs/${id}/edit` },
       ]}
-      contentType="form"
     >
       <DrugEditPage
         drug={{

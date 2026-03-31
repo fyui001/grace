@@ -2,40 +2,28 @@
 
 import { useState, useCallback } from 'react'
 import {
-  Box,
-  Button,
-  FormField,
-  Header,
-  Input,
-  Modal,
-  Select,
-  SpaceBetween,
-} from '@cloudscape-design/components'
-import styled from '@emotion/styled'
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from 'components/ui/dialog'
+import { Button } from 'components/ui/button'
+import { Input } from 'components/ui/input'
+import { Label } from 'components/ui/label'
+import { Popover, PopoverContent, PopoverTrigger } from 'components/ui/popover'
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from 'components/ui/command'
+import { Check, ChevronsUpDown, X, Plus } from 'lucide-react'
+import { cn } from 'lib/utils'
 import { useApiClient } from 'client/apiClient'
 import { medicationRepository } from 'repository/medicationRepository'
-
-const EntryRow = styled.div`
-  display: flex;
-  align-items: flex-end;
-  gap: 12px;
-`
-
-const EntryIndex = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 32px;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--color-text-body-secondary, #5f6b7a);
-`
-
-const RemoveButton = styled.div`
-  flex-shrink: 0;
-  padding-bottom: 2px;
-`
 
 interface Drug {
   id: string
@@ -68,8 +56,6 @@ export default function CreateMedicationHistoryModal({
   const [entries, setEntries] = useState<MedicationEntry[]>([emptyEntry()])
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
-
-  const drugOptions = drugs.map((d) => ({ value: d.id, label: d.name }))
 
   const updateEntry = useCallback(
     (index: number, field: keyof MedicationEntry, value: string) => {
@@ -144,86 +130,130 @@ export default function CreateMedicationHistoryModal({
   }, [apiClient, validEntries, reset, onCreated])
 
   return (
-    <Modal
-      visible={visible}
-      onDismiss={handleDismiss}
-      header={<Header variant="h2">服薬を記録</Header>}
-      size="large"
-      footer={
-        <Box float="right">
-          <SpaceBetween direction="horizontal" size="xs">
-            <Button variant="link" onClick={handleDismiss}>
-              キャンセル
+    <Dialog open={visible} onOpenChange={(open) => !open && handleDismiss()}>
+      <DialogContent className="max-w-2xl">
+        <DialogHeader>
+          <DialogTitle>服薬を記録</DialogTitle>
+        </DialogHeader>
+        <div className="flex flex-col gap-4">
+          {error && <p className="text-sm text-destructive">{error}</p>}
+
+          {entries.map((entry, index) => (
+            <div key={index} className="flex items-end gap-3">
+              <div className="flex size-7 shrink-0 items-center justify-center text-sm font-semibold text-muted-foreground">
+                {index + 1}
+              </div>
+              <div className="flex flex-1 flex-col gap-2">
+                {index === 0 && <Label>薬</Label>}
+                <DrugCombobox
+                  drugs={drugs}
+                  value={entry.drugId}
+                  onChange={(value) => updateEntry(index, 'drugId', value)}
+                />
+              </div>
+              <div className="flex w-32 flex-col gap-2">
+                {index === 0 && <Label>服薬量(mg)</Label>}
+                <Input
+                  value={entry.amount}
+                  onChange={(e) => updateEntry(index, 'amount', e.target.value)}
+                  type="number"
+                  placeholder="mg"
+                />
+              </div>
+              <div className="shrink-0 pb-0.5">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  aria-label="この行を削除"
+                  disabled={entries.length <= 1}
+                  onClick={() => removeEntry(index)}
+                >
+                  <X className="size-4" />
+                </Button>
+              </div>
+            </div>
+          ))}
+
+          {entries.length < 10 && (
+            <Button variant="ghost" className="self-start" onClick={addEntry}>
+              <Plus className="size-4" />
+              追加（{entries.length}/10）
             </Button>
-            <Button
-              variant="primary"
-              loading={submitting}
-              onClick={handleSubmit}
-              disabled={validEntries.length === 0}
-            >
-              {validEntries.length > 1
+          )}
+        </div>
+        <DialogFooter>
+          <Button variant="ghost" onClick={handleDismiss}>
+            キャンセル
+          </Button>
+          <Button
+            disabled={submitting || validEntries.length === 0}
+            onClick={handleSubmit}
+          >
+            {submitting
+              ? '記録中...'
+              : validEntries.length > 1
                 ? `${validEntries.length}件を記録`
                 : '記録する'}
-            </Button>
-          </SpaceBetween>
-        </Box>
-      }
-    >
-      <SpaceBetween size="m">
-        {error && (
-          <Box color="text-status-error" fontSize="body-s">
-            {error}
-          </Box>
-        )}
-
-        {entries.map((entry, index) => (
-          <EntryRow key={index}>
-            <EntryIndex>{index + 1}</EntryIndex>
-            <FormField label={index === 0 ? '薬' : undefined} stretch>
-              <Select
-                selectedOption={
-                  drugOptions.find((o) => o.value === entry.drugId) ?? null
-                }
-                options={drugOptions}
-                placeholder="薬を選択"
-                filteringType="auto"
-                filteringPlaceholder="薬名で検索"
-                onChange={({ detail }) =>
-                  updateEntry(
-                    index,
-                    'drugId',
-                    detail.selectedOption.value ?? '',
-                  )
-                }
-              />
-            </FormField>
-            <FormField label={index === 0 ? '服薬量(mg)' : undefined}>
-              <Input
-                value={entry.amount}
-                onChange={({ detail }) =>
-                  updateEntry(index, 'amount', detail.value)
-                }
-                type="number"
-                placeholder="mg"
-              />
-            </FormField>
-            <RemoveButton>
-              <Button
-                iconName="close"
-                variant="icon"
-                disabled={entries.length <= 1}
-                onClick={() => removeEntry(index)}
-              />
-            </RemoveButton>
-          </EntryRow>
-        ))}
-
-        {entries.length < 10 && (
-          <Button iconName="add-plus" variant="link" onClick={addEntry}>
-            追加（{entries.length}/10）
           </Button>
-        )}
-      </SpaceBetween>
-    </Modal>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+function DrugCombobox({
+  drugs,
+  value,
+  onChange,
+}: {
+  drugs: Drug[]
+  value: string
+  onChange: (value: string) => void
+}) {
+  const [open, setOpen] = useState(false)
+  const selectedDrug = drugs.find((d) => d.id === value)
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          role="combobox"
+          aria-expanded={open}
+          className="w-full justify-between font-normal"
+        >
+          {selectedDrug ? selectedDrug.name : '薬を選択'}
+          <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
+        <Command>
+          <CommandInput placeholder="薬名で検索" />
+          <CommandList>
+            <CommandEmpty>見つかりませんでした</CommandEmpty>
+            <CommandGroup>
+              {drugs.map((drug) => (
+                <CommandItem
+                  key={drug.id}
+                  value={drug.name}
+                  onSelect={() => {
+                    onChange(drug.id)
+                    setOpen(false)
+                  }}
+                >
+                  <Check
+                    className={cn(
+                      'mr-2 size-4',
+                      value === drug.id ? 'opacity-100' : 'opacity-0',
+                    )}
+                  />
+                  {drug.name}
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
   )
 }

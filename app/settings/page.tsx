@@ -6,7 +6,7 @@ export default async function PageSettings() {
   const user = await getServerUser()
 
   return (
-    <AppShell user={user ?? undefined} pageTitle="設定" contentType="form">
+    <AppShell user={user ?? undefined}>
       <SettingsPage userName={user?.name ?? ''} />
     </AppShell>
   )

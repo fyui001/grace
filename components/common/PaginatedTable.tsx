@@ -1,14 +1,16 @@
 'use client'
 
+import { Button } from 'components/ui/button'
 import {
-  Header,
-  Pagination,
   Select,
-  SpaceBetween,
-  Table,
-  type TableProps,
-} from '@cloudscape-design/components'
-import ScrollableTable from 'components/common/ScrollableTable'
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from 'components/ui/select'
+import { Card, CardContent, CardHeader, CardTitle } from 'components/ui/card'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
+import DataTable, { type ColumnDefinition } from 'components/common/DataTable'
 
 const PAGE_SIZE_OPTIONS = [
   { value: '25', label: '25件' },
@@ -19,10 +21,9 @@ const PAGE_SIZE_OPTIONS = [
 
 interface PaginatedTableProps<T> {
   title: string
-  headerActions?: React.ReactNode
-  columnDefinitions: TableProps<T>['columnDefinitions']
+  columnDefinitions: ColumnDefinition<T>[]
   items: T[]
-  trackBy: TableProps<T>['trackBy']
+  trackBy?: keyof T | ((item: T) => string)
   loading?: boolean
   loadingText?: string
   empty?: string
@@ -38,12 +39,11 @@ interface PaginatedTableProps<T> {
 
 export default function PaginatedTable<T>({
   title,
-  headerActions,
   columnDefinitions,
   items,
   trackBy,
   loading,
-  loadingText = '読み込み中',
+  loadingText,
   empty,
   currentPage,
   lastPage,
@@ -55,49 +55,69 @@ export default function PaginatedTable<T>({
   maxHeight,
 }: PaginatedTableProps<T>) {
   return (
-    <ScrollableTable
-      maxHeight={maxHeight ?? 'calc(100vh - 250px)'}
-      clickableRows={!!onRowClick}
-    >
-      <Table
-        variant="container"
-        stickyHeader
-        header={
-          <Header variant="h2" counter={`(${total})`} actions={headerActions}>
-            {title}
-          </Header>
-        }
-        loading={loading}
-        loadingText={loadingText}
-        columnDefinitions={columnDefinitions}
-        items={items}
-        trackBy={trackBy}
-        stripedRows
-        sortingDisabled
-        onRowClick={
-          onRowClick ? ({ detail }) => onRowClick(detail.item) : undefined
-        }
-        empty={empty}
-        pagination={
-          <SpaceBetween direction="horizontal" size="xs" alignItems="center">
-            <Select
-              selectedOption={
-                PAGE_SIZE_OPTIONS.find((o) => o.value === String(perPage)) ??
-                PAGE_SIZE_OPTIONS[0]
-              }
-              options={PAGE_SIZE_OPTIONS}
-              onChange={({ detail }) =>
-                onPageSizeChange(Number(detail.selectedOption.value))
-              }
-            />
-            <Pagination
-              currentPageIndex={currentPage}
-              pagesCount={lastPage}
-              onChange={({ detail }) => onPageChange(detail.currentPageIndex)}
-            />
-          </SpaceBetween>
-        }
-      />
-    </ScrollableTable>
+    <Card>
+      <CardHeader className="flex-row items-center justify-between">
+        <CardTitle>
+          {title} ({total})
+        </CardTitle>
+        <div className="flex items-center gap-2">
+          <Select
+            value={String(perPage)}
+            onValueChange={(v) => onPageSizeChange(Number(v))}
+          >
+            <SelectTrigger className="w-24">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {PAGE_SIZE_OPTIONS.map((o) => (
+                <SelectItem key={o.value} value={o.value}>
+                  {o.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <div className="flex items-center gap-1">
+            <Button
+              variant="outline"
+              size="icon"
+              aria-label="前のページ"
+              disabled={currentPage <= 1}
+              onClick={() => onPageChange(currentPage - 1)}
+            >
+              <ChevronLeft className="size-4" />
+            </Button>
+            <span className="text-sm px-2">
+              {currentPage} / {lastPage}
+            </span>
+            <Button
+              variant="outline"
+              size="icon"
+              aria-label="次のページ"
+              disabled={currentPage >= lastPage}
+              onClick={() => onPageChange(currentPage + 1)}
+            >
+              <ChevronRight className="size-4" />
+            </Button>
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent className="p-0">
+        <div
+          className="overflow-y-auto"
+          style={maxHeight ? { maxHeight } : undefined}
+        >
+          <DataTable
+            columnDefinitions={columnDefinitions}
+            items={items}
+            trackBy={trackBy}
+            loading={loading}
+            loadingText={loadingText}
+            empty={empty}
+            striped
+            onRowClick={onRowClick}
+          />
+        </div>
+      </CardContent>
+    </Card>
   )
 }

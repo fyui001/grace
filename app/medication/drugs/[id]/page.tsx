@@ -24,12 +24,10 @@ export default async function PageDrugDetail({
   return (
     <AppShell
       user={user ?? undefined}
-      pageTitle={drug.name ?? '薬詳細'}
       breadcrumbs={[
         { text: '薬一覧', href: '/medication/drugs' },
         { text: drug.name ?? '薬詳細', href: `/medication/drugs/${id}` },
       ]}
-      contentType="default"
     >
       <DrugDetailPage
         drug={{
