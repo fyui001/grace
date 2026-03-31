@@ -42,7 +42,13 @@ export default function DrugEditPage({ drug }: DrugEditPageProps) {
   }
 
   return (
-    <div className="flex flex-col gap-5">
+    <form
+      className="flex flex-col gap-5"
+      onSubmit={(e) => {
+        e.preventDefault()
+        handleSubmit()
+      }}
+    >
       <h1 className="text-2xl font-bold">薬を編集</h1>
 
       <Card>
@@ -88,13 +94,13 @@ export default function DrugEditPage({ drug }: DrugEditPageProps) {
       </Card>
 
       <div className="flex justify-end gap-2">
-        <Button variant="ghost" onClick={() => router.back()}>
+        <Button type="button" variant="ghost" onClick={() => router.back()}>
           キャンセル
         </Button>
-        <Button disabled={submitting} onClick={handleSubmit}>
+        <Button type="submit" disabled={submitting}>
           {submitting ? '保存中...' : '保存'}
         </Button>
       </div>
-    </div>
+    </form>
   )
 }

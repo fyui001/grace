@@ -19,7 +19,7 @@ export default function AccountSettings({
       </CardHeader>
       <CardContent>
         <div className="flex flex-col gap-5">
-          <div className="grid grid-cols-2 gap-4">
+          <dl className="grid grid-cols-2 gap-4">
             <div>
               <dt className="text-sm text-muted-foreground">表示名</dt>
               <dd className="text-sm mt-1">{userName || '-'}</dd>
@@ -28,7 +28,7 @@ export default function AccountSettings({
               <dt className="text-sm text-muted-foreground">認証方法</dt>
               <dd className="text-sm mt-1">{authProvider}</dd>
             </div>
-          </div>
+          </dl>
           <div>
             <Button variant="outline" onClick={onLogout}>
               ログアウト

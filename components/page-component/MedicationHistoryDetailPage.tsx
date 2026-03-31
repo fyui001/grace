@@ -42,7 +42,7 @@ export default function MedicationHistoryDetailPage({
           <CardTitle>基本情報</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-3 gap-4">
+          <dl className="grid grid-cols-3 gap-4">
             <div>
               <dt className="text-sm text-muted-foreground">薬名</dt>
               <dd className="text-sm mt-1">
@@ -88,7 +88,7 @@ export default function MedicationHistoryDetailPage({
                 {history.updatedAt.replace('T', ' ').substring(0, 16)}
               </dd>
             </div>
-          </div>
+          </dl>
         </CardContent>
       </Card>
 

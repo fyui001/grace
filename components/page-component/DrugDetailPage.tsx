@@ -35,7 +35,7 @@ export default function DrugDetailPage({ drug }: DrugDetailPageProps) {
           <CardTitle>基本情報</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 gap-4">
+          <dl className="grid grid-cols-2 gap-4">
             <div>
               <dt className="text-sm text-muted-foreground">薬名</dt>
               <dd className="text-sm mt-1">{drug.name || '-'}</dd>
@@ -58,7 +58,7 @@ export default function DrugDetailPage({ drug }: DrugDetailPageProps) {
                 )}
               </dd>
             </div>
-          </div>
+          </dl>
         </CardContent>
       </Card>
 
