@@ -105,10 +105,22 @@ export default function AppShell({
   const router = useRouter()
   const isMobile = useIsMobile()
   const [hydrated, setHydrated] = useState(false)
-  const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [sidebarOpen, setSidebarOpenState] = useState(() => {
+    if (typeof document === 'undefined') return true
+    const cookie = document.cookie
+      .split('; ')
+      .find((c) => c.startsWith('grace-sidebar-open='))
+    if (!cookie) return true
+    return cookie.split('=')[1] !== 'false'
+  })
   const [overlayVisible, setOverlayVisible] = useState(false)
   const [groupOpen, setGroupOpen] = useState(true)
   const hoverTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const setSidebarOpen = useCallback((open: boolean) => {
+    setSidebarOpenState(open)
+    document.cookie = `grace-sidebar-open=${open}; path=/; max-age=31536000`
+  }, [])
 
   const shellRef = useCallback((node: HTMLElement | null) => {
     if (node) setHydrated(true)
@@ -162,7 +174,7 @@ export default function AppShell({
         <div key={group.href}>
           <button
             type="button"
-            className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold hover:bg-accent"
+            className="flex w-full cursor-pointer items-center gap-2 rounded-md px-3 py-2 text-sm font-semibold hover:bg-accent"
             onClick={() => setGroupOpen((prev) => !prev)}
           >
             {groupOpen ? (
@@ -179,7 +191,7 @@ export default function AppShell({
                   type="button"
                   key={item.href}
                   className={cn(
-                    'rounded-md px-3 py-1.5 text-left text-sm transition-colors hover:bg-accent',
+                    'cursor-pointer rounded-md px-3 py-1.5 text-left text-sm transition-colors hover:bg-accent',
                     activeHref === item.href &&
                       'bg-accent font-medium text-accent-foreground',
                   )}
@@ -244,7 +256,7 @@ export default function AppShell({
       {/* Desktop hover edge */}
       {!isMobile && !sidebarOpen && !overlayVisible && (
         <div
-          className="fixed top-0 left-0 z-[300] hidden h-screen w-6 md:block"
+          className="fixed top-0 left-0 z-[9998] hidden h-screen w-6 md:block"
           onMouseEnter={handleEdgeEnter}
           onMouseLeave={() => clearHoverTimer()}
         />
@@ -254,11 +266,11 @@ export default function AppShell({
       {!isMobile && overlayVisible && (
         <>
           <div
-            className="fixed inset-0 z-[300]"
+            className="fixed inset-0 z-[9998] bg-black/20"
             onClick={() => setOverlayVisible(false)}
           />
           <div
-            className="fixed top-0 left-0 z-[301] flex h-screen flex-col border-r bg-sidebar text-sidebar-foreground shadow-lg animate-in slide-in-from-left duration-150"
+            className="fixed top-0 left-0 z-[9999] flex h-screen flex-col border-r bg-sidebar text-sidebar-foreground shadow-lg animate-in slide-in-from-left duration-150"
             style={{ width: SIDEBAR_WIDTH }}
             onMouseEnter={handleOverlayEnter}
             onMouseLeave={handleOverlayLeave}
