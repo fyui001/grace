@@ -20,6 +20,20 @@ const ThemeContext = createContext<ThemeContextValue | undefined>(undefined)
 
 const COOKIE_KEY = 'grace-theme-mode'
 
+function applyTheme(mode: ThemeMode) {
+  document.cookie = `${COOKIE_KEY}=${mode};path=/;max-age=31536000`
+
+  // Tailwind dark mode
+  if (mode === 'dark') {
+    document.documentElement.classList.add('dark')
+  } else {
+    document.documentElement.classList.remove('dark')
+  }
+
+  // Cloudscape dark mode (kept during migration, remove in Phase 7)
+  applyMode(mode === 'dark' ? Mode.Dark : Mode.Light)
+}
+
 export function ThemeProvider({
   children,
   initialMode,
@@ -32,8 +46,7 @@ export function ThemeProvider({
   const toggleMode = useCallback(() => {
     setMode((prev) => {
       const next = prev === 'light' ? 'dark' : 'light'
-      document.cookie = `${COOKIE_KEY}=${next};path=/;max-age=31536000`
-      applyMode(next === 'dark' ? Mode.Dark : Mode.Light)
+      applyTheme(next)
       return next
     })
   }, [])

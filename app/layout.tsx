@@ -19,7 +19,7 @@ export default async function RootLayout({
     headerStore.get('x-theme-mode') === 'dark' ? 'dark' : 'light'
 
   return (
-    <html lang="ja">
+    <html lang="ja" className={initialMode === 'dark' ? 'dark' : ''}>
       <body className={initialMode === 'dark' ? 'awsui-dark-mode' : ''}>
         <ThemeProvider initialMode={initialMode}>{children}</ThemeProvider>
       </body>
