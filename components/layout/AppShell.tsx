@@ -238,7 +238,7 @@ export default function AppShell({
       {/* Desktop inline sidebar */}
       {showSidebarInline && (
         <aside
-          className="hidden md:flex flex-col shrink-0 border-r bg-sidebar text-sidebar-foreground overflow-hidden"
+          className="hidden md:flex flex-col shrink-0 border-r bg-[var(--sidebar-background)] text-[var(--sidebar-foreground)] overflow-hidden"
           style={{ width: SIDEBAR_WIDTH }}
         >
           <div className="flex items-center justify-between px-4 py-3">
@@ -282,7 +282,7 @@ export default function AppShell({
             onClick={() => setOverlayVisible(false)}
           />
           <aside
-            className="fixed top-0 left-0 z-[1001] flex h-screen flex-col border-r bg-sidebar text-sidebar-foreground animate-in slide-in-from-left duration-150"
+            className="fixed top-0 left-0 z-[1001] flex h-screen flex-col border-r bg-[var(--sidebar-background)] text-[var(--sidebar-foreground)] animate-in slide-in-from-left duration-150"
             style={{
               width: isMobile ? '85vw' : SIDEBAR_WIDTH,
               maxWidth: SIDEBAR_WIDTH,
