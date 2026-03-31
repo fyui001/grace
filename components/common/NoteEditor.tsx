@@ -1,7 +1,6 @@
 'use client'
 
 import { useRef, useCallback, useEffect } from 'react'
-import styled from '@emotion/styled'
 import { useCreateBlockNote } from '@blocknote/react'
 import { BlockNoteView } from '@blocknote/mantine'
 import type { Block } from '@blocknote/core'
@@ -9,10 +8,6 @@ import '@blocknote/core/fonts/inter.css'
 import '@blocknote/mantine/style.css'
 import { useTheme } from 'components/theme/ThemeProvider'
 import { cloudscapeBlockNoteTheme } from './blocknoteTheme'
-
-const EditorWrapper = styled.div`
-  min-height: 200px;
-`
 
 function parseInitialContent(data: string | null): Block[] | undefined {
   if (!data) return undefined
@@ -46,12 +41,12 @@ export default function NoteEditor({ data, onChange }: NoteEditorProps) {
   }, [editor])
 
   return (
-    <EditorWrapper>
+    <div className="min-h-[200px]">
       <BlockNoteView
         editor={editor}
         onChange={handleChange}
         theme={cloudscapeBlockNoteTheme[mode]}
       />
-    </EditorWrapper>
+    </div>
   )
 }

@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Button, Header, SpaceBetween } from '@cloudscape-design/components'
+import { Button } from 'components/ui/button'
 import MedicationHistoryTable from 'components/medication/MedicationHistoryTable'
 import CreateMedicationHistoryModal from 'components/medication/CreateMedicationHistoryModal'
 import DiscordLinkPrompt from 'components/common/DiscordLinkPrompt'
@@ -80,9 +80,7 @@ export default function MedicationHistoryPage({
   )
 
   const handlePageChange = useCallback(
-    (page: number) => {
-      navigateWithParams(page)
-    },
+    (page: number) => navigateWithParams(page),
     [navigateWithParams],
   )
 
@@ -99,16 +97,10 @@ export default function MedicationHistoryPage({
     router.refresh()
   }, [router])
 
-  const createButton = drugs.length > 0 && (
-    <Button variant="primary" onClick={() => setModalVisible(true)}>
-      服薬を記録
-    </Button>
-  )
-
   if (discordLinked === false) {
     return (
-      <SpaceBetween size="l">
-        <Header variant="h1">服薬履歴</Header>
+      <div className="flex flex-col gap-5">
+        <h1 className="text-2xl font-bold">服薬履歴</h1>
         <DiscordLinkPrompt>
           <MedicationHistoryTable
             items={MOCK_ITEMS}
@@ -120,15 +112,18 @@ export default function MedicationHistoryPage({
             onPageSizeChange={() => {}}
           />
         </DiscordLinkPrompt>
-      </SpaceBetween>
+      </div>
     )
   }
 
   return (
-    <SpaceBetween size="l">
-      <Header variant="h1" actions={createButton}>
-        服薬履歴
-      </Header>
+    <div className="flex flex-col gap-5">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold">服薬履歴</h1>
+        {drugs.length > 0 && (
+          <Button onClick={() => setModalVisible(true)}>服薬を記録</Button>
+        )}
+      </div>
       <MedicationHistoryTable
         items={items}
         currentPage={currentPage}
@@ -144,6 +139,6 @@ export default function MedicationHistoryPage({
         onCreated={handleCreated}
         drugs={drugs}
       />
-    </SpaceBetween>
+    </div>
   )
 }
