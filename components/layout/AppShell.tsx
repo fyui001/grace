@@ -16,12 +16,6 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from 'components/ui/breadcrumb'
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from 'components/ui/sheet'
 import { Button } from 'components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from 'components/ui/avatar'
 import { Separator } from 'components/ui/separator'
@@ -43,6 +37,7 @@ import {
   Moon,
   Settings,
   LogOut,
+  X,
 } from 'lucide-react'
 import { useTheme } from 'components/theme/ThemeProvider'
 import { cn } from '@/lib/utils'
@@ -266,59 +261,62 @@ export default function AppShell({
         </aside>
       )}
 
-      {/* Desktop hover edge */}
+      {/* Hover edge (desktop only, sidebar collapsed) */}
       {!isMobile && !sidebarOpen && !overlayVisible && (
         <div
-          className="fixed top-0 left-0 z-[9998] hidden h-screen w-6 md:block"
+          className="fixed top-0 left-0 z-[1000] hidden h-screen w-6 md:block"
           onMouseEnter={handleEdgeEnter}
           onMouseLeave={() => clearHoverTimer()}
         />
       )}
 
-      {/* Desktop overlay sidebar */}
-      {!isMobile && overlayVisible && (
+      {/* Overlay sidebar (desktop hover + mobile menu) */}
+      {overlayVisible && (
         <>
+          {/* Backdrop: transparent on desktop, dark on mobile */}
           <div
-            className="fixed inset-0 z-[9998] bg-black/50"
+            className={cn(
+              'fixed inset-0 z-[1000]',
+              isMobile ? 'bg-black/30' : 'bg-transparent',
+            )}
             onClick={() => setOverlayVisible(false)}
           />
-          <div
-            className="fixed top-0 left-0 z-[9999] flex h-screen flex-col border-r bg-sidebar text-sidebar-foreground shadow-lg animate-in slide-in-from-left duration-150"
-            style={{ width: SIDEBAR_WIDTH }}
-            onMouseEnter={handleOverlayEnter}
-            onMouseLeave={handleOverlayLeave}
+          <aside
+            className="fixed top-0 left-0 z-[1001] flex h-screen flex-col border-r bg-sidebar text-sidebar-foreground animate-in slide-in-from-left duration-150"
+            style={{
+              width: isMobile ? '85vw' : SIDEBAR_WIDTH,
+              maxWidth: SIDEBAR_WIDTH,
+              boxShadow: '0 0 16px rgba(0, 0, 0, 0.15)',
+            }}
+            onMouseEnter={!isMobile ? handleOverlayEnter : undefined}
+            onMouseLeave={!isMobile ? handleOverlayLeave : undefined}
           >
             <div className="flex items-center justify-between px-4 py-3">
               <span className="text-lg font-bold">Grace</span>
               <Button
                 variant="ghost"
                 size="icon-sm"
-                aria-label="サイドバーを固定"
+                aria-label={isMobile ? 'メニューを閉じる' : 'サイドバーを固定'}
                 onClick={() => {
-                  setSidebarOpen(true)
-                  setOverlayVisible(false)
+                  if (isMobile) {
+                    setOverlayVisible(false)
+                  } else {
+                    setSidebarOpen(true)
+                    setOverlayVisible(false)
+                  }
                 }}
               >
-                <PanelLeftOpen className="size-4" />
+                {isMobile ? (
+                  <X className="size-4" />
+                ) : (
+                  <PanelLeftOpen className="size-4" />
+                )}
               </Button>
             </div>
             <div className="flex-1 overflow-y-auto px-2">{sideNavContent}</div>
-          </div>
+          </aside>
         </>
       )}
-
-      {/* Mobile sidebar (Sheet) */}
-      <Sheet
-        open={isMobile && overlayVisible}
-        onOpenChange={(open) => !open && setOverlayVisible(false)}
-      >
-        <SheetContent side="left" className="w-[85vw] max-w-[280px] p-0">
-          <SheetHeader className="px-4 py-3 border-b">
-            <SheetTitle className="text-lg font-bold">Grace</SheetTitle>
-          </SheetHeader>
-          <div className="overflow-y-auto px-2">{sideNavContent}</div>
-        </SheetContent>
-      </Sheet>
 
       {/* Main area */}
       <div className="flex flex-1 flex-col min-w-0">
