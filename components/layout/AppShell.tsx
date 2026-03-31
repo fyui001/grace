@@ -26,13 +26,25 @@ import { Button } from 'components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from 'components/ui/avatar'
 import { Separator } from 'components/ui/separator'
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from 'components/ui/dropdown-menu'
+import {
   Menu,
   PanelLeftClose,
   PanelLeftOpen,
   ChevronDown,
   ChevronRight,
   User,
+  Sun,
+  Moon,
+  Settings,
+  LogOut,
 } from 'lucide-react'
+import { useTheme } from 'components/theme/ThemeProvider'
 import { cn } from '@/lib/utils'
 
 const SIDEBAR_WIDTH = 280
@@ -104,6 +116,7 @@ export default function AppShell({
   const pathname = usePathname()
   const router = useRouter()
   const isMobile = useIsMobile()
+  const { mode, toggleMode } = useTheme()
   const [hydrated, setHydrated] = useState(false)
   const [sidebarOpen, setSidebarOpenState] = useState(() => {
     if (typeof document === 'undefined') return true
@@ -335,19 +348,61 @@ export default function AppShell({
             Grace
           </Link>
           <div className="flex-1" />
-          {user && (
-            <div className="flex items-center gap-2">
-              <Avatar className="size-7">
-                {user.iconUrl ? (
-                  <AvatarImage src={user.iconUrl} alt={user.name} />
-                ) : null}
-                <AvatarFallback>
-                  <User className="size-3.5" />
-                </AvatarFallback>
-              </Avatar>
-              <span className="text-sm hidden sm:inline">{user.name}</span>
-            </div>
-          )}
+          <div className="flex items-center gap-1">
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              aria-label="テーマ切替"
+              onClick={toggleMode}
+            >
+              {mode === 'dark' ? (
+                <Sun className="size-4" />
+              ) : (
+                <Moon className="size-4" />
+              )}
+            </Button>
+            {user && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="flex items-center gap-2 px-2"
+                  >
+                    <Avatar className="size-7">
+                      {user.iconUrl ? (
+                        <AvatarImage src={user.iconUrl} alt={user.name} />
+                      ) : null}
+                      <AvatarFallback>
+                        <User className="size-3.5" />
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="text-sm hidden sm:inline">
+                      {user.name}
+                    </span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem
+                    className="cursor-pointer"
+                    onClick={() => router.push('/settings')}
+                  >
+                    <Settings className="mr-2 size-4" />
+                    設定
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    className="cursor-pointer"
+                    onClick={() => {
+                      window.location.href = '/logout'
+                    }}
+                  >
+                    <LogOut className="mr-2 size-4" />
+                    ログアウト
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+          </div>
         </header>
 
         {/* Breadcrumbs */}
