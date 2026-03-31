@@ -8,8 +8,9 @@
 |---|---|
 | フレームワーク | Next.js 16 (App Router, Turbopack) |
 | 言語 | TypeScript (strict mode) |
-| UIライブラリ | Cloudscape Design System |
-| スタイリング | Emotion CSS-in-JS (`@emotion/styled`, `@emotion/react`) |
+| UIライブラリ | shadcn/ui (Radix UI) |
+| スタイリング | Tailwind CSS v4 |
+| アイコン | lucide-react |
 | APIクライアント | openapi-fetch (OpenAPI specから型自動生成) |
 | コンポーネント開発 | Storybook 10 |
 | パッケージマネージャ | Yarn |
