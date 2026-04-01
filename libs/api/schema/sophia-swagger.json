@@ -340,6 +340,45 @@
       }
     },
     "/api/medication-histories/{id}": {
+      "delete": {
+        "tags": ["DeleteMedicationHistoryAction"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObjectBaseResponder"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObjectBaseResponder"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObjectBaseResponder"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
       "get": {
         "tags": ["GetMedicationHistoryDetailAction"],
         "parameters": [
@@ -926,6 +965,10 @@
             "format": "double"
           },
           "note": {
+            "type": "string",
+            "nullable": true
+          },
+          "medicationDate": {
             "type": "string",
             "nullable": true
           }

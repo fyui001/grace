@@ -57,3 +57,13 @@ export const NoNote: Story = {
     },
   },
 }
+
+export const LongUrl: Story = {
+  args: {
+    history: {
+      ...sampleHistory,
+      drugUrl:
+        'https://example.com/very/long/path/to/drug/information/page/that/should/wrap/properly/without/overflowing/the/container/levothyroxine?param=value&another=longvalue',
+    },
+  },
+}

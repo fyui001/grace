@@ -22,11 +22,19 @@ export const medicationRepository = {
   async updateMedicationHistory(
     apiClient: ClientType,
     id: number,
-    body: { amount: number; note?: string | null },
+    body: {
+      amount: number
+      note?: string | null
+      medicationDate?: string | null
+    },
   ) {
     const result = await apiClient.PUT('/api/medication-histories/{id}', {
       params: { path: { id } },
-      body: { amount: body.amount, note: body.note },
+      body: {
+        amount: body.amount,
+        note: body.note,
+        medicationDate: body.medicationDate,
+      },
     })
     if (result.error) {
       console.error(
@@ -61,6 +69,20 @@ export const medicationRepository = {
       )
       return false
     }
+  },
+
+  async deleteMedicationHistory(apiClient: ClientType, id: number) {
+    const result = await apiClient.DELETE('/api/medication-histories/{id}', {
+      params: { path: { id } },
+    })
+    if (result.error) {
+      console.error(
+        '[medicationRepository] deleteMedicationHistory error:',
+        result.error,
+      )
+      return false
+    }
+    return true
   },
 
   async getMedicationHistory(apiClient: ClientType, id: number) {

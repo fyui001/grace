@@ -368,7 +368,37 @@ export interface paths {
       }
     }
     post?: never
-    delete?: never
+    delete: {
+      parameters: {
+        query?: never
+        header?: never
+        path: {
+          id: number
+        }
+        cookie?: never
+      }
+      requestBody?: never
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown
+          }
+          content: {
+            'text/plain': components['schemas']['ObjectBaseResponder']
+            'application/json': components['schemas']['ObjectBaseResponder']
+            'text/json': components['schemas']['ObjectBaseResponder']
+          }
+        }
+        /** @description Unauthorized */
+        401: {
+          headers: {
+            [name: string]: unknown
+          }
+          content?: never
+        }
+      }
+    }
     options?: never
     head?: never
     patch?: never
@@ -658,6 +688,7 @@ export interface components {
       /** Format: double */
       amount: number
       note?: string | null
+      medicationDate?: string | null
     }
     UserDto: {
       /** Format: int64 */

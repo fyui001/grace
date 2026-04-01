@@ -9,6 +9,7 @@ import { Label } from 'components/ui/label'
 import { useApiClient } from 'client/apiClient'
 import { medicationRepository } from 'repository/medicationRepository'
 import NoteEditor from 'components/common/NoteEditor'
+import dayjs from 'dayjs'
 
 interface MedicationHistoryEditPageProps {
   history: {
@@ -26,6 +27,9 @@ export default function MedicationHistoryEditPage({
   const router = useRouter()
   const apiClient = useApiClient()
   const [amount, setAmount] = useState(String(history.amount))
+  const [medicationDate, setMedicationDate] = useState(
+    dayjs(history.createdAt).format('YYYY-MM-DDTHH:mm'),
+  )
   const noteJsonRef = useRef<string | null>(history.note)
   const [submitting, setSubmitting] = useState(false)
 
@@ -37,6 +41,7 @@ export default function MedicationHistoryEditPage({
       {
         amount: Number(amount),
         note: noteJsonRef.current,
+        medicationDate: dayjs(medicationDate).format('YYYY-MM-DD HH:mm:ss'),
       },
     )
     setSubmitting(false)
@@ -70,8 +75,9 @@ export default function MedicationHistoryEditPage({
               <Label htmlFor="taken-at">服薬日時</Label>
               <Input
                 id="taken-at"
-                value={history.createdAt.replace('T', ' ').substring(0, 16)}
-                disabled
+                type="datetime-local"
+                value={medicationDate}
+                onChange={(e) => setMedicationDate(e.target.value)}
               />
             </div>
             <div className="flex flex-col gap-2">

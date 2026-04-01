@@ -40,7 +40,7 @@ export default function DrugDetailPage({ drug }: DrugDetailPageProps) {
               <dt className="text-sm text-muted-foreground">薬名</dt>
               <dd className="text-sm mt-1">{drug.name || '-'}</dd>
             </div>
-            <div>
+            <div className="min-w-0">
               <dt className="text-sm text-muted-foreground">リンク</dt>
               <dd className="text-sm mt-1">
                 {drug.url ? (
@@ -48,10 +48,10 @@ export default function DrugDetailPage({ drug }: DrugDetailPageProps) {
                     href={drug.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-primary hover:underline"
+                    className="inline-flex items-center gap-1 text-primary hover:underline break-all"
                   >
                     {drug.url}
-                    <ExternalLink className="size-3" />
+                    <ExternalLink className="size-3 shrink-0" />
                   </a>
                 ) : (
                   '-'
