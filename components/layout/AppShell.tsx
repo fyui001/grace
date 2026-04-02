@@ -1,12 +1,6 @@
 'use client'
 
-import {
-  Fragment,
-  useState,
-  useCallback,
-  useRef,
-  useSyncExternalStore,
-} from 'react'
+import { Fragment, useState, useCallback, useSyncExternalStore } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
@@ -38,6 +32,9 @@ import {
   Settings,
   LogOut,
   X,
+  LayoutDashboard,
+  Pill,
+  ClipboardList,
 } from 'lucide-react'
 import { useTheme } from 'components/theme/ThemeProvider'
 import { cn } from '@/lib/utils'
@@ -72,6 +69,7 @@ function useIsMobile() {
 interface NavItem {
   text: string
   href: string
+  icon: React.ComponentType<{ className?: string }>
 }
 
 interface NavGroup {
@@ -85,14 +83,18 @@ const NAV_GROUPS: NavGroup[] = [
     text: '服薬指導室',
     href: '/dashboard',
     items: [
-      { text: 'ダッシュボード', href: '/dashboard' },
-      { text: '薬一覧', href: '/medication/drugs' },
-      { text: '服薬履歴', href: '/medication/history' },
+      { text: 'ダッシュボード', href: '/dashboard', icon: LayoutDashboard },
+      { text: '薬一覧', href: '/medication/drugs', icon: Pill },
+      { text: '服薬履歴', href: '/medication/history', icon: ClipboardList },
     ],
   },
 ]
 
-const NAV_EXTRA: NavItem[] = [{ text: '設定', href: '/settings' }]
+const NAV_EXTRA: NavItem[] = [
+  { text: '設定', href: '/settings', icon: Settings },
+]
+
+const SIDEBAR_COLLAPSED_WIDTH = 56
 
 interface AppShellProps {
   children: React.ReactNode
@@ -114,9 +116,8 @@ export default function AppShell({
   const { mode, toggleMode } = useTheme()
   const [hydrated, setHydrated] = useState(false)
   const [sidebarOpen, setSidebarOpenState] = useState(true)
-  const [overlayVisible, setOverlayVisible] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [groupOpen, setGroupOpen] = useState(true)
-  const hoverTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const setSidebarOpen = useCallback((open: boolean) => {
     setSidebarOpenState(open)
@@ -134,34 +135,6 @@ export default function AppShell({
     setHydrated(true)
   }, [])
 
-  const clearHoverTimer = useCallback(() => {
-    if (hoverTimerRef.current) {
-      clearTimeout(hoverTimerRef.current)
-      hoverTimerRef.current = null
-    }
-  }, [])
-
-  const handleEdgeEnter = useCallback(() => {
-    clearHoverTimer()
-    hoverTimerRef.current = setTimeout(() => {
-      setOverlayVisible(true)
-    }, 100)
-  }, [clearHoverTimer])
-
-  const handleOverlayLeave = useCallback(() => {
-    clearHoverTimer()
-    hoverTimerRef.current = setTimeout(() => {
-      setOverlayVisible(false)
-    }, 200)
-  }, [clearHoverTimer])
-
-  const handleOverlayEnter = useCallback(() => {
-    clearHoverTimer()
-  }, [clearHoverTimer])
-
-  const showSidebarInline = sidebarOpen && !isMobile
-  const showMenuButton = !showSidebarInline
-
   const activeHref = pathname.startsWith('/medication/drugs')
     ? '/medication/drugs'
     : pathname.startsWith('/medication/history')
@@ -171,10 +144,12 @@ export default function AppShell({
   const handleNavClick = useCallback(
     (href: string) => {
       router.push(href)
-      setOverlayVisible(false)
+      setMobileMenuOpen(false)
     },
     [router],
   )
+
+  const allNavItems = [...NAV_GROUPS.flatMap((g) => g.items), ...NAV_EXTRA]
 
   const sideNavContent = (
     <nav className="flex flex-col gap-1 py-2">
@@ -193,18 +168,19 @@ export default function AppShell({
             {group.text}
           </button>
           {groupOpen && (
-            <div className="ml-4 flex flex-col gap-0.5">
+            <div className="ml-2 flex flex-col gap-0.5">
               {group.items.map((item) => (
                 <button
                   type="button"
                   key={item.href}
                   className={cn(
-                    'cursor-pointer rounded-md px-3 py-1.5 text-left text-sm transition-colors hover:bg-accent',
+                    'flex cursor-pointer items-center gap-2 rounded-md px-3 py-1.5 text-left text-sm transition-colors hover:bg-accent',
                     activeHref === item.href &&
                       'bg-accent font-medium text-accent-foreground',
                   )}
                   onClick={() => handleNavClick(item.href)}
                 >
+                  <item.icon className="size-4 shrink-0" />
                   {item.text}
                 </button>
               ))}
@@ -218,12 +194,13 @@ export default function AppShell({
           type="button"
           key={item.href}
           className={cn(
-            'rounded-md px-3 py-1.5 text-left text-sm transition-colors hover:bg-accent',
+            'flex cursor-pointer items-center gap-2 rounded-md px-3 py-1.5 text-left text-sm transition-colors hover:bg-accent',
             activeHref === item.href &&
               'bg-accent font-medium text-accent-foreground',
           )}
           onClick={() => handleNavClick(item.href)}
         >
+          <item.icon className="size-4 shrink-0" />
           {item.text}
         </button>
       ))}
@@ -235,82 +212,90 @@ export default function AppShell({
       ref={shellRef}
       className={cn('flex h-screen', !hydrated && 'opacity-0')}
     >
-      {/* Desktop inline sidebar */}
-      {showSidebarInline && (
-        <aside
-          className="hidden md:flex flex-col shrink-0 border-r bg-[var(--sidebar-background)] text-[var(--sidebar-foreground)] overflow-hidden"
-          style={{ width: SIDEBAR_WIDTH }}
-        >
-          <div className="flex items-center justify-between px-4 py-3">
-            <Link
-              href="/dashboard"
-              className="text-lg font-bold hover:opacity-80"
-            >
-              Grace
-            </Link>
-            <Button
-              variant="ghost"
-              size="icon-sm"
-              aria-label="サイドバーを閉じる"
-              onClick={() => setSidebarOpen(false)}
-            >
-              <PanelLeftClose className="size-4" />
-            </Button>
-          </div>
-          <div className="flex-1 overflow-y-auto px-2">{sideNavContent}</div>
-        </aside>
-      )}
+      {/* Desktop sidebar — expanded or collapsed icon rail */}
+      <aside
+        className={cn(
+          'hidden md:flex flex-col shrink-0 border-r bg-[var(--sidebar-background)] text-[var(--sidebar-foreground)] overflow-hidden transition-[width] duration-200',
+        )}
+        style={{ width: sidebarOpen ? SIDEBAR_WIDTH : SIDEBAR_COLLAPSED_WIDTH }}
+      >
+        {sidebarOpen ? (
+          <>
+            <div className="flex items-center justify-between px-4 py-3">
+              <Link
+                href="/dashboard"
+                className="text-lg font-bold hover:opacity-80"
+              >
+                Grace
+              </Link>
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                aria-label="サイドバーを閉じる"
+                onClick={() => setSidebarOpen(false)}
+              >
+                <PanelLeftClose className="size-4" />
+              </Button>
+            </div>
+            <div className="flex-1 overflow-y-auto px-2">{sideNavContent}</div>
+          </>
+        ) : (
+          <>
+            <div className="flex items-center justify-center py-3">
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                aria-label="サイドバーを開く"
+                onClick={() => setSidebarOpen(true)}
+              >
+                <PanelLeftOpen className="size-4" />
+              </Button>
+            </div>
+            <nav className="flex flex-1 flex-col items-center gap-1 py-2">
+              {allNavItems.map((item) => (
+                <button
+                  type="button"
+                  key={item.href}
+                  title={item.text}
+                  className={cn(
+                    'flex size-9 cursor-pointer items-center justify-center rounded-md transition-colors hover:bg-accent',
+                    activeHref === item.href &&
+                      'bg-accent text-accent-foreground',
+                  )}
+                  onClick={() => handleNavClick(item.href)}
+                >
+                  <item.icon className="size-4" />
+                </button>
+              ))}
+            </nav>
+          </>
+        )}
+      </aside>
 
-      {/* Hover edge (desktop only, sidebar collapsed) */}
-      {!isMobile && !sidebarOpen && !overlayVisible && (
-        <div
-          className="fixed top-0 left-0 z-[1000] hidden h-screen w-6 md:block"
-          onMouseEnter={handleEdgeEnter}
-          onMouseLeave={() => clearHoverTimer()}
-        />
-      )}
-
-      {/* Overlay sidebar (desktop hover + mobile menu) */}
-      {overlayVisible && (
+      {/* Mobile overlay sidebar */}
+      {mobileMenuOpen && (
         <>
-          {/* Backdrop: transparent on desktop, dark on mobile */}
           <div
-            className={cn(
-              'fixed inset-0 z-[1000]',
-              isMobile ? 'bg-black/30' : 'bg-transparent',
-            )}
-            onClick={() => setOverlayVisible(false)}
+            className="fixed inset-0 z-[1000] bg-black/30"
+            onClick={() => setMobileMenuOpen(false)}
           />
           <aside
             className="fixed top-0 left-0 z-[1001] flex h-screen flex-col border-r bg-[var(--sidebar-background)] text-[var(--sidebar-foreground)] animate-in slide-in-from-left duration-150"
             style={{
-              width: isMobile ? '85vw' : SIDEBAR_WIDTH,
+              width: '85vw',
               maxWidth: SIDEBAR_WIDTH,
               boxShadow: '0 0 16px rgba(0, 0, 0, 0.15)',
             }}
-            onMouseEnter={!isMobile ? handleOverlayEnter : undefined}
-            onMouseLeave={!isMobile ? handleOverlayLeave : undefined}
           >
             <div className="flex items-center justify-between px-4 py-3">
               <span className="text-lg font-bold">Grace</span>
               <Button
                 variant="ghost"
                 size="icon-sm"
-                aria-label={isMobile ? 'メニューを閉じる' : 'サイドバーを固定'}
-                onClick={() => {
-                  if (isMobile) {
-                    setOverlayVisible(false)
-                  } else {
-                    setSidebarOpen(true)
-                    setOverlayVisible(false)
-                  }
-                }}
+                aria-label="メニューを閉じる"
+                onClick={() => setMobileMenuOpen(false)}
               >
-                {isMobile ? (
-                  <X className="size-4" />
-                ) : (
-                  <PanelLeftOpen className="size-4" />
-                )}
+                <X className="size-4" />
               </Button>
             </div>
             <div className="flex-1 overflow-y-auto px-2">{sideNavContent}</div>
@@ -322,19 +307,13 @@ export default function AppShell({
       <div className="flex flex-1 flex-col min-w-0">
         {/* Top bar */}
         <header className="flex items-center border-b bg-background px-4 h-12 shrink-0">
-          {showMenuButton && (
+          {isMobile && (
             <Button
               variant="ghost"
               size="icon-sm"
               aria-label="メニューを開く"
               className="mr-2"
-              onClick={() => {
-                if (isMobile) {
-                  setOverlayVisible(true)
-                } else {
-                  setSidebarOpen(true)
-                }
-              }}
+              onClick={() => setMobileMenuOpen(true)}
             >
               <Menu className="size-4" />
             </Button>
