@@ -14,6 +14,7 @@ export interface ColumnDefinition<T> {
   id: string
   header: ReactNode
   cell: (item: T) => ReactNode
+  width?: string
 }
 
 interface DataTableProps<T> {
@@ -25,6 +26,7 @@ interface DataTableProps<T> {
   empty?: ReactNode
   striped?: boolean
   onRowClick?: (item: T) => void
+  maxHeight?: string
 }
 
 export default function DataTable<T>({
@@ -36,6 +38,7 @@ export default function DataTable<T>({
   empty,
   striped = false,
   onRowClick,
+  maxHeight,
 }: DataTableProps<T>) {
   const getKey = (item: T, index: number): string => {
     if (!trackBy) return String(index)
@@ -43,8 +46,18 @@ export default function DataTable<T>({
     return String(item[trackBy])
   }
 
-  return (
+  const table = (
     <Table>
+      {columnDefinitions.some((col) => col.width) && (
+        <colgroup>
+          {columnDefinitions.map((col) => (
+            <col
+              key={col.id}
+              style={col.width ? { width: col.width } : undefined}
+            />
+          ))}
+        </colgroup>
+      )}
       <TableHeader>
         <TableRow>
           {columnDefinitions.map((col) => (
@@ -99,4 +112,17 @@ export default function DataTable<T>({
       </TableBody>
     </Table>
   )
+
+  if (maxHeight) {
+    return (
+      <div
+        className="overflow-auto [&_[data-slot=table-container]]:overflow-visible"
+        style={{ maxHeight }}
+      >
+        {table}
+      </div>
+    )
+  }
+
+  return table
 }

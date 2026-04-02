@@ -330,28 +330,34 @@ function RecentHistoryTable({ histories }: { histories: MedicationHistory[] }) {
         <CardTitle>直近の服薬履歴 ({recentItems.length})</CardTitle>
       </CardHeader>
       <CardContent className="p-0">
-        <div className="max-h-[500px] overflow-y-auto">
-          <DataTable
-            columnDefinitions={[
-              { id: 'name', header: '薬名', cell: (item) => item.name },
-              {
-                id: 'amount',
-                header: '服薬量(mg)',
-                cell: (item) => `${item.amount}mg`,
-              },
-              {
-                id: 'takenAt',
-                header: '服薬日時',
-                cell: (item) => item.takenAt,
-              },
-            ]}
-            items={recentItems}
-            trackBy="id"
-            striped
-            empty="服薬履歴はありません"
-            onRowClick={(item) => router.push(`/medication/history/${item.id}`)}
-          />
-        </div>
+        <DataTable
+          columnDefinitions={[
+            {
+              id: 'name',
+              header: '薬名',
+              cell: (item) => item.name,
+              width: '40%',
+            },
+            {
+              id: 'amount',
+              header: '服薬量(mg)',
+              cell: (item) => `${item.amount}mg`,
+              width: '25%',
+            },
+            {
+              id: 'takenAt',
+              header: '服薬日時',
+              cell: (item) => item.takenAt,
+              width: '35%',
+            },
+          ]}
+          items={recentItems}
+          trackBy="id"
+          striped
+          empty="服薬履歴はありません"
+          onRowClick={(item) => router.push(`/medication/history/${item.id}`)}
+          maxHeight="500px"
+        />
       </CardContent>
     </Card>
   )
