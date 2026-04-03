@@ -14,7 +14,10 @@ export async function middleware(request: NextRequest) {
   const sidebarOpen = request.cookies.get('grace-sidebar-open')?.value ?? 'true'
   const requestHeaders = new Headers(request.headers)
   requestHeaders.set('x-theme-mode', themeMode === 'dark' ? 'dark' : 'light')
-  requestHeaders.set('x-sidebar-open', sidebarOpen === 'false' ? 'false' : 'true')
+  requestHeaders.set(
+    'x-sidebar-open',
+    sidebarOpen === 'false' ? 'false' : 'true',
+  )
 
   if (
     request.nextUrl.pathname.match(/^\/(dashboard|settings|medication)(\/|$)/)
