@@ -245,10 +245,13 @@ function DrugCombobox({
           <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
+      <PopoverContent
+        className="w-[--radix-popover-trigger-width] p-0"
+        onWheel={(e) => e.stopPropagation()}
+      >
         <Command>
           <CommandInput placeholder="薬名で検索" />
-          <CommandList className="max-h-60">
+          <CommandList className="max-h-60 overscroll-contain">
             <CommandEmpty>見つかりませんでした</CommandEmpty>
             <CommandGroup>
               {drugs.map((drug) => (
